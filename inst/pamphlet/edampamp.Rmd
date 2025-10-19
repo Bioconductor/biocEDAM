@@ -1,0 +1,92 @@
+---
+title: "Ontological tagging of Bioconductor packages with EDAM"
+subtitle: "CZI EOSS Cycle 6 project"
+author: "Claire Rioualen, Hervé Menager, Maria Doyle, Anh Ngyuet Vu, Sebastian Lobentanzer, Vincent Carey"
+date: "`r Sys.Date()`"
+output:
+  tufte::tufte_handout:
+    citation_package: natbib
+    latex_engine: xelatex
+geometry: 
+- top=.5in
+- bottom=.5in
+- left=.5in
+- right=.5in
+natbiboptions: round
+---
+
+```{r setup, include=FALSE}
+library(tufte)
+# invalidate cache when the tufte version changes
+knitr::opts_chunk$set(tidy = FALSE, cache.extra = packageVersion('tufte'))
+options(htmltools.dir.version = FALSE)
+suppressPackageStartupMessages({
+library(BiocStyle)
+library(biocEDAM)
+library(ggplot2)
+})
+```
+
+# Bioconductor and biocViews
+
+biocViews is a package that started with the ambition 
+of emulating CRAN Task Views.  It wound up as a 'graph' object.
+Every Bioconductor package must tag itself in the DESCRIPTION
+file with one or more terms.
+
+![Subtopics of "BiologicalQuestions" biocView, and some packages annotated to "DifferentialSplicing".](bvb.jpg)
+
+# EDAM and the ELIXIR Research Software Ecosystem
+
+The EDAM ontology is registered at the National Center for Biomedical Ontology
+and has an OWL serialization.
+
+![Mostly collapsed view of EDAM at edamontology.org browser link](edamshotV.jpg)
+
+\pagebreak
+
+EDAM is the fundamental vocabulary for organizing the ELIXIR Research Software Ecosystem.
+
+# Adequacy of EDAM for tagging Bioconductor packages
+
+Several approaches to "matching" terms in biocViews to EDAM have been undertaken.
+
+![text2term scoring.](text2term.jpg)
+
+Some gaps that need to be filled:
+
+![Small excerpt of work on comparison of scope of biocViews and EDAM.](adeq.jpg)
+
+\pagebreak
+
+# AI-oriented approaches to tagging software resources
+
+With EOSS support, this group has been meeting regularly to create
+tools to enhance discoverability of software tools for genomics.
+
+The EDAM vocabulary was distilled to JSON schemas by Anh Nguyet Vu, and
+GPT-4 was prompted to use these schemas and to digest package documentation
+for the purpose of recommending EDAM terms as package tags.
+
+![biocEDAM::edamize applied to the vignette of tximeta](biocedam.jpg)
+
+See Figure 6 for additional work in this direction.
+
+# Beyond packages and modules: fostering workflow composition and use
+
+Software packages are often used in sequential combinations.
+The EDAM vocabulary includes precise terms for data formats and operations.
+Effective tagging of package components, including data classes and
+detailed analytic operations in use,
+will be helpful for building reliable analytic workflows.
+
+Figure 6 presents a schematic for harvesting information from
+Bioconductor, ELIXIR bio.tools, and nf-core to both
+enrich EDAM and to enhance the metadata about software and
+workflow ecosystems.
+
+
+
+![Proposed architecture of MCP-based system for recommending ontology extensions and tagging packages.](merm.jpg)
+
+
