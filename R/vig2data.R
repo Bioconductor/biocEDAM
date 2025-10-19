@@ -33,20 +33,19 @@ vig2data = function(url ="https://bioconductor.org/packages/release/bioc/html/Vo
    }
  else stop("url does not point to .html or .pdf")
 
-# this code, from ellmer vignette on structured data, defines a series of prompts and result types
  type_summary <- type_object(
-  "Summary of the article.",
-  author = type_array("Name of the article author(s)", type_string(),),
+  .description = "Summary of the article.",
+  author = type_array(description = "Name of the article author(s)", type_string(),),
   topics = type_array(
-    'Array of topics in the biosciences, e.g. ["DNA", "RNA", "chromosomal positions", "genes"]. Should be as specific as possible, and can overlap.',
-    type_string(),
+    description='Array of topics in the biosciences, e.g. ["DNA", "RNA", "chromosomal positions", "genes"]. Should be as specific as possible, and can overlap.',
+    type_string()
   ),
-  focused = type_string("Provide a concise summary of the article using distinctive vocabulary that would be helpful for embedding the summarized content.  Avoid subjective judgmental commentary.  Avoid generalities about hypotheses and generic activities of data analysis.  Limit the summary to 450 words."),
+  focused = type_string(description = "Provide a concise summary of the article using distinctive vocabulary that would be helpful for embedding the summarized content.  Avoid subjective judgmental commentary.  Avoid generalities about hypotheses and generic activities of data analysis.  Limit the summary to 450 words."),
   coherence = type_integer("Coherence of the article's key points, 0-100 (inclusive)"),
   persuasion = type_number("Article's persuasion score, 0.0-1.0 (inclusive)")
-)
+ )
 
  chat <- chat_openai()
- chat$extract_data(substr(text,1,maxnchar), type = type_summary)
+ chat$chat_structured(substr(text,1,maxnchar), type = type_summary)
 }
 

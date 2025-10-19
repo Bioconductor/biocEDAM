@@ -55,16 +55,16 @@
 
 <link href="curate_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
 <script src="curate_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="curate_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
-<script src="curate_files/datatables-binding-0.33/datatables.js"></script><link href="curate_files/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="curate_files/datatables-binding-0.34.0/datatables.js"></script><link href="curate_files/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="curate_files/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
-<script src="curate_files/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="curate_files/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet">
-<script src="curate_files/crosstalk-1.2.1/js/crosstalk.min.js"></script><div class="row">
+<script src="curate_files/dt-core-1.13.6/js/jquery.dataTables.min.js"></script><link href="curate_files/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="curate_files/crosstalk-1.2.2/js/crosstalk.min.js"></script><div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas</h1>
                         <h4 data-toc-skip class="author">Vincent J. Carey, stvjc at channing.harvard.edu</h4>
             
-            <h4 data-toc-skip class="date">March 18, 2025</h4>
+            <h4 data-toc-skip class="date">October 18, 2025</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vjcitn/biocEDAM/blob/HEAD/vignettes/curate.Rmd"><code>vignettes/curate.Rmd</code></a></small>
       <div class="d-none name"><code>curate.Rmd</code></div>
@@ -91,11 +91,11 @@
 <span><span class="op">}</span></span></code></pre></div>
 <pre><code><span><span class="co">## List of 5</span></span>
 <span><span class="co">##  $ author    : chr [1:4] "Michael I. Love" "Charlotte Soneson" "Peter F. Hickey" "Rob Patro"</span></span>
-<span><span class="co">##  $ topics    : chr [1:5] "RNA-seq" "transcriptomics" "data import" "bioconductor" ...</span></span>
-<span><span class="co">##  $ focused   : chr "The tximeta package is designed to extend the functionality of the tximport package for importing transcript-le"| __truncated__</span></span>
-<span><span class="co">##  $ coherence : int 97</span></span>
-<span><span class="co">##  $ persuasion: num 0.95</span></span></code></pre>
-<pre><code><span><span class="co">## [1] 2457</span></span></code></pre>
+<span><span class="co">##  $ topics    : chr [1:19] "RNA-seq" "transcript quantification" "genomic annotation" "metadata provenance" ...</span></span>
+<span><span class="co">##  $ focused   : chr "The article introduces tximeta, a Bioconductor package for R that automates annotation and metadata attachment "| __truncated__</span></span>
+<span><span class="co">##  $ coherence : int 95</span></span>
+<span><span class="co">##  $ persuasion: num 0.94</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 2029</span></span></code></pre>
 <p>We then use schema-driven inference to produce associated EDAM tags; see the code in <code>inst/curbioc</code> in the package source.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html" class="external-link">Sys.getenv</a></span><span class="op">(</span><span class="st">"OPENAI_API_KEY"</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
@@ -106,7 +106,7 @@
 <pre><code><span><span class="co">## Loading required namespace: reticulate</span></span></code></pre>
 <pre><code><span><span class="co">## Success after 0 attempts</span></span></code></pre>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14"],["http://edamontology.org/topic_0091","http://edamontology.org/topic_3308","http://edamontology.org/topic_3170","http://edamontology.org/topic_0219","http://edamontology.org/operation_2422","http://edamontology.org/operation_0361","http://edamontology.org/operation_3800","http://edamontology.org/operation_3282","http://edamontology.org/data_0849","http://edamontology.org/format_1929","http://edamontology.org/format_1930","http://edamontology.org/data_0928","http://edamontology.org/format_3752","http://edamontology.org/format_3464"],["Bioinformatics","Transcriptomics","RNA-Seq","Data submission, annotation and curation","Data retrieval","Sequence annotation","RNA-Seq quantification","ID mapping","Sequence record","FASTA","FASTQ","Gene expression profile","CSV","JSON"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>uri<\/th>\n      <th>tm<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"uri","targets":1},{"name":"tm","targets":2}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"],["http://edamontology.org/topic_0091","http://edamontology.org/topic_0085","http://edamontology.org/topic_3170","http://edamontology.org/topic_0219","http://edamontology.org/topic_0203","http://edamontology.org/topic_0622","http://edamontology.org/topic_3308","http://edamontology.org/operation_0361","http://edamontology.org/operation_3680","http://edamontology.org/operation_3223","http://edamontology.org/operation_2422","http://edamontology.org/operation_3282","http://edamontology.org/operation_3793","http://edamontology.org/data_0849","http://edamontology.org/format_1929","http://edamontology.org/format_1930","http://edamontology.org/data_0928","http://edamontology.org/format_3464","http://edamontology.org/format_3752"],["Bioinformatics","Functional genomics","RNA-Seq","Data submission, annotation and curation","Gene expression","Genomics","Transcriptomics","Sequence annotation","RNA-Seq analysis","Differential gene expression profiling","Data retrieval","ID mapping","Read summarisation","Sequence record","FASTA","FASTQ","Gene expression profile","JSON","CSV"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>uri<\/th>\n      <th>tm<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"uri","targets":1},{"name":"tm","targets":2}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="example-2-msnbase">Example 2: MSnbase<a class="anchor" aria-label="anchor" href="#example-2-msnbase"></a>
@@ -118,12 +118,10 @@
 <span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">uu</span><span class="op">)</span><span class="op">)</span> <span class="va">uu</span> <span class="op">=</span> <span class="fu"><a href="../reference/edamize.html">edamize</a></span><span class="op">(</span><span class="va">mm</span><span class="op">$</span><span class="va">focus</span><span class="op">)</span>  <span class="co"># second try</span></span>
 <span><span class="fu">DT</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/DT/man/datatable.html" class="external-link">datatable</a></span><span class="op">(</span><span class="fu"><a href="../reference/mkdf.html">mkdf</a></span><span class="op">(</span><span class="va">uu</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<pre><code><span><span class="co">## Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4o"</span>.</span></span></code></pre>
-<pre><code><span><span class="co">## JSON not valid, trying QC/correction prompt, attempt 1</span></span>
-<span><span class="co">## Success after 1 attempts</span></span>
-<span><span class="co">## Success after 0 attempts</span></span></code></pre>
+<pre><code><span><span class="co">## Using <span style="color: #00BB00;">model</span> = <span style="color: #0000BB;">"gpt-4.1"</span>.</span></span></code></pre>
+<pre><code><span><span class="co">## Success after 0 attempts</span></span></code></pre>
 <div class="datatables html-widget html-fill-item" id="htmlwidget-e5c8c404fe174e4c81bd" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],["http://edamontology.org/topic_0121","http://edamontology.org/topic_0091","http://edamontology.org/topic_0092","http://edamontology.org/topic_3172","http://edamontology.org/operation_2422","http://edamontology.org/operation_3214","http://edamontology.org/operation_3630","http://edamontology.org/operation_3628","http://edamontology.org/operation_3627","http://edamontology.org/data_2536","http://edamontology.org/format_3244","http://edamontology.org/format_3654","http://edamontology.org/data_0945","http://edamontology.org/format_3247","http://edamontology.org/format_3752"],["Proteomics","Bioinformatics","Data visualisation","Metabolomics","Data retrieval","Spectral analysis","Protein quantification","Chromatographic alignment","Mass spectra calibration","Mass spectrometry data","mzML","mzXML","Peptide identification","mzIdentML","CSV"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>uri<\/th>\n      <th>tm<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"uri","targets":1},{"name":"tm","targets":2}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-e5c8c404fe174e4c81bd">{"x":{"filter":"none","vertical":false,"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19"],["http://edamontology.org/topic_0121","http://edamontology.org/topic_0091","http://edamontology.org/topic_0092","http://edamontology.org/topic_3172","http://edamontology.org/operation_3627","http://edamontology.org/operation_3628","http://edamontology.org/operation_3629","http://edamontology.org/operation_3630","http://edamontology.org/operation_3631","http://edamontology.org/operation_3214","http://edamontology.org/operation_3215","http://edamontology.org/operation_3694","http://edamontology.org/data_2536","http://edamontology.org/format_3244","http://edamontology.org/format_3654","http://edamontology.org/format_3834","http://edamontology.org/data_0945","http://edamontology.org/format_3247","http://edamontology.org/format_3681"],["Proteomics","Bioinformatics","Data visualisation","Metabolomics","Mass spectra calibration","Chromatographic alignment","Deisotoping","Protein quantification","Peptide identification","Spectral analysis","Peak detection","Mass spectrum visualisation","Mass spectrometry data","mzML","mzXML","mzData","Peptide identification","mzIdentML","mzTab"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>uri<\/th>\n      <th>tm<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"uri","targets":1},{"name":"tm","targets":2}],"order":[],"autoWidth":false,"orderClasses":false},"selection":{"mode":"multiple","selected":null,"target":"row","selectable":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="caveats">Caveats<a class="anchor" aria-label="anchor" href="#caveats"></a>
@@ -141,7 +139,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer>
