@@ -1,6 +1,6 @@
 
 #' use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-#' document, tailored to vignettes in bioconductor
+#' document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL
 #' @import rvest pdftools ellmer
 #' @param url character(1) URL for an html bioconductor vignettes
 #' @param maxnchar numeric(1) text is truncated to a substring with this length
@@ -31,7 +31,7 @@ vig2data = function(url ="https://bioconductor.org/packages/release/bioc/html/Vo
    strs = lapply(tmp, paste, collapse=" ")
    text <- paste(strs, collapse=" ")
    }
- else stop("url does not point to .html or .pdf")
+ else text = paste(readLines(url), collapse = " ")
 
  type_summary <- type_object(
   .description = "Summary of the article.",

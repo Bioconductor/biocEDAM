@@ -1,7 +1,7 @@
 Package: biocEDAM
 Date: 2025-03-15
 Title: Support the investigation of biocViews in relation to EDAM ontology
-Version: 0.0.12
+Version: 0.0.13
 Authors@R: 
     c(person(
         "Vincent", "Carey", role = c("aut", "cre"),
@@ -26,7 +26,7 @@ Imports: graph, shiny, BiocPkgTools, rvest, pdftools, rjsoncons,
 	jsonlite, ellmer, reticulate, dplyr
 VignetteBuilder: knitr
 biocViews: Infrastructure
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 URL: https://github.com/vjcitn/biocEDAM
 BugReports: https://github.com/vjcitn/biocEDAM/issues
 Config/reticulate:

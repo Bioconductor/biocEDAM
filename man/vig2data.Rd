@@ -3,7 +3,7 @@
 \name{vig2data}
 \alias{vig2data}
 \title{use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-document, tailored to vignettes in bioconductor}
+document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL}
 \usage{
 vig2data(
   url = "https://bioconductor.org/packages/release/bioc/html/Voyager.html",
@@ -23,7 +23,7 @@ a list with components author, topics, focused, coherence, and persuasion
 }
 \description{
 use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-document, tailored to vignettes in bioconductor
+document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL
 }
 \note{
 Based on code from https://cran.r-project.org/web/packages/ellmer/vignettes/structured-data.html
