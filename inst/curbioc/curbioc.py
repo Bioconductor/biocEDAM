@@ -71,7 +71,7 @@ def get_text_from_url(url, trim=False):  # some developer files need trimming
 def schema_completion(content, schema, temp):
   completion=client.chat.completions.create(
     model=MODEL,
-    temperature = temp,
+#    temperature = temp,
     messages=[
       {"role": "system", "content": "You are a helpful expert in data curation and data modeling, especially with structured JSON data." + 
        "You return only valid JSON string, not in a code block, and without any other explanation so that the string and decoded and inserted into a database."},
