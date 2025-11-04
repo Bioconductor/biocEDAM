@@ -3,7 +3,7 @@
 This package investigates tools that
 can help understand the relationship
 of [biocViews](https://bioconductor.org/packages/biocViews) in relation to the 
-[EDAM ontology](https://edamontology.org).
+[EDAM ontology](https://edamontology.org). A brief introduction to EDAM Ontology is also reported in this [Bioconductor post](https://blog.bioconductor.org/posts/2025-07-18-edam/)
 
 ## Installation 
 
