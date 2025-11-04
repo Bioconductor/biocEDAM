@@ -60,11 +60,12 @@ edamize = function(
    requests = reticulate::import("requests", convert=FALSE)
    # we copy to tempdir to avoid problems with python import from the installed folder
     # the tmpdir path is typically compact and has not special characters
-   file.copy(system.file("curbioc", package="biocEDAM"), tempdir(), recursive=TRUE)
-    py_source = readLines(file.path(tempdir(), "curbioc.py")) # get all code lines
+   tdir = tempdir()
+   file.copy(system.file("curbioc", package="biocEDAM"), tdir, recursive=TRUE)
+    py_source = readLines(file.path(tdir, "curbioc", "curbioc.py")) # get all code lines
     py_source = gsub("%%MODEL%%", model, py_source)
-    writeLines(py_source, file.path(tempdir(), "curbioc.py"))
-   curbioc = reticulate::import_from_path("curbioc.curbioc", path=tempdir(), convert=FALSE)
+    writeLines(py_source, file.path(tdir, "curbioc", "curbioc.py"))
+   curbioc = reticulate::import_from_path("curbioc.curbioc", path=tdir, convert=FALSE)
    oai = reticulate::import("openai", convert=FALSE)
    json = reticulate::import("json", convert=FALSE)
    
