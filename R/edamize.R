@@ -54,20 +54,23 @@ mkdf = function (x)
 #' @export
 edamize = function(
      content_for_edam,
-     temp = 0.0, prescrub=TRUE) {
+     temp = 0.0, model = "gpt-5", prescrub=TRUE) {
    requireNamespace("reticulate")
    os = reticulate::import("os")
    requests = reticulate::import("requests", convert=FALSE)
-   
+   # we copy to tempdir to avoid problems with python import from the installed folder
+    # the tmpdir path is typically compact and has not special characters
    file.copy(system.file("curbioc", package="biocEDAM"), tempdir(), recursive=TRUE)
+    py_source = readLines(file.path(tempdir(), "curbioc.py")) # get all code lines
+    py_source = gsub("%%MODEL%%", model, py_source)
+    writeLines(py_source, file.path(tempdir(), "curbioc.py"))
    curbioc = reticulate::import_from_path("curbioc.curbioc", path=tempdir(), convert=FALSE)
    oai = reticulate::import("openai", convert=FALSE)
    json = reticulate::import("json", convert=FALSE)
    
    OPENAI_API_KEY = os$getenv('OPENAI_API_KEY')
-   MODEL="gpt-4o"
-   client = oai$OpenAI(api_key=OPENAI_API_KEY)
    
+   client = oai$OpenAI(api_key=OPENAI_API_KEY)
    
    #
    ## Retrieve schemas
@@ -84,23 +87,9 @@ edamize = function(
    #
    if (prescrub) content_for_edam = cleantxt(content_for_edam)
    edam_completion = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
-
-#   retry_count = 0
-#   while (inherits(edam_completion, "try-error")) {
-#    retry_count = retry_count + 1
-#    if (retry_count > n_retries) break
-#    edam_completion = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
-#    }
      
    edam_json = edam_completion$choices[0]$message$content
    edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-
-#   retry_count = 0
-#   while (inherits(edam_final, "try-error")) {
-#    retry_count = retry_count + 1
-#    if (retry_count > n_retries) break
-#    edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-#    }
    
    edam_processed = curbioc$transform_terms(edam_final)
    reticulate::py_to_r(edam_processed)
