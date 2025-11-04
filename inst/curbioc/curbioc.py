@@ -22,7 +22,7 @@ encoding = tiktoken.get_encoding(embedding_encoding)
 # end new
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-MODEL="gpt-4o"
+MODEL="%%MODEL%%"
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # This segment prepares EDAM-oriented schemas
