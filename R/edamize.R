@@ -62,13 +62,17 @@ edamize = function(
    file.copy(system.file("curbioc", package="biocEDAM"), tempdir(), recursive=TRUE)
    curbioc = reticulate::import_from_path("curbioc.curbioc", path=tempdir(), convert=FALSE)
    oai = reticulate::import("openai", convert=FALSE)
+   gemini = reticulate::import("google.generativeai", convert = FALSE)
    json = reticulate::import("json", convert=FALSE)
    
-   OPENAI_API_KEY = os$getenv('OPENAI_API_KEY')
-   MODEL="gpt-4o"
-   client = oai$OpenAI(api_key=OPENAI_API_KEY)
+   # OPENAI_API_KEY = os$getenv('OPENAI_API_KEY')
+   # MODEL="gpt-4o"
+   # client = oai$OpenAI(api_key=OPENAI_API_KEY)
    
-   
+   gemini_key = os$getenv("GEMINI_API_KEY")
+   gemini$config$configure(api_key = gemini_key)
+   client = gemini$GenerativeModel("gemini-2.0-flash")  
+
    #
    ## Retrieve schemas
    #
