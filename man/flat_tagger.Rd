@@ -16,6 +16,9 @@ flat_tagger(txt, nterms = 20, model = "gpt-5", ...)
 \description{
 simple tagger based on text excerpt and available context from data-frames with edam vocabularies
 }
+\note{
+This function as of Nov 7 2025 will routinely hallucinate associations and terms.
+}
 \examples{
 if (interactive()) {
 txt = "The Voyager package is an R/Bioconductor software designed for exploratory spatial 
