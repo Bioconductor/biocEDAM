@@ -32,7 +32,7 @@ flat_tagger = function(txt, nterms = 20, model="gpt-5", ...) {
     lbl = type_string()
     )
    )
-  ch$chat_structured(btw(), sprintf("Provide around %d edam terms relevant to user query.  Return the results in an R data frame with one column giving the edam id, the other giving the label.  Do not add any markdown or descriptive text and evaluate the R code instead of placing it in a markdown block.  The query is: Provide up to 20 edam terms relevant to %s", 
-      nterms, txt), type=dfstr) 
+  ch$chat_structured(btw(), sprintf("Provide around %d edam terms relevant to user query.  Return the results in an R data frame with one column giving the edam id, the other giving the label.  You are using the ellmer structured chat to facilitate return of a data frame.  The query is: Provide up to %d edam terms relevant to %s", 
+      nterms, nterms, txt), type=dfstr) 
 }
   
