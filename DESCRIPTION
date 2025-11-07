@@ -23,7 +23,7 @@ Encoding: UTF-8
 Depends: R (>= 4.1), biocViews
 Suggests: knitr, testthat, BiocStyle, ontoProc, DT
 Imports: graph, shiny, BiocPkgTools, rvest, pdftools, rjsoncons,
-	jsonlite, ellmer, reticulate, dplyr
+	jsonlite, ellmer, reticulate, dplyr, btw
 VignetteBuilder: knitr
 biocViews: Infrastructure
 RoxygenNote: 7.3.3
