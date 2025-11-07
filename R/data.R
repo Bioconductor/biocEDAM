@@ -21,3 +21,22 @@
 #' dim(vlist[[1]])
 "vlist"
 
+#' snapshot of edam topics circa early 2024
+#' @docType data
+#' @format list with data.frame
+"edam_topics"
+
+#' snapshot of edam formats circa early 2024
+#' @docType data
+#' @format list with data.frame
+"edam_formats"
+
+#' snapshot of edam operations circa early 2024
+#' @docType data
+#' @format list with data.frame
+"edam_operations"
+
+#' snapshot of edam data circa early 2024
+#' @docType data
+#' @format list with data.frame
+"edam_data"
