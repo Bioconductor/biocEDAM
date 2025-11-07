@@ -5,12 +5,14 @@
 \title{use Anh Vu's OpenAI prompting to develop structured metadata about
 Bioconductor packages, targeting EDAM ontology and bio.tools schema}
 \usage{
-edamize(content_for_edam, temp = 0, prescrub = TRUE)
+edamize(content_for_edam, temp = 0, model = "gpt-5", prescrub = TRUE)
 }
 \arguments{
 \item{content_for_edam}{character(1) a URL for doc originating from the developer}
 
-\item{temp}{numeric(1) temperature setting for openAI chat, see `https://gptcache.readthedocs.io/en/latest/bootcamp/temperature/chat.html`, defaults to 0.0}
+\item{temp}{numeric(1) temperature setting for openAI chat, see `https://gptcache.readthedocs.io/en/latest/bootcamp/temperature/chat.html`, defaults to 0.0, ignored when gpt-5 is used}
+
+\item{model}{character(1) defaults to gpt-5}
 
 \item{prescrub}{logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
 defaults to TRUE
@@ -27,6 +29,8 @@ Bioconductor packages, targeting EDAM ontology and bio.tools schema
 This function is not deterministic.  For the provided example, the input to the function
 is a fixed text, but the output at the end can be NULL, a data frame with 12 rows, or a data frame with 14 rows.
 More work is needed to achieve greater predictability.
+
+The result may possess redundant elements; mkdf will apply dplyr::distinct
 }
 \examples{
 if (interactive()) {

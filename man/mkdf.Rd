@@ -12,3 +12,6 @@ mkdf(x)
 \description{
 simple utility to process output of edamize into data.frame
 }
+\note{
+dplyr::distinct is run on the result
+}

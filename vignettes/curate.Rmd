@@ -49,6 +49,9 @@ see the code in `inst/curbioc` in the package source.
 ```{r finish}
 if (nchar(Sys.getenv("OPENAI_API_KEY"))>0) {
 substr(content$focus,1,250)
+pks = c("requests", "openai", "jsonschema", "tiktoken", "pandas")
+for (i in pks) reticulate::py_require(i)
+for (i in pks) reticulate::import(i)
 ans = edamize(content$focus)
 DT::datatable(mkdf(ans))
 }

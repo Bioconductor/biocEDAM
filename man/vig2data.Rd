@@ -2,13 +2,15 @@
 % Please edit documentation in R/vig2data.R
 \name{vig2data}
 \alias{vig2data}
-\title{use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL}
+\title{Use the extract_data facility defined in ellmer's doc to obtain summary information about textual content.
+Originally tailored to vignettes in bioconductor; it is newly generalized to handle any pdf, html or text in URL.}
 \usage{
 vig2data(
   url = "https://bioconductor.org/packages/release/bioc/html/Voyager.html",
   maxnchar = 30000,
-  n_pdf_pages = 10
+  n_pdf_pages = 10,
+  model = "gpt-4o",
+  ...
 )
 }
 \arguments{
@@ -17,13 +19,17 @@ vig2data(
 \item{maxnchar}{numeric(1) text is truncated to a substring with this length}
 
 \item{n_pdf_pages}{numeric(1) maximum number of pages to extract text from for pdf vignettes}
+
+\item{model}{character(1) model for use with chat_openai, defaults to gpt-4o}
+
+\item{\dots}{passed to chat_openai}
 }
 \value{
 a list with components author, topics, focused, coherence, and persuasion
 }
 \description{
-use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL
+Use the extract_data facility defined in ellmer's doc to obtain summary information about textual content.
+Originally tailored to vignettes in bioconductor; it is newly generalized to handle any pdf, html or text in URL.
 }
 \note{
 Based on code from https://cran.r-project.org/web/packages/ellmer/vignettes/structured-data.html

@@ -1,10 +1,12 @@
 
-#' use the extract_data facility defined in ellmer's doc to obtain summary information about an html
-#' document, tailored to vignettes in bioconductor; newly generalized to handle any text in URL
+#' Use the extract_data facility defined in ellmer's doc to obtain summary information about textual content.
+#' Originally tailored to vignettes in bioconductor; it is newly generalized to handle any pdf, html or text in URL.
 #' @import rvest pdftools ellmer
 #' @param url character(1) URL for an html bioconductor vignettes
 #' @param maxnchar numeric(1) text is truncated to a substring with this length
 #' @param n_pdf_pages numeric(1) maximum number of pages to extract text from for pdf vignettes
+#' @param model character(1) model for use with chat_openai, defaults to gpt-4o
+#' @param \dots passed to chat_openai
 #' @return a list with components author, topics, focused, coherence, and persuasion
 #' @note Based on code from https://cran.r-project.org/web/packages/ellmer/vignettes/structured-data.html
 #' March 15 2025.  Requires that OPENAI_API_KEY is available in environment.
@@ -16,7 +18,7 @@
 #' }
 #' @export
 vig2data = function(url ="https://bioconductor.org/packages/release/bioc/html/Voyager.html",
-   maxnchar=30000, n_pdf_pages=10) {
+   maxnchar=30000, n_pdf_pages=10, model="gpt-4o", ...) {
  isHTML = isTRUE(length(grep("\\.html$", basename(url)))>0)
  isPDF = isTRUE(length(grep("\\.pdf$", basename(url)))>0)
  if (isHTML) {
@@ -45,7 +47,7 @@ vig2data = function(url ="https://bioconductor.org/packages/release/bioc/html/Vo
   persuasion = type_number("Article's persuasion score, 0.0-1.0 (inclusive)")
  )
 
- chat <- chat_openai()
+ chat <- chat_openai(model=model, ...)
  chat$chat_structured(substr(text,1,maxnchar), type = type_summary)
 }
 

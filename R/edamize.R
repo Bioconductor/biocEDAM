@@ -10,13 +10,14 @@ cleantxt = function(x) gsub('-|\\(|`|#|:|\\*|’|"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\|
 #' @import rjsoncons
 #' @rawNamespace import(jsonlite, except=validate)
 #' @param x a list as produced by edamize
+#' @note dplyr::distinct is run on the result
 #' @export
 mkdf = function (x) 
 {
     lkj = jsonlite::toJSON(x)
     uri = fromJSON(rjsoncons::j_query(lkj, "$..uri"))
     tm = fromJSON(rjsoncons::j_query(lkj, "$..term"))
-    data.frame(uri, tm)
+    data.frame(uri, tm) |> dplyr::distinct()
 }
 
 
@@ -25,14 +26,17 @@ mkdf = function (x)
 
 #' use Anh Vu's OpenAI prompting to develop structured metadata about
 #' Bioconductor packages, targeting EDAM ontology and bio.tools schema
+#' @import dplyr
 #' @param content_for_edam character(1) a URL for doc originating from the developer
-#' @param temp numeric(1) temperature setting for openAI chat, see `https://gptcache.readthedocs.io/en/latest/bootcamp/temperature/chat.html`, defaults to 0.0
+#' @param temp numeric(1) temperature setting for openAI chat, see `https://gptcache.readthedocs.io/en/latest/bootcamp/temperature/chat.html`, defaults to 0.0, ignored when gpt-5 is used
+#' @param model character(1) defaults to gpt-5
 #' @param prescrub logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
 #' defaults to TRUE
 #' effort in the python operations in inst/curbioc; defaults to 1
 #' @note This function is not deterministic.  For the provided example, the input to the function
 #' is a fixed text, but the output at the end can be NULL, a data frame with 12 rows, or a data frame with 14 rows.
 #' More work is needed to achieve greater predictability.
+#' @note The result may possess redundant elements; mkdf will apply dplyr::distinct
 #' @return a list with components 'topic' and 'function', which can be converted to a data.frame using `mkdf`
 #' @examples
 #' if (interactive()) {
@@ -54,20 +58,24 @@ mkdf = function (x)
 #' @export
 edamize = function(
      content_for_edam,
-     temp = 0.0, prescrub=TRUE) {
+     temp = 0.0, model = "gpt-5", prescrub=TRUE) {
    requireNamespace("reticulate")
    os = reticulate::import("os")
    requests = reticulate::import("requests", convert=FALSE)
-   
-   file.copy(system.file("curbioc", package="biocEDAM"), tempdir(), recursive=TRUE)
-   curbioc = reticulate::import_from_path("curbioc.curbioc", path=tempdir(), convert=FALSE)
+   # we copy to tempdir to avoid problems with python import from the installed folder
+    # the tmpdir path is typically compact and has not special characters
+   tdir = tempdir()
+   file.copy(system.file("curbioc", package="biocEDAM"), tdir, recursive=TRUE)
+    py_source = readLines(file.path(tdir, "curbioc", "curbioc.py")) # get all code lines
+    py_source = gsub("%%MODEL%%", model, py_source)
+    writeLines(py_source, file.path(tdir, "curbioc", "curbioc.py"))
+   curbioc = reticulate::import_from_path("curbioc.curbioc", path=tdir, convert=FALSE)
    oai = reticulate::import("openai", convert=FALSE)
    json = reticulate::import("json", convert=FALSE)
    
    OPENAI_API_KEY = os$getenv('OPENAI_API_KEY')
-   MODEL="gpt-4o"
-   client = oai$OpenAI(api_key=OPENAI_API_KEY)
    
+   client = oai$OpenAI(api_key=OPENAI_API_KEY)
    
    #
    ## Retrieve schemas
@@ -84,23 +92,9 @@ edamize = function(
    #
    if (prescrub) content_for_edam = cleantxt(content_for_edam)
    edam_completion = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
-
-#   retry_count = 0
-#   while (inherits(edam_completion, "try-error")) {
-#    retry_count = retry_count + 1
-#    if (retry_count > n_retries) break
-#    edam_completion = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
-#    }
      
    edam_json = edam_completion$choices[0]$message$content
    edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-
-#   retry_count = 0
-#   while (inherits(edam_final, "try-error")) {
-#    retry_count = retry_count + 1
-#    if (retry_count > n_retries) break
-#    edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-#    }
    
    edam_processed = curbioc$transform_terms(edam_final)
    reticulate::py_to_r(edam_processed)

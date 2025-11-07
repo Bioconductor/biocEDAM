@@ -22,7 +22,7 @@ encoding = tiktoken.get_encoding(embedding_encoding)
 # end new
 
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-MODEL="gpt-4o"
+MODEL="%%MODEL%%"
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 # This segment prepares EDAM-oriented schemas
@@ -71,7 +71,7 @@ def get_text_from_url(url, trim=False):  # some developer files need trimming
 def schema_completion(content, schema, temp):
   completion=client.chat.completions.create(
     model=MODEL,
-    temperature = temp,
+#    temperature = temp,
     messages=[
       {"role": "system", "content": "You are a helpful expert in data curation and data modeling, especially with structured JSON data." + 
        "You return only valid JSON string, not in a code block, and without any other explanation so that the string and decoded and inserted into a database."},
