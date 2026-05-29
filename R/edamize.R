@@ -61,7 +61,7 @@ edamize = function(
      temp = 0.0, model = "gpt-5", prescrub=TRUE) {
    requireNamespace("reticulate")
    reticulate::py_require(c("jsonschema==4.23.0", "openai==1.66.3",  # try to scotch warning
-        "pandas==2.2.3", "requests==2.32.3", "tiktoken==0.9.0"))
+        "pandas==2.2.3", "requests==2.32.3", "tiktoken==0.9.0", "pip"))
    os = reticulate::import("os")
    requests = reticulate::import("requests", convert=FALSE)
    # we copy to tempdir to avoid problems with python import from the installed folder
