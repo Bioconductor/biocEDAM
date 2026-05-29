@@ -8,7 +8,7 @@
 list with data.frame
 }
 \usage{
-edam_formats
+data(edam_formats)
 }
 \description{
 snapshot of edam formats circa early 2024

@@ -10,6 +10,7 @@ vig2data(
   maxnchar = 30000,
   n_pdf_pages = 10,
   model = "gpt-4o",
+  provider = "openai",
   ...
 )
 }
@@ -20,9 +21,12 @@ vig2data(
 
 \item{n_pdf_pages}{numeric(1) maximum number of pages to extract text from for pdf vignettes}
 
-\item{model}{character(1) model for use with chat_openai, defaults to gpt-4o}
+\item{model}{character(1) model identifier for the selected provider; defaults to "gpt-4o" (OpenAI)}
 
-\item{\dots}{passed to chat_openai}
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
+the required environment variable for each.  Defaults to "openai".}
+
+\item{\dots}{passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}}
 }
 \value{
 a list with components author, topics, focused, coherence, and persuasion
@@ -33,11 +37,12 @@ Originally tailored to vignettes in bioconductor; it is newly generalized to han
 }
 \note{
 Based on code from https://cran.r-project.org/web/packages/ellmer/vignettes/structured-data.html
-March 15 2025.  Requires that OPENAI_API_KEY is available in environment.
+March 15 2025.  The API key for the chosen provider must be available in the corresponding
+environment variable (e.g. OPENAI_API_KEY for "openai", ANTHROPIC_API_KEY for "anthropic").
 }
 \examples{
 if (interactive()) {
-# be sure OPENAI_API_KEY is available to Sys.getenv
+# OPENAI_API_KEY must be set for the default provider
 tst = vig2data()
 str(tst)
 }

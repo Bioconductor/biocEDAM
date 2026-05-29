@@ -8,7 +8,7 @@
 An object of class \code{biocPkgList} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 2266 rows and 47 columns.
 }
 \usage{
-saved_views_2023.18.11
+data(saved_views_2023.18.11)
 }
 \description{
 dated set of biocViews

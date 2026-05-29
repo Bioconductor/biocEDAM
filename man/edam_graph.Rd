@@ -4,12 +4,14 @@
 \alias{edam_graph}
 \title{build a graph of EDAM terms deemed relevant to a text}
 \usage{
-edam_graph(txt, edam_graph, ...)
+edam_graph(txt, edam_graph, provider = "openai", ...)
 }
 \arguments{
 \item{txt}{string, typically describing a software artifact}
 
 \item{edam_graph}{an ontologyIndex ontology-index instance representing EDAM}
+
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}. Defaults to "openai".}
 
 \item{\dots}{passed to ontoProc::onto_plot2}
 }
@@ -23,9 +25,8 @@ of vig2data; it will then be processed by 'edamize'
 \examples{
 if (interactive()) {
 requireNamespace("ontoProc2")
-stopifnot(nchar(Sys.getenv("OPENAI_API_KEY"))>0)
 eg = readRDS(system.file("rds", "edam_1.25_ontoindex.rds", package="biocEDAM"))
 statescoper = readRDS(system.file("rds", "tgac-vumc_StatescopeR.rds", package="biocEDAM"))
-edam_graph(statescoper$focused, eg, cex=.3) 
+edam_graph(statescoper$focused, eg, cex=.3)
 }
 }

@@ -8,13 +8,16 @@ EDAM terms}
 tag_bioc(
   pkgname = "tximeta",
   url =
-    "https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html"
+    "https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html",
+  provider = "openai"
 )
 }
 \arguments{
 \item{pkgname}{character(1)}
 
 \item{url}{URL for representative content, in html or pdf}
+
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}. Defaults to "openai".}
 }
 \value{
 a data.frame with biocViews and EDAM suggestions
@@ -24,9 +27,9 @@ full workflow to tag a bioconductor package and selected representative content 
 EDAM terms
 }
 \examples{
-if (interactive() & nchar(Sys.getenv("OPENAI_API_KEY")>0)) {
+if (interactive()) {
 ti = tag_bioc()
-bs = tag_bioc(pkg="Biostrings", 
+bs = tag_bioc(pkg="Biostrings",
   url="https://bioconductor.org/packages/release/bioc/vignettes/Biostrings/inst/doc/Biostrings2Classes.pdf")
 library(DT)
 ndf = rbind(ti, bs)

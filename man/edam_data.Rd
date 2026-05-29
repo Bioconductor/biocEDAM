@@ -8,7 +8,7 @@
 list with data.frame
 }
 \usage{
-edam_data
+data(edam_data)
 }
 \description{
 snapshot of edam data circa early 2024

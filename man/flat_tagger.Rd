@@ -4,14 +4,17 @@
 \alias{flat_tagger}
 \title{simple tagger based on text excerpt and available context from data-frames with edam vocabularies}
 \usage{
-flat_tagger(txt, nterms = 20, model = "gpt-5", ...)
+flat_tagger(txt, nterms = 20, model = "gpt-5", provider = "openai", ...)
 }
 \arguments{
 \item{txt}{a text string for analysis}
 
-\item{model}{a string naming an openai model}
+\item{model}{character(1) model identifier for the selected provider; defaults to "gpt-5" (OpenAI)}
 
-\item{\dots}{parameters passed to chat_openai}
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
+the required environment variable for each.  Defaults to "openai".}
+
+\item{\dots}{parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}}
 }
 \description{
 simple tagger based on text excerpt and available context from data-frames with edam vocabularies

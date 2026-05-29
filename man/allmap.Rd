@@ -8,7 +8,7 @@
 An object of class \code{data.frame} with 917 rows and 7 columns.
 }
 \usage{
-allmap
+data(allmap)
 }
 \description{
 map from biocViews to EDAM

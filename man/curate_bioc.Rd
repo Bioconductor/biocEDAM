@@ -2,25 +2,33 @@
 % Please edit documentation in R/curate_bioc.R
 \name{curate_bioc}
 \alias{curate_bioc}
-\title{use Anh Vu's OpenAI prompting to develop structured metadata about
+\title{use Anh Vu's prompting to develop structured metadata about
 Bioconductor packages, targeting EDAM ontology and bio.tools schema}
 \usage{
 curate_bioc(
   packageName = "chromVAR",
   devurl =
-    "https://raw.githubusercontent.com/GreenleafLab/chromVAR/refs/heads/master/README.md"
+    "https://raw.githubusercontent.com/GreenleafLab/chromVAR/refs/heads/master/README.md",
+  model = "gpt-4o",
+  provider = "openai"
 )
 }
 \arguments{
 \item{packageName}{character(1) a Bioconductor software package name, its release landing page will be scraped}
 
 \item{devurl}{character(1) a URL for doc originating from the developer}
+
+\item{model}{character(1) model identifier for the selected provider; defaults to "gpt-4o" (OpenAI)}
+
+\item{provider}{character(1) LLM provider for the Python path; currently only "openai" is supported.
+The value of the corresponding environment variable (see \code{\link{llm_env_var}}) is used as the API key
+and the function stops with an informative error if the variable is not set.}
 }
 \value{
 two python dicts, base_final and edam_processed
 }
 \description{
-use Anh Vu's OpenAI prompting to develop structured metadata about
+use Anh Vu's prompting to develop structured metadata about
 Bioconductor packages, targeting EDAM ontology and bio.tools schema
 }
 \note{
@@ -28,8 +36,7 @@ Schema completion is done with temperature set to 0.0; see edamize function for 
 }
 \examples{
 if (interactive()) {
-  key = Sys.getenv("OPENAI_API_KEY")
-  if (nchar(key)==0) stop("need to have OPENAI_API_KEY set")
+  # OPENAI_API_KEY must be set for the default provider
   lk = curate_bioc()
   str(lk)
 }

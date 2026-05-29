@@ -2,27 +2,38 @@
 % Please edit documentation in R/edamize.R
 \name{edamize}
 \alias{edamize}
-\title{use Anh Vu's OpenAI prompting to develop structured metadata about
+\title{use Anh Vu's prompting to develop structured metadata about
 Bioconductor packages, targeting EDAM ontology and bio.tools schema}
 \usage{
-edamize(content_for_edam, temp = 0, model = "gpt-5", prescrub = TRUE)
+edamize(
+  content_for_edam,
+  temp = 0,
+  model = "claude-sonnet-4-5",
+  prescrub = TRUE,
+  provider = "anthropic"
+)
 }
 \arguments{
 \item{content_for_edam}{character(1) a URL for doc originating from the developer}
 
-\item{temp}{numeric(1) temperature setting for openAI chat, see `https://gptcache.readthedocs.io/en/latest/bootcamp/temperature/chat.html`, defaults to 0.0, ignored when gpt-5 is used}
+\item{temp}{numeric(1) temperature setting for the LLM chat, defaults to 0.0}
 
-\item{model}{character(1) defaults to gpt-5}
+\item{model}{character(1) model identifier for the selected provider;
+defaults to "claude-sonnet-4-5" (Anthropic)}
 
 \item{prescrub}{logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
-defaults to TRUE
-effort in the python operations in inst/curbioc; defaults to 1}
+defaults to TRUE}
+
+\item{provider}{character(1) LLM provider for the Python path; one of "openai", "anthropic", or "gemini".
+The value of the corresponding environment variable (see \code{\link{llm_env_var}}) is used as the API key
+and the function stops with an informative error if the variable is not set.
+Defaults to "anthropic".}
 }
 \value{
 a list with components 'topic' and 'function', which can be converted to a data.frame using `mkdf`
 }
 \description{
-use Anh Vu's OpenAI prompting to develop structured metadata about
+use Anh Vu's prompting to develop structured metadata about
 Bioconductor packages, targeting EDAM ontology and bio.tools schema
 }
 \note{
@@ -34,17 +45,12 @@ The result may possess redundant elements; mkdf will apply dplyr::distinct
 }
 \examples{
 if (interactive()) {
-  key = Sys.getenv("OPENAI_API_KEY")
-  if (nchar(key)==0) stop("need to have OPENAI_API_KEY set")
-  # avoid repetitious reprocessing of tximeta vignette
-  # content = vig2data("https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html")
+  # ANTHROPIC_API_KEY must be set for the default provider
   content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
   str(content)
   lk = edamize(content$focus)
   if (is.null(lk)) lk = edamize(content$focus)  # sometimes a second try is needed
   print(mkdf(lk))
-  # try content derived from a pdf vignette
-  # content2 = vig2data("https://bioconductor.org/packages/release/bioc/vignettes/IRanges/inst/doc/IRangesOverview.pdf")
   content2 = readRDS(system.file("rds/IRangesOVdata.rds", package="biocEDAM"))
   lk2 = edamize(content2$focus)
   mkdf(lk2)

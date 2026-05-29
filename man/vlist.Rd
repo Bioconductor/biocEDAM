@@ -8,7 +8,7 @@
 An object of class \code{list} of length 4.
 }
 \usage{
-vlist
+data(vlist)
 }
 \description{
 snapshot of all biocViews

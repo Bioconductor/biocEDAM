@@ -8,7 +8,7 @@
 An object of class \code{data.frame} with 3364 rows and 5 columns.
 }
 \usage{
-biotools_bioc
+data(biotools_bioc)
 }
 \description{
 result of scanning biotools metadata on 3 Nov 2024 to find bioconductor packages and EDAM topics
