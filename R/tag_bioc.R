@@ -27,7 +27,7 @@ bioc_line = function(pkgname = "tximeta") {
 #' @export
 tag_bioc = function(pkgname = "tximeta", url =
      "https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html",
-     provider="openai") {
+     provider="anthropic") {
   line = bioc_line(pkgname = pkgname)
   viewstr = paste(unlist(line$biocViews), collapse=", ")
   dat = vig2data(url, provider=provider)

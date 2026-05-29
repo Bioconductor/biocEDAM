@@ -33,7 +33,7 @@ extract_uri <- function(node) {
 #' edam_graph(statescoper$focused, eg, cex=.3)
 #' }
 #' @export
-edam_graph = function(txt, edam_graph, provider="openai", ...) {
+edam_graph = function(txt, edam_graph, provider="anthropic", ...) {
  ed = biocEDAM::edamize(txt, provider=provider)
  tf = tempfile()
  on.exit(unlink(tf))

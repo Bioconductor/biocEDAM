@@ -23,7 +23,7 @@
 #' flat_tagger(txt, nterms=12, model="gpt-4o")
 #' }
 #' @export
-flat_tagger = function(txt, nterms = 20, model="gpt-5", provider="openai", ...) {
+flat_tagger = function(txt, nterms = 20, model="claude-sonnet-4-5", provider="anthropic", ...) {
   message("This function does not avoid hallucinatory rewording of EDAM tags or construction of false tags")
   ch = llm_chat(provider=provider, model=model, ...)
   data("edam_topics", package="biocEDAM")

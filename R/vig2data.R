@@ -15,13 +15,13 @@
 #' environment variable (e.g. OPENAI_API_KEY for "openai", ANTHROPIC_API_KEY for "anthropic").
 #' @examples
 #' if (interactive()) {
-#' # OPENAI_API_KEY must be set for the default provider
+#' # ANTHROPIC_API_KEY must be set for the default provider
 #' tst = vig2data()
 #' str(tst)
 #' }
 #' @export
 vig2data = function(url ="https://bioconductor.org/packages/release/bioc/html/Voyager.html",
-   maxnchar=30000, n_pdf_pages=10, model="gpt-4o", provider="openai", ...) {
+   maxnchar=30000, n_pdf_pages=10, model="claude-sonnet-4-5", provider="anthropic", ...) {
  isHTML = isTRUE(length(grep("\\.html$", basename(url)))>0)
  isPDF = isTRUE(length(grep("\\.pdf$", basename(url)))>0)
  if (isHTML) {
