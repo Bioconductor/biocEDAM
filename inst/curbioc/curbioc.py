@@ -91,11 +91,20 @@ def _complete(system, user):
 
 
 def _extract_json(text):
-    """Strip markdown code fences that LLMs sometimes add despite instructions."""
+    """Extract JSON from an LLM response, handling code fences and prose preambles."""
     text = text.strip()
-    text = re.sub(r'^```[a-zA-Z]*\n?', '', text)
-    text = re.sub(r'\n?```\s*$', '', text)
-    return text.strip()
+    # Search for a fenced code block anywhere in the response
+    fence = re.search(r'```[a-zA-Z]*\s*\n?([\s\S]*?)\n?```', text)
+    if fence:
+        text = fence.group(1).strip()
+    # Find the outermost JSON object or array
+    for open_ch, close_ch in [('{', '}'), ('[', ']')]:
+        start = text.find(open_ch)
+        if start != -1:
+            end = text.rfind(close_ch)
+            if end > start:
+                return text[start:end + 1]
+    return text
 
 
 def get_text_from_url(url, trim=False):
@@ -140,8 +149,8 @@ def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
     except (json.JSONDecodeError, ValidationError) as e:
         attempts += 1
         print("JSON not valid, trying QC/correction prompt, attempt", attempts)
-        if attempts == max_retries:
-            raise
+        if attempts >= max_retries:
+            raise RuntimeError(f"JSON validation failed after {max_retries} attempts: {type(e).__name__}: {e.args[0] if e.args else ''}")
         json_string = fix_completion(json_string, str(e))
         return validate_json_with_retries(json_string, schema, max_retries, attempts)
 
