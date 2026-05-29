@@ -57,6 +57,16 @@ mkdf = function(x) {
 #' @param nterms integer(1) approximate number of EDAM terms to select. Defaults to 20.
 #' @param prescrub logical(1) if TRUE apply \code{\link{cleantxt}} before processing.
 #' Defaults to TRUE.
+#' @param retrieve_k integer(1) or NULL.  When not NULL, use embedding-based
+#' retrieval (via \code{\link{retrieve_edam_candidates}}) to pre-filter the
+#' EDAM vocabulary to the top \code{retrieve_k} candidates per type before
+#' LLM selection.  Requires \code{OPENAI_API_KEY} and the pre-computed
+#' embedding artifact (see \code{\link{get_edam_embeddings}}).
+#' Set to \code{NULL} to pass the full vocabulary directly to the LLM.
+#' Defaults to 75L.
+#' @param embed_model character(1) OpenAI embedding model used for retrieval;
+#' must match the model used to build the artifact.
+#' Defaults to \code{"text-embedding-3-small"}.
 #' @param \dots passed to \code{\link{llm_chat}}
 #' @return a data.frame with columns \code{uri} (full EDAM URI) and \code{tm} (term label),
 #' restricted to confirmed vocabulary entries and deduplicated.  Compatible with
@@ -76,10 +86,12 @@ mkdf = function(x) {
 #' @export
 edamize = function(
         content_for_edam,
-        provider = "anthropic",
-        model    = "claude-sonnet-4-5",
-        nterms   = 20L,
-        prescrub = TRUE,
+        provider    = "anthropic",
+        model       = "claude-sonnet-4-5",
+        nterms      = 20L,
+        prescrub    = TRUE,
+        retrieve_k  = 75L,
+        embed_model = "text-embedding-3-small",
         ...) {
     if (!is.character(content_for_edam) || length(content_for_edam) != 1L)
         stop("content_for_edam must be a single character string; ",
@@ -87,8 +99,14 @@ edamize = function(
 
     if (prescrub) content_for_edam = cleantxt(content_for_edam)
 
-    ee      = ontoProc2::semsql_connect(ontology = "edam")
-    edam_db = .get_edam_terms_from_db(ee@con)
+    if (!is.null(retrieve_k)) {
+        edam_emb = get_edam_embeddings()
+        edam_db  = retrieve_edam_candidates(content_for_edam, edam_emb,
+                                             retrieve_k, embed_model)
+    } else {
+        ee      = ontoProc2::semsql_connect(ontology = "edam")
+        edam_db = .get_edam_terms_from_db(ee@con)
+    }
 
     ch = llm_chat(provider = provider, model = model, ...)
 
