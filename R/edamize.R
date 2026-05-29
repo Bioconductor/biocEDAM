@@ -1,4 +1,4 @@
-#' utility to "clean" odd characters in text input that seem to increase risk of json-transformation failures
+#' utility to "clean" odd characters in text input that seem to increase risk of LLM failures
 #' @param x character(1) text from which non-alphabetic characters like brackets and parentheses
 #' are to be removed
 #' @note This is speculative; success rates appear to increase with no evident degradation of
@@ -6,84 +6,116 @@
 #' @export
 cleantxt = function(x) gsub('-|\\(|`|#|:|\\*|’|"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\||")', "", x)
 
-#' simple utility to process output of edamize into data.frame
+#' simple utility to process output of edamize into a data.frame
 #' @import rjsoncons
 #' @rawNamespace import(jsonlite, except=validate)
-#' @param x a list as produced by edamize
+#' @param x a data.frame as produced by edamize (returned as-is), or a legacy list
 #' @note dplyr::distinct is run on the result
 #' @export
-mkdf = function (x) 
-{
+mkdf = function(x) {
+    if (is.data.frame(x)) return(dplyr::distinct(x))
     lkj = jsonlite::toJSON(x)
     uri = fromJSON(rjsoncons::j_query(lkj, "$..uri"))
-    tm = fromJSON(rjsoncons::j_query(lkj, "$..term"))
+    tm  = fromJSON(rjsoncons::j_query(lkj, "$..term"))
     data.frame(uri, tm) |> dplyr::distinct()
 }
 
+# Internal: query the four EDAM term types from a SemanticSQL DBI connection.
+# Returns a named list of data frames (topic, operation, data, format),
+# each with columns id (CURIE) and lbl (label), excluding deprecated terms.
+.get_edam_terms_from_db = function(con) {
+    types = c("topic", "operation", "data", "format")
+    lapply(setNames(types, types), function(type) {
+        DBI::dbGetQuery(con, sprintf(
+            "SELECT s.subject AS id, s.value AS lbl
+             FROM rdfs_label_statement s
+             WHERE s.subject LIKE 'EDAM:%s_%%'
+               AND s.subject NOT IN (
+                   SELECT subject FROM edge
+                   WHERE object = 'owl:DeprecatedClass'
+               )",
+            type
+        ))
+    })
+}
 
-# mods to Anh Vu's code in github.com/anngvu/bioc-curation
-# aim is to run the code in R
-
-#' use Anh Vu's prompting to develop structured metadata about
-#' Bioconductor packages, targeting EDAM ontology and bio.tools schema
-#' @import dplyr
-#' @param content_for_edam character(1) a URL for doc originating from the developer
-#' @param temp numeric(1) temperature setting for the LLM chat, defaults to 0.0
-#' @param model character(1) model identifier for the selected provider;
-#' defaults to "claude-sonnet-4-5" (Anthropic)
-#' @param prescrub logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
-#' defaults to TRUE
-#' @param provider character(1) LLM provider for the Python path; one of "openai", "anthropic", or "gemini".
-#' The value of the corresponding environment variable (see \code{\link{llm_env_var}}) is used as the API key
-#' and the function stops with an informative error if the variable is not set.
+#' Assign EDAM ontology terms to text using a live SemanticSQL database and an LLM
+#' @import dplyr ellmer btw
+#' @importFrom DBI dbGetQuery
+#' @param content_for_edam character(1) text describing a bioinformatics resource
+#' @param provider character(1) LLM provider; see \code{\link{llm_env_var}}.
 #' Defaults to "anthropic".
-#' @note This function is not deterministic.  For the provided example, the input to the function
-#' is a fixed text, but the output at the end can be NULL, a data frame with 12 rows, or a data frame with 14 rows.
-#' More work is needed to achieve greater predictability.
-#' @note The result may possess redundant elements; mkdf will apply dplyr::distinct
-#' @return a list with components 'topic' and 'function', which can be converted to a data.frame using `mkdf`
+#' @param model character(1) model identifier for the selected provider.
+#' Defaults to "claude-sonnet-4-5".
+#' @param nterms integer(1) approximate number of EDAM terms to select. Defaults to 20.
+#' @param prescrub logical(1) if TRUE apply \code{\link{cleantxt}} before processing.
+#' Defaults to TRUE.
+#' @param \dots passed to \code{\link{llm_chat}}
+#' @return a data.frame with columns \code{uri} (full EDAM URI) and \code{tm} (term label),
+#' restricted to confirmed vocabulary entries and deduplicated.  Compatible with
+#' \code{\link{mkdf}}, \code{\link{toline}}, and \code{\link{edam_graph}}.
+#' @note This function replaces the former Python/curbioc.py implementation.
+#' It connects to the current EDAM release via \code{ontoProc2::semsql_connect()} and
+#' selects terms using \code{chat_structured()} via ellmer, so no JSON schema validation
+#' loop is needed and hallucinated term labels are eliminated by post-filtering against
+#' the actual vocabulary.
 #' @examples
 #' if (interactive()) {
 #'   # ANTHROPIC_API_KEY must be set for the default provider
 #'   content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
-#'   str(content)
-#'   lk = edamize(content$focus)
-#'   if (is.null(lk)) lk = edamize(content$focus)  # sometimes a second try is needed
-#'   print(mkdf(lk))
-#'   content2 = readRDS(system.file("rds/IRangesOVdata.rds", package="biocEDAM"))
-#'   lk2 = edamize(content2$focus)
-#'   mkdf(lk2)
+#'   lk = edamize(content$focused)
+#'   print(lk)
 #' }
 #' @export
 edamize = function(
-     content_for_edam,
-     temp = 0.0, model = "claude-sonnet-4-5", prescrub=TRUE, provider="anthropic") {
-   if (!is.character(content_for_edam) || length(content_for_edam) != 1)
-     stop("content_for_edam must be a single character string; did you mean to pass e.g. tst$focused?")
-   requireNamespace("reticulate")
-   api_key = llm_api_key(provider)
-   # copy to tempdir to avoid python import problems with the installed path
-   tdir = tempdir()
-   file.copy(system.file("curbioc", package="biocEDAM"), tdir, recursive=TRUE)
-   curbioc = reticulate::import_from_path("curbioc.curbioc", path=tdir, convert=FALSE)
-   json = reticulate::import("json", convert=FALSE)
-   curbioc$init_client(api_key=api_key, provider=provider, model=model)
+        content_for_edam,
+        provider = "anthropic",
+        model    = "claude-sonnet-4-5",
+        nterms   = 20L,
+        prescrub = TRUE,
+        ...) {
+    if (!is.character(content_for_edam) || length(content_for_edam) != 1L)
+        stop("content_for_edam must be a single character string; ",
+             "did you mean to pass e.g. tst$focused?")
 
-   edam_schema = curbioc$get_text_from_url("https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/edammap.json")
-   edam_validation = json$loads(edam_schema)
+    if (prescrub) content_for_edam = cleantxt(content_for_edam)
 
-   if (prescrub) content_for_edam = cleantxt(content_for_edam)
-   edam_json = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
-   if (inherits(edam_json, "try-error")) {
-     warning("schema_completion failed")
-     return(NULL)
-   }
-   edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-   if (inherits(edam_final, "try-error")) {
-     warning("JSON validation failed after retries")
-     return(NULL)
-   }
-   edam_processed = curbioc$transform_terms(edam_final)
-   reticulate::py_to_r(edam_processed)
+    ee      = ontoProc2::semsql_connect(ontology = "edam")
+    edam_db = .get_edam_terms_from_db(ee@con)
+
+    ch = llm_chat(provider = provider, model = model, ...)
+
+    sel_type = ellmer::type_array(
+        ellmer::type_object(
+            id  = ellmer::type_string(
+                      description = "EDAM CURIE exactly as provided, e.g. EDAM:topic_0003"),
+            lbl = ellmer::type_string(
+                      description = "EDAM term label exactly as provided")
+        )
+    )
+
+    prompt = paste0(
+        "You are an expert bioinformatics curator. ",
+        "Select approximately ", nterms, " EDAM ontology terms most relevant to the content below. ",
+        "Aim for a balanced mix of topics, operations, data types, and formats. ",
+        "Return id and lbl EXACTLY as they appear in the vocabulary tables — ",
+        "do not invent, paraphrase, or abbreviate terms.\n\n",
+        "CONTENT:\n", content_for_edam
+    )
+
+    result = ch$chat_structured(
+        btw::btw(edam_db$topic, edam_db$operation, edam_db$data, edam_db$format, prompt),
+        type = sel_type
+    )
+
+    # Discard any IDs not present in the actual vocabulary (hallucination guard)
+    all_valid = do.call(rbind, edam_db)
+    result    = result[result$id %in% all_valid$id, ]
+
+    # Convert CURIEs to full URIs and name columns to match legacy mkdf output
+    data.frame(
+        uri = sub("^EDAM:", "http://edamontology.org/", result$id),
+        tm  = result$lbl,
+        stringsAsFactors = FALSE
+    ) |> dplyr::distinct()
 }
-   
