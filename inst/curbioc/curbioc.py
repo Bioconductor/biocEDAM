@@ -3,6 +3,7 @@
 # Vince Carey stripped out notebook components to expose functions for
 # calling from R via reticulate
 
+import re
 import requests
 import os
 import json
@@ -106,6 +107,14 @@ def get_text_from_url(url, trim=False):
         return None
 
 
+def _extract_json(text):
+    """Strip markdown code fences that LLMs sometimes add despite instructions."""
+    text = text.strip()
+    text = re.sub(r'^```[a-zA-Z]*\n?', '', text)
+    text = re.sub(r'\n?```\s*$', '', text)
+    return text.strip()
+
+
 def schema_completion(content, schema, temp=0.0):
     system = (
         "You are a helpful expert in data curation and data modeling, especially with structured JSON data."
@@ -115,13 +124,13 @@ def schema_completion(content, schema, temp=0.0):
         "Given content about a bioformatics tool, represent it as a JSON object compliant with the provided schema:"
         "\nCONTENT:\n\n" + content + '\nSCHEMA:\n\n' + schema
     )
-    return _complete(system, user)
+    return _extract_json(_complete(system, user))
 
 
 def fix_completion(content, error):
     system = "You are debugging an API. Review the given JSON object and schema error and return the corrected JSON object only. Do not use code blocks."
     user = "JSON:\n\n" + content + "\nSchema ERROR:\n\n" + error
-    return _complete(system, user)
+    return _extract_json(_complete(system, user))
 
 
 def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
