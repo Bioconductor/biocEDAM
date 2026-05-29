@@ -20,10 +20,16 @@ mkdf = function(x) {
     data.frame(uri, tm) |> dplyr::distinct()
 }
 
+# The four EDAM branch roots — too generic to tag anything with.
+.EDAM_ROOTS = c("EDAM:topic_0003", "EDAM:operation_0004",
+                "EDAM:data_0006",  "EDAM:format_1915")
+
 # Internal: query the four EDAM term types from a SemanticSQL DBI connection.
 # Returns a named list of data frames (topic, operation, data, format),
-# each with columns id (CURIE) and lbl (label), excluding deprecated terms.
+# each with columns id (CURIE) and lbl (label), excluding deprecated terms
+# and the four branch-root nodes.
 .get_edam_terms_from_db = function(con) {
+    root_sql = paste0("'", .EDAM_ROOTS, "'", collapse = ", ")
     types = c("topic", "operation", "data", "format")
     lapply(setNames(types, types), function(type) {
         DBI::dbGetQuery(con, sprintf(
@@ -33,8 +39,9 @@ mkdf = function(x) {
                AND s.subject NOT IN (
                    SELECT subject FROM edge
                    WHERE object = 'owl:DeprecatedClass'
-               )",
-            type
+               )
+               AND s.subject NOT IN (%s)",
+            type, root_sql
         ))
     })
 }
@@ -98,8 +105,10 @@ edamize = function(
         "You are an expert bioinformatics curator. ",
         "Select approximately ", nterms, " EDAM ontology terms most relevant to the content below. ",
         "Aim for a balanced mix of topics, operations, data types, and formats. ",
-        "Return id and lbl EXACTLY as they appear in the vocabulary tables — ",
-        "do not invent, paraphrase, or abbreviate terms.\n\n",
+        "Prefer specific, informative terms over generic parent categories ",
+        "(e.g. avoid 'Bioinformatics' or 'Data analysis' unless uniquely fitting). ",
+        "Return the id field EXACTLY as it appears in the vocabulary tables — ",
+        "do not invent, paraphrase, or alter any id or label.\n\n",
         "CONTENT:\n", content_for_edam
     )
 
@@ -111,6 +120,9 @@ edamize = function(
     # Discard any IDs not present in the actual vocabulary (hallucination guard)
     all_valid = do.call(rbind, edam_db)
     result    = result[result$id %in% all_valid$id, ]
+
+    # Replace model-provided labels with authoritative database labels
+    result$lbl = all_valid$lbl[match(result$id, all_valid$id)]
 
     # Convert CURIEs to full URIs and name columns to match legacy mkdf output
     data.frame(
