@@ -28,14 +28,15 @@ mkdf = function (x)
 #' Bioconductor packages, targeting EDAM ontology and bio.tools schema
 #' @import dplyr
 #' @param content_for_edam character(1) a URL for doc originating from the developer
-#' @param temp numeric(1) temperature setting for the LLM chat, defaults to 0.0, ignored when gpt-5 is used
-#' @param model character(1) model identifier for the selected provider; defaults to "gpt-5" (OpenAI)
+#' @param temp numeric(1) temperature setting for the LLM chat, defaults to 0.0
+#' @param model character(1) model identifier for the selected provider;
+#' defaults to "claude-sonnet-4-5" (Anthropic)
 #' @param prescrub logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
 #' defaults to TRUE
-#' @param provider character(1) LLM provider for the Python path; currently only "openai" is supported.
+#' @param provider character(1) LLM provider for the Python path; one of "openai", "anthropic", or "gemini".
 #' The value of the corresponding environment variable (see \code{\link{llm_env_var}}) is used as the API key
 #' and the function stops with an informative error if the variable is not set.
-#' effort in the python operations in inst/curbioc; defaults to 1
+#' Defaults to "anthropic".
 #' @note This function is not deterministic.  For the provided example, the input to the function
 #' is a fixed text, but the output at the end can be NULL, a data frame with 12 rows, or a data frame with 14 rows.
 #' More work is needed to achieve greater predictability.
@@ -43,7 +44,7 @@ mkdf = function (x)
 #' @return a list with components 'topic' and 'function', which can be converted to a data.frame using `mkdf`
 #' @examples
 #' if (interactive()) {
-#'   # OPENAI_API_KEY must be set for the default provider
+#'   # ANTHROPIC_API_KEY must be set for the default provider
 #'   content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
 #'   str(content)
 #'   lk = edamize(content$focus)
@@ -56,7 +57,7 @@ mkdf = function (x)
 #' @export
 edamize = function(
      content_for_edam,
-     temp = 0.0, model = "gpt-5", prescrub=TRUE, provider="openai") {
+     temp = 0.0, model = "claude-sonnet-4-5", prescrub=TRUE, provider="anthropic") {
    requireNamespace("reticulate")
    api_key = llm_api_key(provider)
    requests = reticulate::import("requests", convert=FALSE)
