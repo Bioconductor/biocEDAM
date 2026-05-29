@@ -4,40 +4,87 @@
 # calling from R via reticulate
 
 import requests
-import openai
 import os
 import json
 from jsonschema import validate, ValidationError
-
-# new 7 nov
 import pandas as pd
-import tiktoken
 
-embedding_model = "text-embedding-3-large"
-embedding_encoding = "cl100k_base" # check
-max_tokens = 8000
+# LLM state – set by init_client() before use
+_provider = None
+client = None
+MODEL = "%%MODEL%%"
 
-encoding = tiktoken.get_encoding(embedding_encoding)
 
-# end new
+def init_client(api_key, provider="openai", model=None):
+    """Initialize the module-level LLM client and optionally set MODEL.
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-MODEL="%%MODEL%%"
-client = openai.OpenAI(api_key=OPENAI_API_KEY)
+    Must be called before schema_completion or fix_completion.
+    Supported providers: 'openai', 'anthropic', 'gemini'.
+    """
+    global client, MODEL, _provider
+    if model is not None:
+        MODEL = model
+    _provider = provider
+    if provider == "openai":
+        import openai as _openai
+        client = _openai.OpenAI(api_key=api_key)
+    elif provider == "anthropic":
+        import anthropic as _anthropic
+        client = _anthropic.Anthropic(api_key=api_key)
+    elif provider == "gemini":
+        from google import genai as _genai
+        client = _genai.Client(api_key=api_key)
+    else:
+        raise ValueError(
+            f"Unsupported provider: '{provider}'. Supported: openai, anthropic, gemini"
+        )
+
+
+def _complete(system, user):
+    """Call the active LLM provider and return the response text."""
+    if client is None:
+        raise RuntimeError("Call init_client() before using LLM functions.")
+    if _provider == "openai":
+        resp = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": system},
+                {"role": "user",   "content": user},
+            ],
+        )
+        return resp.choices[0].message.content
+    elif _provider == "anthropic":
+        resp = client.messages.create(
+            model=MODEL,
+            max_tokens=4096,
+            system=system,
+            messages=[{"role": "user", "content": user}],
+        )
+        return resp.content[0].text
+    elif _provider == "gemini":
+        from google.genai import types as _types
+        resp = client.models.generate_content(
+            model=MODEL,
+            contents=user,
+            config=_types.GenerateContentConfig(system_instruction=system),
+        )
+        return resp.text
+    else:
+        raise RuntimeError(f"Unknown provider '{_provider}' – was init_client() called?")
+
 
 # This segment prepares EDAM-oriented schemas
 
 # EDAM data still needs post-AI processing to merge in class ids using a reference file before it is truly valid
 references = {
-    'topic' : 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_topics.json',
-    'operation' : 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_operations.json',
-    'data': 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_data.json',
-    'format': 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_formats.json'
+    'topic':     'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_topics.json',
+    'operation': 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_operations.json',
+    'data':      'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_data.json',
+    'format':    'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_formats.json',
 }
 
 loaded_reference = {}
 
-# Load each reference file into the dictionary
 for subset, url in references.items():
     response = json.loads(requests.get(url).text)
     terms = next(iter(response.values()))
@@ -45,52 +92,37 @@ for subset, url in references.items():
 
 # end of schema reference processing
 
-# Basic python functions from Anh:
 
-def get_text_from_url(url, trim=False):  # some developer files need trimming
-  try:
-    response = requests.get(url)
-    response.raise_for_status()
-    tmp = response.text
-# new
-#    print(len(encoding.encode(tmp)))  # actual number of tokens?
-#    print(len(tmp))
-#
-    #print(len(tmp))    # FIXME -- shoould we use the len(encode.encode(tmp)) instead of len(tmp) for test:
-    if (len(tmp)>30000) & trim: 
-      tmp = tmp[0:30000:1]  # avoid rate limiting error, could be too strict
-    #print(len(tmp))
-    return tmp
-  except requests.exceptions.RequestException as e:
-    print(f"Error fetching URL: {e}")
-    return None
+def get_text_from_url(url, trim=False):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        tmp = response.text
+        if (len(tmp) > 30000) and trim:
+            tmp = tmp[0:30000:1]
+        return tmp
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching URL: {e}")
+        return None
 
 
-# Base schema completion
+def schema_completion(content, schema, temp=0.0):
+    system = (
+        "You are a helpful expert in data curation and data modeling, especially with structured JSON data."
+        "You return only valid JSON string, not in a code block, and without any other explanation so that the string and decoded and inserted into a database."
+    )
+    user = (
+        "Given content about a bioformatics tool, represent it as a JSON object compliant with the provided schema:"
+        "\nCONTENT:\n\n" + content + '\nSCHEMA:\n\n' + schema
+    )
+    return _complete(system, user)
 
-def schema_completion(content, schema, temp):
-  completion=client.chat.completions.create(
-    model=MODEL,
-#    temperature = temp,
-    messages=[
-      {"role": "system", "content": "You are a helpful expert in data curation and data modeling, especially with structured JSON data." + 
-       "You return only valid JSON string, not in a code block, and without any other explanation so that the string and decoded and inserted into a database."},
-      {"role": "user", "content": "Given content about a bioformatics tool, represent it as a JSON object compliant with the provided schema:" +
-       "\nCONTENT:\n\n" + content + '\nSCHEMA:\n\n' + schema}]
-  )
-  return(completion)
-
-# Validate and send any error to be corrected (default: max of 3 times), based on validation error
 
 def fix_completion(content, error):
-#  print(content)
-  completion=client.chat.completions.create(
-    model=MODEL,
-    messages=[
-      {"role": "system", "content": "You are debugging an API. Review the given JSON object and schema error and return the corrected JSON object only. Do not use code blocks."},
-      {"role": "user", "content": "JSON:\n\n" + content + "\nSchema ERROR:\n\n" + error }]
-  )
-  return(completion)
+    system = "You are debugging an API. Review the given JSON object and schema error and return the corrected JSON object only. Do not use code blocks."
+    user = "JSON:\n\n" + content + "\nSchema ERROR:\n\n" + error
+    return _complete(system, user)
+
 
 def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
     if attempts > max_retries:
@@ -98,8 +130,6 @@ def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
     try:
         parsed_json = json.loads(json_string)
         validate(instance=parsed_json, schema=schema)
-        
-        # Both JSON parsing and validation succeeded
         print("Success after", attempts, "attempts")
         return parsed_json
     except (json.JSONDecodeError, ValidationError) as e:
@@ -107,32 +137,31 @@ def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
         print("JSON not valid, trying QC/correction prompt, attempt", attempts)
         if attempts == max_retries:
             raise
-        response = fix_completion(json_string, str(e))
-        json_string = response.choices[0].message.content
+        json_string = fix_completion(json_string, str(e))
         validate_json_with_retries(json_string, schema, max_retries, attempts)
-    
 
-# https://openai.com/api/pricing/
-# Note: minimum cost, ignores cached tokens and completions for QC re-prompts
 
+# https://openai.com/api/pricing/ — OpenAI provider only
 def openai_completion_cost(usage):
     input_pricing_per_token = 0.0000025
     output_pricing_per_token = 0.00001
     total = (usage.prompt_tokens * input_pricing_per_token) + (usage.completion_tokens * output_pricing_per_token)
-    return(total)
+    return total
+
 
 def transform_with_uri(terms, subset):
-     result = [{ "term" : term["term"], "uri": loaded_reference[subset][term.get("term")]} for term in terms]
-     return result
+    result = [{"term": term["term"], "uri": loaded_reference[subset][term.get("term")]} for term in terms]
+    return result
+
 
 def transform_terms(data):
     new_data = {}
     if isinstance(data, dict):
         for key, value in data.items():
             if key in ("operation", "topic", "format"):
-                new_data[key] = [{ "term" : term["term"], "uri": loaded_reference[key][term.get("term")]} for term in value]
+                new_data[key] = [{"term": term["term"], "uri": loaded_reference[key][term.get("term")]} for term in value]
             elif key == "data":
-                new_data[key] = { "term" : value["term"], "uri": loaded_reference[key][value["term"]]}
+                new_data[key] = {"term": value["term"], "uri": loaded_reference[key][value["term"]]}
             else:
                 new_data[key] = transform_terms(value)
         return new_data
@@ -140,7 +169,7 @@ def transform_terms(data):
         return [transform_terms(item) for item in data]
     else:
         return data
-   
+
 
 def final_validation(merged):
     try:
@@ -148,5 +177,3 @@ def final_validation(merged):
         return ""
     except Exception as e:
         return str(e)
-    
-

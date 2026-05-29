@@ -1,7 +1,7 @@
 Package: biocEDAM
 Date: 2026-02-17
 Title: Support the investigation of biocViews in relation to EDAM ontology
-Version: 0.0.19
+Version: 0.0.22
 Authors@R: 
     c(person(
         "Vincent", "Carey", role = c("aut", "cre"),
@@ -33,9 +33,10 @@ Config/reticulate:
   list(
     packages = list(
       list(package = "openai", version = "1.66.3", pip = TRUE),
+      list(package = "anthropic", pip = TRUE),
+      list(package = "google-genai", pip = TRUE),
       list(package = "requests", version = "2.32.3", pip = TRUE),
       list(package = "jsonschema", version = "4.23.0", pip = TRUE),
-      list(package = "pandas", version = "2.2.3", pip = TRUE),
-      list(package = "tiktoken", version = "0.9.0", pip = TRUE)
+      list(package = "pandas", version = "2.2.3", pip = TRUE)
     )
   )

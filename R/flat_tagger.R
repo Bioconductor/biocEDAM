@@ -2,8 +2,10 @@
 #' @import ellmer
 #' @import btw
 #' @param txt a text string for analysis
-#' @param model a string naming an openai model
-#' @param \dots parameters passed to chat_openai
+#' @param model character(1) model identifier for the selected provider; defaults to "gpt-5" (OpenAI)
+#' @param provider character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
+#' the required environment variable for each.  Defaults to "openai".
+#' @param \dots parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}
 #' @note This function as of Nov 7 2025 will routinely hallucinate associations and terms.
 #' @examples
 #' if (interactive()) {
@@ -21,9 +23,9 @@
 #' flat_tagger(txt, nterms=12, model="gpt-4o")
 #' }
 #' @export
-flat_tagger = function(txt, nterms = 20, model="gpt-5", ...) {
+flat_tagger = function(txt, nterms = 20, model="gpt-5", provider="openai", ...) {
   message("This function does not avoid hallucinatory rewording of EDAM tags or construction of false tags")
-  ch = chat_openai(model=model, ...)
+  ch = llm_chat(provider=provider, model=model, ...)
   data("edam_topics", package="biocEDAM")
   data("edam_operations", package="biocEDAM")
   data("edam_data", package="biocEDAM")

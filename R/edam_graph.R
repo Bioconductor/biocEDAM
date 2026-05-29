@@ -21,20 +21,20 @@ extract_uri <- function(node) {
 #' @importFrom jsonlite write_json read_json
 #' @param txt string, typically describing a software artifact
 #' @param edam_graph an ontologyIndex ontology-index instance representing EDAM
+#' @param provider character(1) LLM provider; see \code{\link{llm_env_var}}. Defaults to "openai".
 #' @param \dots passed to ontoProc::onto_plot2
 #' @note The text is expected to be generated as the 'focused' result
 #' of vig2data; it will then be processed by 'edamize'
 #' @examples
 #' if (interactive()) {
 #' requireNamespace("ontoProc2")
-#' stopifnot(nchar(Sys.getenv("OPENAI_API_KEY"))>0)
 #' eg = readRDS(system.file("rds", "edam_1.25_ontoindex.rds", package="biocEDAM"))
 #' statescoper = readRDS(system.file("rds", "tgac-vumc_StatescopeR.rds", package="biocEDAM"))
-#' edam_graph(statescoper$focused, eg, cex=.3) 
+#' edam_graph(statescoper$focused, eg, cex=.3)
 #' }
 #' @export
-edam_graph = function(txt, edam_graph, ...) {
- ed = biocEDAM::edamize(txt) # uses openAI API
+edam_graph = function(txt, edam_graph, provider="openai", ...) {
+ ed = biocEDAM::edamize(txt, provider=provider)
  tf = tempfile()
  on.exit(unlink(tf))
  jsonlite::write_json(ed, path=tf)  # probably unnecessary, do in memory
