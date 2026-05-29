@@ -9,8 +9,8 @@ curate_bioc(
   packageName = "chromVAR",
   devurl =
     "https://raw.githubusercontent.com/GreenleafLab/chromVAR/refs/heads/master/README.md",
-  model = "gpt-4o",
-  provider = "openai"
+  model = "claude-sonnet-4-5",
+  provider = "anthropic"
 )
 }
 \arguments{

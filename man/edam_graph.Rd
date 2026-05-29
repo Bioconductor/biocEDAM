@@ -4,7 +4,7 @@
 \alias{edam_graph}
 \title{build a graph of EDAM terms deemed relevant to a text}
 \usage{
-edam_graph(txt, edam_graph, provider = "openai", ...)
+edam_graph(txt, edam_graph, provider = "anthropic", ...)
 }
 \arguments{
 \item{txt}{string, typically describing a software artifact}

@@ -9,8 +9,8 @@ vig2data(
   url = "https://bioconductor.org/packages/release/bioc/html/Voyager.html",
   maxnchar = 30000,
   n_pdf_pages = 10,
-  model = "gpt-4o",
-  provider = "openai",
+  model = "claude-sonnet-4-5",
+  provider = "anthropic",
   ...
 )
 }
@@ -42,7 +42,7 @@ environment variable (e.g. OPENAI_API_KEY for "openai", ANTHROPIC_API_KEY for "a
 }
 \examples{
 if (interactive()) {
-# OPENAI_API_KEY must be set for the default provider
+# ANTHROPIC_API_KEY must be set for the default provider
 tst = vig2data()
 str(tst)
 }

@@ -4,7 +4,13 @@
 \alias{flat_tagger}
 \title{simple tagger based on text excerpt and available context from data-frames with edam vocabularies}
 \usage{
-flat_tagger(txt, nterms = 20, model = "gpt-5", provider = "openai", ...)
+flat_tagger(
+  txt,
+  nterms = 20,
+  model = "claude-sonnet-4-5",
+  provider = "anthropic",
+  ...
+)
 }
 \arguments{
 \item{txt}{a text string for analysis}

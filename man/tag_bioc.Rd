@@ -9,7 +9,7 @@ tag_bioc(
   pkgname = "tximeta",
   url =
     "https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html",
-  provider = "openai"
+  provider = "anthropic"
 )
 }
 \arguments{

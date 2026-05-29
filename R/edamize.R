@@ -58,34 +58,31 @@ mkdf = function (x)
 edamize = function(
      content_for_edam,
      temp = 0.0, model = "claude-sonnet-4-5", prescrub=TRUE, provider="anthropic") {
+   if (!is.character(content_for_edam) || length(content_for_edam) != 1)
+     stop("content_for_edam must be a single character string; did you mean to pass e.g. tst$focused?")
    requireNamespace("reticulate")
    api_key = llm_api_key(provider)
-   requests = reticulate::import("requests", convert=FALSE)
-   # we copy to tempdir to avoid problems with python import from the installed folder
-   # the tmpdir path is typically compact and has no special characters
+   # copy to tempdir to avoid python import problems with the installed path
    tdir = tempdir()
    file.copy(system.file("curbioc", package="biocEDAM"), tdir, recursive=TRUE)
    curbioc = reticulate::import_from_path("curbioc.curbioc", path=tdir, convert=FALSE)
    json = reticulate::import("json", convert=FALSE)
    curbioc$init_client(api_key=api_key, provider=provider, model=model)
-   
-   #
-   ## Retrieve schemas
-   #
-
-   # EDAM
 
    edam_schema = curbioc$get_text_from_url("https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/edammap.json")
    edam_validation = json$loads(edam_schema)
-   #
-   
-   #
-   ## EDAM schema completion
-   #
+
    if (prescrub) content_for_edam = cleantxt(content_for_edam)
    edam_json = try(curbioc$schema_completion(content_for_edam, edam_schema, temp=temp))
+   if (inherits(edam_json, "try-error")) {
+     warning("schema_completion failed")
+     return(NULL)
+   }
    edam_final = try(curbioc$validate_json_with_retries(edam_json, edam_validation))
-   
+   if (inherits(edam_final, "try-error")) {
+     warning("JSON validation failed after retries")
+     return(NULL)
+   }
    edam_processed = curbioc$transform_terms(edam_final)
    reticulate::py_to_r(edam_processed)
 }

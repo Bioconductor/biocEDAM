@@ -5,27 +5,43 @@
 
 import re
 import requests
-import os
 import json
 from jsonschema import validate, ValidationError
 import pandas as pd
 
-# LLM state – set by init_client() before use
+# LLM state – all set by init_client() before use
 _provider = None
 client = None
-MODEL = "%%MODEL%%"
+MODEL = None
+loaded_reference = {}
+
+_REFERENCE_URLS = {
+    'topic':     'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_topics.json',
+    'operation': 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_operations.json',
+    'data':      'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_data.json',
+    'format':    'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_formats.json',
+}
+
+
+def _load_references():
+    global loaded_reference
+    for subset, url in _REFERENCE_URLS.items():
+        resp = json.loads(requests.get(url).text)
+        terms = next(iter(resp.values()))
+        loaded_reference[subset] = {item['lbl']: item['id'] for item in terms}
 
 
 def init_client(api_key, provider="openai", model=None):
-    """Initialize the module-level LLM client and optionally set MODEL.
+    """Initialize the LLM client, set MODEL, and load EDAM reference tables.
 
     Must be called before schema_completion or fix_completion.
     Supported providers: 'openai', 'anthropic', 'gemini'.
     """
     global client, MODEL, _provider
-    if model is not None:
-        MODEL = model
+    MODEL = model
     _provider = provider
+    if not loaded_reference:
+        _load_references()
     if provider == "openai":
         import openai as _openai
         client = _openai.OpenAI(api_key=api_key)
@@ -43,7 +59,7 @@ def init_client(api_key, provider="openai", model=None):
 
 def _complete(system, user):
     """Call the active LLM provider and return the response text."""
-    if client is None:
+    if client is None or MODEL is None:
         raise RuntimeError("Call init_client() before using LLM functions.")
     if _provider == "openai":
         resp = client.chat.completions.create(
@@ -74,24 +90,12 @@ def _complete(system, user):
         raise RuntimeError(f"Unknown provider '{_provider}' – was init_client() called?")
 
 
-# This segment prepares EDAM-oriented schemas
-
-# EDAM data still needs post-AI processing to merge in class ids using a reference file before it is truly valid
-references = {
-    'topic':     'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_topics.json',
-    'operation': 'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_operations.json',
-    'data':      'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_data.json',
-    'format':    'https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_formats.json',
-}
-
-loaded_reference = {}
-
-for subset, url in references.items():
-    response = json.loads(requests.get(url).text)
-    terms = next(iter(response.values()))
-    loaded_reference[subset] = {item['lbl']: item['id'] for item in terms}
-
-# end of schema reference processing
+def _extract_json(text):
+    """Strip markdown code fences that LLMs sometimes add despite instructions."""
+    text = text.strip()
+    text = re.sub(r'^```[a-zA-Z]*\n?', '', text)
+    text = re.sub(r'\n?```\s*$', '', text)
+    return text.strip()
 
 
 def get_text_from_url(url, trim=False):
@@ -107,21 +111,13 @@ def get_text_from_url(url, trim=False):
         return None
 
 
-def _extract_json(text):
-    """Strip markdown code fences that LLMs sometimes add despite instructions."""
-    text = text.strip()
-    text = re.sub(r'^```[a-zA-Z]*\n?', '', text)
-    text = re.sub(r'\n?```\s*$', '', text)
-    return text.strip()
-
-
 def schema_completion(content, schema, temp=0.0):
     system = (
         "You are a helpful expert in data curation and data modeling, especially with structured JSON data."
-        "You return only valid JSON string, not in a code block, and without any other explanation so that the string and decoded and inserted into a database."
+        "You return only valid JSON string, not in a code block, and without any other explanation so that the string can be decoded and inserted into a database."
     )
     user = (
-        "Given content about a bioformatics tool, represent it as a JSON object compliant with the provided schema:"
+        "Given content about a bioinformatics tool, represent it as a JSON object compliant with the provided schema:"
         "\nCONTENT:\n\n" + content + '\nSCHEMA:\n\n' + schema
     )
     return _extract_json(_complete(system, user))
@@ -147,20 +143,18 @@ def validate_json_with_retries(json_string, schema, max_retries=3, attempts=0):
         if attempts == max_retries:
             raise
         json_string = fix_completion(json_string, str(e))
-        validate_json_with_retries(json_string, schema, max_retries, attempts)
+        return validate_json_with_retries(json_string, schema, max_retries, attempts)
 
 
 # https://openai.com/api/pricing/ — OpenAI provider only
 def openai_completion_cost(usage):
     input_pricing_per_token = 0.0000025
     output_pricing_per_token = 0.00001
-    total = (usage.prompt_tokens * input_pricing_per_token) + (usage.completion_tokens * output_pricing_per_token)
-    return total
+    return (usage.prompt_tokens * input_pricing_per_token) + (usage.completion_tokens * output_pricing_per_token)
 
 
 def transform_with_uri(terms, subset):
-    result = [{"term": term["term"], "uri": loaded_reference[subset][term.get("term")]} for term in terms]
-    return result
+    return [{"term": term["term"], "uri": loaded_reference[subset][term.get("term")]} for term in terms]
 
 
 def transform_terms(data):
