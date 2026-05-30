@@ -72,9 +72,12 @@
 #' \code{oio:hasDefinition} text.  On first call the file is downloaded;
 #' subsequent calls in the same or future sessions use the local cache.
 #'
+#' If the environment variable \code{EDAM_EMBEDDING_RDS} is set to a readable
+#' \code{.rds} file path, that file is loaded directly and takes priority over
+#' AnnotationHub.  Otherwise the resource is retrieved from AnnotationHub.
 #' If the resource is not yet available in AnnotationHub, run
-#' \code{\link{make_edam_embeddings}} to generate it locally and pass the
-#' resulting object directly to \code{\link{retrieve_edam_candidates}}.
+#' \code{\link{make_edam_embeddings}} to generate it locally and set
+#' \code{EDAM_EMBEDDING_RDS} to its path.
 #'
 #' @return a list with components \code{ids}, \code{labels}, \code{types},
 #' \code{texts}, \code{embeddings} (numeric matrix, terms × dimensions),
@@ -82,13 +85,22 @@
 #' @importFrom AnnotationHub AnnotationHub query
 #' @export
 get_edam_embeddings <- function() {
+    env_path <- Sys.getenv("EDAM_EMBEDDING_RDS", unset = "")
+    if (nchar(env_path) > 0L) {
+        if (!file.exists(env_path))
+            stop("EDAM_EMBEDDING_RDS is set to '", env_path,
+                 "' but the file does not exist.")
+        message("Loading EDAM embeddings from EDAM_EMBEDDING_RDS: ", env_path)
+        return(readRDS(env_path))
+    }
     hub <- AnnotationHub::AnnotationHub()
     q   <- AnnotationHub::query(
                hub, c("biocEDAM", "EDAM", "embeddings",
                       "text-embedding-3-small"))
     if (length(q) == 0L)
         stop("EDAM embedding artifact not yet in AnnotationHub.\n",
-             "Generate it locally with biocEDAM::make_edam_embeddings().")
+             "Generate it locally with biocEDAM::make_edam_embeddings() ",
+             "and set EDAM_EMBEDDING_RDS to its path.")
     q[[length(q)]]
 }
 
