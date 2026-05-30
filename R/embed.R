@@ -72,12 +72,18 @@
 #' \code{oio:hasDefinition} text.  On first call the file is downloaded;
 #' subsequent calls in the same or future sessions use the local cache.
 #'
-#' If the environment variable \code{EDAM_EMBEDDING_RDS} is set to a readable
-#' \code{.rds} file path, that file is loaded directly and takes priority over
-#' AnnotationHub.  Otherwise the resource is retrieved from AnnotationHub.
-#' If the resource is not yet available in AnnotationHub, run
-#' \code{\link{make_edam_embeddings}} to generate it locally and set
-#' \code{EDAM_EMBEDDING_RDS} to its path.
+#' Lookup order:
+#' \enumerate{
+#'   \item If \code{EDAM_EMBEDDING_RDS} is set to a readable \code{.rds} path,
+#'         that file is loaded and returned immediately.
+#'   \item The file bundled with the package at
+#'         \code{inst/demo_embedding/edam_embeddings.rds} is used (via
+#'         \code{system.file}).
+#'   \item AnnotationHub is queried for a \code{biocEDAM} embedding resource.
+#' }
+#' To override the bundled demo file with a freshly generated artifact, set
+#' \code{EDAM_EMBEDDING_RDS} to its path or ensure the resource is in
+#' AnnotationHub (see \code{\link{make_edam_embeddings}}).
 #'
 #' @return a list with components \code{ids}, \code{labels}, \code{types},
 #' \code{texts}, \code{embeddings} (numeric matrix, terms × dimensions),
@@ -85,6 +91,7 @@
 #' @importFrom AnnotationHub AnnotationHub query
 #' @export
 get_edam_embeddings <- function() {
+    # 1. Explicit env-var override
     env_path <- Sys.getenv("EDAM_EMBEDDING_RDS", unset = "")
     if (nchar(env_path) > 0L) {
         if (!file.exists(env_path))
@@ -93,14 +100,22 @@ get_edam_embeddings <- function() {
         message("Loading EDAM embeddings from EDAM_EMBEDDING_RDS: ", env_path)
         return(readRDS(env_path))
     }
+    # 2. Bundled demo embedding shipped with the package
+    pkg_path <- system.file("demo_embedding", "edam_embeddings.rds",
+                            package = "biocEDAM")
+    if (nchar(pkg_path) > 0L) {
+        message("Loading bundled EDAM embeddings from ", pkg_path)
+        return(readRDS(pkg_path))
+    }
+    # 3. AnnotationHub
     hub <- AnnotationHub::AnnotationHub()
     q   <- AnnotationHub::query(
                hub, c("biocEDAM", "EDAM", "embeddings",
                       "text-embedding-3-small"))
     if (length(q) == 0L)
-        stop("EDAM embedding artifact not yet in AnnotationHub.\n",
-             "Generate it locally with biocEDAM::make_edam_embeddings() ",
-             "and set EDAM_EMBEDDING_RDS to its path.")
+        stop("No EDAM embedding artifact found.\n",
+             "Generate one with biocEDAM::make_edam_embeddings() and set ",
+             "EDAM_EMBEDDING_RDS to its path.")
     q[[length(q)]]
 }
 
