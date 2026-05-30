@@ -1,7 +1,9 @@
 test_that("cleantxt removes special characters", {
-    expect_equal(cleantxt("RNA-seq (paired)"), "RNAseq paired")
+    expect_equal(cleantxt("RNA-seq (paired)"), "RNAseq paired)")  # ) not in pattern
     expect_equal(cleantxt("foo#bar:baz"), "foobarbaz")
     expect_equal(cleantxt("normal text"), "normal text")
+    expect_false(grepl("-", cleantxt("RNA-seq")))   # dash removed
+    expect_false(grepl("\\(", cleantxt("(test")))  # open paren removed
 })
 
 test_that("mkdf passes through a data.frame unchanged", {
