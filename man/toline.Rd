@@ -17,3 +17,14 @@ a data.frame
 process the output of edamize followed by mkdf to create a data frame with components topic, operation, data, format,
 reflecting main elements of EDAM
 }
+\examples{
+df <- data.frame(
+    uri = c("http://edamontology.org/topic_3308",
+            "http://edamontology.org/operation_2238",
+            "http://edamontology.org/data_3112",
+            "http://edamontology.org/format_3475"),
+    tm  = c("Transcriptomics", "Statistical calculation",
+            "Gene expression matrix", "TSV"),
+    stringsAsFactors = FALSE)
+toline(df)
+}

@@ -32,3 +32,8 @@ To override the bundled demo file with a freshly generated artifact, set
 \code{EDAM_EMBEDDING_RDS} to its path or ensure the resource is in
 AnnotationHub (see \code{\link{make_edam_embeddings}}).
 }
+\examples{
+emb <- get_edam_embeddings()
+cat(sprintf("\%d terms | \%d dimensions | model: \%s\n",
+    length(emb$ids), ncol(emb$embeddings), emb$model))
+}

@@ -30,3 +30,11 @@ AnnotationHub or loaded directly and passed to
 \details{
 Requires \code{OPENAI_API_KEY} to be set.
 }
+\examples{
+if (interactive() && nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+    out <- file.path(tempdir(), "edam_test.rds")
+    emb <- make_edam_embeddings(outfile = out)
+    cat("Terms embedded:", length(emb$ids), "\n")
+    unlink(out)
+}
+}

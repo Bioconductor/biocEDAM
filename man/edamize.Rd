@@ -59,10 +59,17 @@ loop is needed and hallucinated term labels are eliminated by post-filtering aga
 the actual vocabulary.
 }
 \examples{
-if (interactive()) {
-  # ANTHROPIC_API_KEY must be set for the default provider
-  content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
-  lk = edamize(content$focused)
+# Input validation fires without any API key
+tryCatch(edamize(list(a=1)), error = function(e) conditionMessage(e))
+
+if (interactive() &&
+    nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0 &&
+    nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+  content <- readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
+  lk <- edamize(content$focused)   # retrieve_k=75 uses bundled embeddings
   print(lk)
+  # Skip embedding retrieval and pass full vocabulary to the LLM:
+  lk2 <- edamize(content$focused, retrieve_k = NULL)
+  print(lk2)
 }
 }

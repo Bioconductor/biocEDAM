@@ -2,9 +2,10 @@
 #' @import ellmer
 #' @import btw
 #' @param txt a text string for analysis
-#' @param model character(1) model identifier for the selected provider; defaults to "gpt-5" (OpenAI)
+#' @param nterms integer(1) approximate number of EDAM terms to return. Defaults to 20.
+#' @param model character(1) model identifier for the selected provider; defaults to "claude-sonnet-4-5" (Anthropic)
 #' @param provider character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
-#' the required environment variable for each.  Defaults to "openai".
+#' the required environment variable for each.  Defaults to "anthropic".
 #' @param \dots parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}
 #' @note This function as of Nov 7 2025 will routinely hallucinate associations and terms.
 #' @examples

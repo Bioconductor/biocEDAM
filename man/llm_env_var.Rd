@@ -15,3 +15,8 @@ character(1) environment variable name, or "" for keyless providers
 \description{
 Map an LLM provider name to its environment variable
 }
+\examples{
+llm_env_var("openai")
+llm_env_var("anthropic")
+llm_env_var("ollama")   # "" — ollama needs no key
+}

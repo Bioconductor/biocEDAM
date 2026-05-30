@@ -15,10 +15,12 @@ flat_tagger(
 \arguments{
 \item{txt}{a text string for analysis}
 
-\item{model}{character(1) model identifier for the selected provider; defaults to "gpt-5" (OpenAI)}
+\item{nterms}{integer(1) approximate number of EDAM terms to return. Defaults to 20.}
+
+\item{model}{character(1) model identifier for the selected provider; defaults to "claude-sonnet-4-5" (Anthropic)}
 
 \item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
-the required environment variable for each.  Defaults to "openai".}
+the required environment variable for each.  Defaults to "anthropic".}
 
 \item{\dots}{parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}}
 }

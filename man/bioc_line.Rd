@@ -15,3 +15,9 @@ a 1-line tibble with all the fields defined in BiocPkgTools::biocPkgList output
 \description{
 use BiocPkgTools to acquire metadata on a specified Bioconductor package
 }
+\examples{
+if (interactive()) {
+    bl <- bioc_line("tximeta")
+    bl$Package
+}
+}

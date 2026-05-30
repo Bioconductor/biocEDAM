@@ -15,3 +15,9 @@ Helper recursive function to extract 'uri' nodes from JSON document based on eda
 \note{
 From perplexity.ai
 }
+\examples{
+node <- list(uri = "http://edamontology.org/topic_3308",
+             children = list(
+                 list(uri = "http://edamontology.org/topic_3170")))
+extract_uri(node)
+}

@@ -1,6 +1,8 @@
 #' given a data.frame with uri and tm produced by edamize (or mkdf),
 #' check against the frozen EDAM term tables in biocEDAM, filtering records to
 #' those whose uri matches a known id.
+#' @param datf data.frame with at least a \code{uri} column containing EDAM URIs
+#' (e.g. \code{"http://edamontology.org/topic_3308"})
 #' @examples
 #' df <- data.frame(
 #'     uri = c("http://edamontology.org/topic_3308",

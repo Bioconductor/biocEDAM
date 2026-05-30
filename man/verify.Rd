@@ -2,24 +2,26 @@
 % Please edit documentation in R/verify.R
 \name{verify}
 \alias{verify}
-\title{given a data.frame with uri and lbl produced by mkdf after edamize,
-check against the edam tables in biocEDAM, filtering records to
-those with id matching the uri.  the result should give TRUE
-for all.equal: all.equal(datf, verify(datf))}
+\title{given a data.frame with uri and tm produced by edamize (or mkdf),
+check against the frozen EDAM term tables in biocEDAM, filtering records to
+those whose uri matches a known id.}
 \usage{
 verify(datf)
 }
+\arguments{
+\item{datf}{data.frame with at least a \code{uri} column containing EDAM URIs
+(e.g. \code{"http://edamontology.org/topic_3308"})}
+}
 \description{
-given a data.frame with uri and lbl produced by mkdf after edamize,
-check against the edam tables in biocEDAM, filtering records to
-those with id matching the uri.  the result should give TRUE
-for all.equal: all.equal(datf, verify(datf))
+given a data.frame with uri and tm produced by edamize (or mkdf),
+check against the frozen EDAM term tables in biocEDAM, filtering records to
+those whose uri matches a known id.
 }
 \examples{
-content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
-str(content)
-lk = edamize(content$focus)
-da = mkdf(lk)
-chk = verify(da)
-all.equal(da, chk)
+df <- data.frame(
+    uri = c("http://edamontology.org/topic_3308",
+            "http://edamontology.org/topic_9999"),   # 9999 is not a real term
+    tm  = c("Transcriptomics", "Made-up term"),
+    stringsAsFactors = FALSE)
+verify(df)  # returns only the row whose uri is in the known vocabulary
 }

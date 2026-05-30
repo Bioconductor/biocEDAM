@@ -33,3 +33,19 @@ Embeds \code{content} using the OpenAI API, computes cosine similarity
 against a pre-computed EDAM embedding matrix, and returns the top
 \code{retrieve_k} candidates per EDAM type (topic, operation, data, format).
 }
+\examples{
+# Model mismatch is caught before any API call
+emb <- get_edam_embeddings()
+tryCatch(
+    retrieve_edam_candidates("some text", emb,
+                             embed_model = "text-embedding-3-large"),
+    error = function(e) conditionMessage(e)
+)
+
+if (interactive() && nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+    candidates <- retrieve_edam_candidates(
+        "RNA-seq transcript quantification and metadata management",
+        emb, retrieve_k = 5L)
+    candidates$topic
+}
+}

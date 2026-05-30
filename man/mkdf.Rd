@@ -15,3 +15,8 @@ simple utility to process output of edamize into a data.frame
 \note{
 dplyr::distinct is run on the result
 }
+\examples{
+df <- data.frame(uri = "http://edamontology.org/topic_3308",
+                 tm  = "Transcriptomics", stringsAsFactors = FALSE)
+mkdf(df)  # data.frame input is passed through unchanged
+}

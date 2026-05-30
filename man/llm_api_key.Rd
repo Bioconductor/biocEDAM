@@ -18,3 +18,8 @@ Retrieve the API key for an LLM provider from the environment
 \note{
 Stops with an informative error if the required environment variable is not set.
 }
+\examples{
+llm_api_key("ollama")  # always returns "" without checking any env var
+if (nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0)
+    llm_api_key("anthropic")
+}

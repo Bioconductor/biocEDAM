@@ -23,3 +23,9 @@ Create an ellmer chat object for a given LLM provider
 The \code{model} default in calling functions is typically an OpenAI model name.
 When using a different provider, supply an appropriate model name for that provider.
 }
+\examples{
+if (interactive() && nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0) {
+    ch <- llm_chat("anthropic", model = "claude-haiku-4-5")
+    ch$chat("Name one EDAM topic term.")
+}
+}

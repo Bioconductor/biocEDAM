@@ -17,3 +17,6 @@ utility to "clean" odd characters in text input that seem to increase risk of LL
 This is speculative; success rates appear to increase with no evident degradation of
 content interpretation.
 }
+\examples{
+cleantxt("RNA-seq (paired-end): analysis of #reads [v2]")
+}
