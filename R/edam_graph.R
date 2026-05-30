@@ -2,6 +2,11 @@
 #' Helper recursive function to extract 'uri' nodes from JSON document based on edamize
 #' @param node a JSON document
 #' @note From perplexity.ai
+#' @examples
+#' node <- list(uri = "http://edamontology.org/topic_3308",
+#'              children = list(
+#'                  list(uri = "http://edamontology.org/topic_3170")))
+#' extract_uri(node)
 #' @export
 extract_uri <- function(node) {
   uris <- list()

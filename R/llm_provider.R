@@ -1,6 +1,10 @@
 #' Map an LLM provider name to its environment variable
 #' @param provider character(1) one of "openai", "anthropic", "claude", "gemini", "google", "ollama"
 #' @return character(1) environment variable name, or "" for keyless providers
+#' @examples
+#' llm_env_var("openai")
+#' llm_env_var("anthropic")
+#' llm_env_var("ollama")   # "" — ollama needs no key
 #' @export
 llm_env_var = function(provider) {
   switch(provider,
@@ -21,6 +25,10 @@ llm_env_var = function(provider) {
 #' @param provider character(1) provider name; see \code{llm_env_var}
 #' @return character(1) the key value; empty string for keyless providers (e.g. ollama)
 #' @note Stops with an informative error if the required environment variable is not set.
+#' @examples
+#' llm_api_key("ollama")  # always returns "" without checking any env var
+#' if (nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0)
+#'     llm_api_key("anthropic")
 #' @export
 llm_api_key = function(provider) {
   var = llm_env_var(provider)
@@ -41,6 +49,11 @@ llm_api_key = function(provider) {
 #' @return an ellmer Chat object
 #' @note The \code{model} default in calling functions is typically an OpenAI model name.
 #' When using a different provider, supply an appropriate model name for that provider.
+#' @examples
+#' if (interactive() && nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0) {
+#'     ch <- llm_chat("anthropic", model = "claude-haiku-4-5")
+#'     ch$chat("Name one EDAM topic term.")
+#' }
 #' @export
 llm_chat = function(provider = "openai", model, ...) {
   llm_api_key(provider)

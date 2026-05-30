@@ -88,6 +88,10 @@
 #' @return a list with components \code{ids}, \code{labels}, \code{types},
 #' \code{texts}, \code{embeddings} (numeric matrix, terms × dimensions),
 #' \code{model}, and \code{created}.
+#' @examples
+#' emb <- get_edam_embeddings()
+#' cat(sprintf("%d terms | %d dimensions | model: %s\n",
+#'     length(emb$ids), ncol(emb$embeddings), emb$model))
 #' @importFrom AnnotationHub AnnotationHub query
 #' @export
 get_edam_embeddings <- function() {
@@ -137,6 +141,13 @@ get_edam_embeddings <- function() {
 #' Defaults to \code{"text-embedding-3-small"}.
 #' @return invisibly, the embedding list (same structure as the AnnotationHub
 #' resource returned by \code{\link{get_edam_embeddings}}).
+#' @examples
+#' if (interactive() && nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+#'     out <- file.path(tempdir(), "edam_test.rds")
+#'     emb <- make_edam_embeddings(outfile = out)
+#'     cat("Terms embedded:", length(emb$ids), "\n")
+#'     unlink(out)
+#' }
 #' @export
 make_edam_embeddings <- function(
         outfile = file.path(tempdir(), "edam_embeddings.rds"),
@@ -179,6 +190,21 @@ make_edam_embeddings <- function(
 #' @return named list of data.frames (topic, operation, data, format), each
 #' with columns \code{id} and \code{lbl}, ordered by descending cosine
 #' similarity to \code{content}.
+#' @examples
+#' # Model mismatch is caught before any API call
+#' emb <- get_edam_embeddings()
+#' tryCatch(
+#'     retrieve_edam_candidates("some text", emb,
+#'                              embed_model = "text-embedding-3-large"),
+#'     error = function(e) conditionMessage(e)
+#' )
+#'
+#' if (interactive() && nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+#'     candidates <- retrieve_edam_candidates(
+#'         "RNA-seq transcript quantification and metadata management",
+#'         emb, retrieve_k = 5L)
+#'     candidates$topic
+#' }
 #' @export
 retrieve_edam_candidates <- function(content, edam_emb,
                                      retrieve_k   = 75L,

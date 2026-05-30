@@ -3,6 +3,8 @@
 #' @import graph
 #' @import BiocPkgTools
 #' @note Was made consistent with inst/app code on 3 Nov 2024.
+#' @examples
+#' if (interactive()) bvbrowse()
 #' @export
 bvbrowse = function() {
 

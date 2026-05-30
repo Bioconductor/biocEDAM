@@ -3,6 +3,8 @@
 #' are to be removed
 #' @note This is speculative; success rates appear to increase with no evident degradation of
 #' content interpretation.
+#' @examples
+#' cleantxt("RNA-seq (paired-end): analysis of #reads [v2]")
 #' @export
 cleantxt = function(x) gsub('-|\\(|`|#|:|\\*|’|"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\||")', "", x)
 
@@ -11,6 +13,10 @@ cleantxt = function(x) gsub('-|\\(|`|#|:|\\*|’|"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\|
 #' @rawNamespace import(jsonlite, except=validate)
 #' @param x a data.frame as produced by edamize (returned as-is), or a legacy list
 #' @note dplyr::distinct is run on the result
+#' @examples
+#' df <- data.frame(uri = "http://edamontology.org/topic_3308",
+#'                  tm  = "Transcriptomics", stringsAsFactors = FALSE)
+#' mkdf(df)  # data.frame input is passed through unchanged
 #' @export
 mkdf = function(x) {
     if (is.data.frame(x)) return(dplyr::distinct(x))
@@ -77,11 +83,18 @@ mkdf = function(x) {
 #' loop is needed and hallucinated term labels are eliminated by post-filtering against
 #' the actual vocabulary.
 #' @examples
-#' if (interactive()) {
-#'   # ANTHROPIC_API_KEY must be set for the default provider
-#'   content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
-#'   lk = edamize(content$focused)
+#' # Input validation fires without any API key
+#' tryCatch(edamize(list(a=1)), error = function(e) conditionMessage(e))
+#'
+#' if (interactive() &&
+#'     nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0 &&
+#'     nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {
+#'   content <- readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
+#'   lk <- edamize(content$focused)   # retrieve_k=75 uses bundled embeddings
 #'   print(lk)
+#'   # Skip embedding retrieval and pass full vocabulary to the LLM:
+#'   lk2 <- edamize(content$focused, retrieve_k = NULL)
+#'   print(lk2)
 #' }
 #' @export
 edamize = function(

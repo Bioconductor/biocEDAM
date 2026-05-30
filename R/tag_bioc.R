@@ -1,6 +1,11 @@
 #' use BiocPkgTools to acquire metadata on a specified Bioconductor package
 #' @param pkgname character(1)
 #' @return a 1-line tibble with all the fields defined in BiocPkgTools::biocPkgList output
+#' @examples
+#' if (interactive()) {
+#'     bl <- bioc_line("tximeta")
+#'     bl$Package
+#' }
 #' @export
 bioc_line = function(pkgname = "tximeta") {
   allpk = BiocPkgTools::biocPkgList()
@@ -42,6 +47,16 @@ tag_bioc = function(pkgname = "tximeta", url =
 #' reflecting main elements of EDAM
 #' @param x output of mkdf
 #' @return a data.frame
+#' @examples
+#' df <- data.frame(
+#'     uri = c("http://edamontology.org/topic_3308",
+#'             "http://edamontology.org/operation_2238",
+#'             "http://edamontology.org/data_3112",
+#'             "http://edamontology.org/format_3475"),
+#'     tm  = c("Transcriptomics", "Statistical calculation",
+#'             "Gene expression matrix", "TSV"),
+#'     stringsAsFactors = FALSE)
+#' toline(df)
 #' @export
 toline = function(x) {
   dr = which(duplicated(x$uri))
