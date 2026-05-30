@@ -6,7 +6,7 @@
 #' @examples
 #' cleantxt("RNA-seq (paired-end): analysis of #reads [v2]")
 #' @export
-cleantxt = function(x) gsub('-|\\(|`|#|:|\\*|’|"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\||")', "", x)
+cleantxt = function(x) gsub("-|\\(|`|#|:|\\*|\u2018|\u2019|\u201c|\u201d|\"|\\[|\\]|\\$|\\{|\\}|=|\\(|\\|", "", x)
 
 #' simple utility to process output of edamize into a data.frame
 #' @import rjsoncons
@@ -26,7 +26,7 @@ mkdf = function(x) {
     data.frame(uri, tm) |> dplyr::distinct()
 }
 
-# The four EDAM branch roots — too generic to tag anything with.
+# The four EDAM branch roots -- too generic to tag anything with.
 .EDAM_ROOTS = c("EDAM:topic_0003", "EDAM:operation_0004",
                 "EDAM:data_0006",  "EDAM:format_1915")
 
@@ -138,7 +138,7 @@ edamize = function(
         "Aim for a balanced mix of topics, operations, data types, and formats. ",
         "Prefer specific, informative terms over generic parent categories ",
         "(e.g. avoid 'Bioinformatics' or 'Data analysis' unless uniquely fitting). ",
-        "Return the id field EXACTLY as it appears in the vocabulary tables — ",
+        "Return the id field EXACTLY as it appears in the vocabulary tables -- ",
         "do not invent, paraphrase, or alter any id or label.\n\n",
         "CONTENT:\n", content_for_edam
     )
