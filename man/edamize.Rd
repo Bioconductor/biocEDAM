@@ -2,57 +2,67 @@
 % Please edit documentation in R/edamize.R
 \name{edamize}
 \alias{edamize}
-\title{use Anh Vu's prompting to develop structured metadata about
-Bioconductor packages, targeting EDAM ontology and bio.tools schema}
+\title{Assign EDAM ontology terms to text using a live SemanticSQL database and an LLM}
 \usage{
 edamize(
   content_for_edam,
-  temp = 0,
+  provider = "anthropic",
   model = "claude-sonnet-4-5",
+  nterms = 20L,
   prescrub = TRUE,
-  provider = "anthropic"
+  retrieve_k = 75L,
+  embed_model = "text-embedding-3-small",
+  ...
 )
 }
 \arguments{
-\item{content_for_edam}{character(1) a URL for doc originating from the developer}
+\item{content_for_edam}{character(1) text describing a bioinformatics resource}
 
-\item{temp}{numeric(1) temperature setting for the LLM chat, defaults to 0.0}
-
-\item{model}{character(1) model identifier for the selected provider;
-defaults to "claude-sonnet-4-5" (Anthropic)}
-
-\item{prescrub}{logical(1) if TRUE, apply the cleantxt function to the input before trying to assign EDAM tags;
-defaults to TRUE}
-
-\item{provider}{character(1) LLM provider for the Python path; one of "openai", "anthropic", or "gemini".
-The value of the corresponding environment variable (see \code{\link{llm_env_var}}) is used as the API key
-and the function stops with an informative error if the variable is not set.
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}.
 Defaults to "anthropic".}
+
+\item{model}{character(1) model identifier for the selected provider.
+Defaults to "claude-sonnet-4-5".}
+
+\item{nterms}{integer(1) approximate number of EDAM terms to select. Defaults to 20.}
+
+\item{prescrub}{logical(1) if TRUE apply \code{\link{cleantxt}} before processing.
+Defaults to TRUE.}
+
+\item{retrieve_k}{integer(1) or NULL.  When not NULL, use embedding-based
+retrieval (via \code{\link{retrieve_edam_candidates}}) to pre-filter the
+EDAM vocabulary to the top \code{retrieve_k} candidates per type before
+LLM selection.  Requires \code{OPENAI_API_KEY} and the pre-computed
+embedding artifact (see \code{\link{get_edam_embeddings}}).
+Set to \code{NULL} to pass the full vocabulary directly to the LLM.
+Defaults to 75L.}
+
+\item{embed_model}{character(1) OpenAI embedding model used for retrieval;
+must match the model used to build the artifact.
+Defaults to \code{"text-embedding-3-small"}.}
+
+\item{\dots}{passed to \code{\link{llm_chat}}}
 }
 \value{
-a list with components 'topic' and 'function', which can be converted to a data.frame using `mkdf`
+a data.frame with columns \code{uri} (full EDAM URI) and \code{tm} (term label),
+restricted to confirmed vocabulary entries and deduplicated.  Compatible with
+\code{\link{mkdf}}, \code{\link{toline}}, and \code{\link{edam_graph}}.
 }
 \description{
-use Anh Vu's prompting to develop structured metadata about
-Bioconductor packages, targeting EDAM ontology and bio.tools schema
+Assign EDAM ontology terms to text using a live SemanticSQL database and an LLM
 }
 \note{
-This function is not deterministic.  For the provided example, the input to the function
-is a fixed text, but the output at the end can be NULL, a data frame with 12 rows, or a data frame with 14 rows.
-More work is needed to achieve greater predictability.
-
-The result may possess redundant elements; mkdf will apply dplyr::distinct
+This function replaces the former Python/curbioc.py implementation.
+It connects to the current EDAM release via \code{ontoProc2::semsql_connect()} and
+selects terms using \code{chat_structured()} via ellmer, so no JSON schema validation
+loop is needed and hallucinated term labels are eliminated by post-filtering against
+the actual vocabulary.
 }
 \examples{
 if (interactive()) {
   # ANTHROPIC_API_KEY must be set for the default provider
   content = readRDS(system.file("rds/tximetaFocused.rds", package="biocEDAM"))
-  str(content)
-  lk = edamize(content$focus)
-  if (is.null(lk)) lk = edamize(content$focus)  # sometimes a second try is needed
-  print(mkdf(lk))
-  content2 = readRDS(system.file("rds/IRangesOVdata.rds", package="biocEDAM"))
-  lk2 = edamize(content2$focus)
-  mkdf(lk2)
+  lk = edamize(content$focused)
+  print(lk)
 }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/edamize.R
 \name{cleantxt}
 \alias{cleantxt}
-\title{utility to "clean" odd characters in text input that seem to increase risk of json-transformation failures}
+\title{utility to "clean" odd characters in text input that seem to increase risk of LLM failures}
 \usage{
 cleantxt(x)
 }
@@ -11,7 +11,7 @@ cleantxt(x)
 are to be removed}
 }
 \description{
-utility to "clean" odd characters in text input that seem to increase risk of json-transformation failures
+utility to "clean" odd characters in text input that seem to increase risk of LLM failures
 }
 \note{
 This is speculative; success rates appear to increase with no evident degradation of

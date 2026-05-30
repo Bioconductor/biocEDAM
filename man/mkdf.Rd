@@ -2,15 +2,15 @@
 % Please edit documentation in R/edamize.R
 \name{mkdf}
 \alias{mkdf}
-\title{simple utility to process output of edamize into data.frame}
+\title{simple utility to process output of edamize into a data.frame}
 \usage{
 mkdf(x)
 }
 \arguments{
-\item{x}{a list as produced by edamize}
+\item{x}{a data.frame as produced by edamize (returned as-is), or a legacy list}
 }
 \description{
-simple utility to process output of edamize into data.frame
+simple utility to process output of edamize into a data.frame
 }
 \note{
 dplyr::distinct is run on the result

@@ -1,0 +1,5 @@
+wget --no-check-certificate https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_topics.json
+wget --no-check-certificate https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_operations.json
+wget --no-check-certificate https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_data.json
+wget --no-check-certificate https://raw.githubusercontent.com/anngvu/bioc-curation/refs/heads/main/subsets/edam_formats.json
+}

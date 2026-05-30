@@ -1,0 +1,2040 @@
+{
+  "operations": [
+    {
+      "id": "http://edamontology.org/operation_3931",
+      "lbl": "Chemometrics"
+    },
+    {
+      "id": "http://edamontology.org/operation_3939",
+      "lbl": "Metabolic engineering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3968",
+      "lbl": "Adhesin prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0224",
+      "lbl": "Query and retrieval"
+    },
+    {
+      "id": "http://edamontology.org/operation_0230",
+      "lbl": "Sequence generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0231",
+      "lbl": "Sequence editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_0232",
+      "lbl": "Sequence merging"
+    },
+    {
+      "id": "http://edamontology.org/operation_0233",
+      "lbl": "Sequence conversion"
+    },
+    {
+      "id": "http://edamontology.org/operation_0234",
+      "lbl": "Sequence complexity calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0235",
+      "lbl": "Sequence ambiguity calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0236",
+      "lbl": "Sequence composition calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0237",
+      "lbl": "Repeat sequence analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0238",
+      "lbl": "Sequence motif discovery"
+    },
+    {
+      "id": "http://edamontology.org/operation_0239",
+      "lbl": "Sequence motif recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_0240",
+      "lbl": "Sequence motif comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0244",
+      "lbl": "Simulation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0245",
+      "lbl": "Structural motif discovery"
+    },
+    {
+      "id": "http://edamontology.org/operation_0246",
+      "lbl": "Protein domain recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_0247",
+      "lbl": "Protein architecture analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0248",
+      "lbl": "Residue interaction calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0249",
+      "lbl": "Protein geometry calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0250",
+      "lbl": "Protein property calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0252",
+      "lbl": "Peptide immunogenicity prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0253",
+      "lbl": "Sequence feature detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0256",
+      "lbl": "Sequence feature comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0258",
+      "lbl": "Sequence alignment analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0259",
+      "lbl": "Sequence alignment comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0260",
+      "lbl": "Sequence alignment conversion"
+    },
+    {
+      "id": "http://edamontology.org/operation_0262",
+      "lbl": "Nucleic acid property calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0264",
+      "lbl": "Alternative splicing prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0265",
+      "lbl": "Frameshift detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0266",
+      "lbl": "Vector sequence detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0267",
+      "lbl": "Protein secondary structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0268",
+      "lbl": "Protein super-secondary structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0269",
+      "lbl": "Transmembrane protein prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0270",
+      "lbl": "Transmembrane protein analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0272",
+      "lbl": "Residue contact prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0276",
+      "lbl": "Protein interaction network analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0278",
+      "lbl": "RNA secondary structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0279",
+      "lbl": "Nucleic acid folding analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0282",
+      "lbl": "Genetic mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0283",
+      "lbl": "Linkage analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0284",
+      "lbl": "Codon usage table generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0285",
+      "lbl": "Codon usage table comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0286",
+      "lbl": "Codon usage analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0287",
+      "lbl": "Base position variability plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0288",
+      "lbl": "Sequence word comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0289",
+      "lbl": "Sequence distance matrix generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0290",
+      "lbl": "Sequence redundancy removal"
+    },
+    {
+      "id": "http://edamontology.org/operation_0291",
+      "lbl": "Sequence clustering"
+    },
+    {
+      "id": "http://edamontology.org/operation_0292",
+      "lbl": "Sequence alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0294",
+      "lbl": "Structure-based sequence alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0295",
+      "lbl": "Structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0296",
+      "lbl": "Sequence profile generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0297",
+      "lbl": "3D profile generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0300",
+      "lbl": "Sequence profile alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0302",
+      "lbl": "Protein threading"
+    },
+    {
+      "id": "http://edamontology.org/operation_0303",
+      "lbl": "Fold recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_0305",
+      "lbl": "Literature search"
+    },
+    {
+      "id": "http://edamontology.org/operation_0306",
+      "lbl": "Text mining"
+    },
+    {
+      "id": "http://edamontology.org/operation_0307",
+      "lbl": "Virtual PCR"
+    },
+    {
+      "id": "http://edamontology.org/operation_0308",
+      "lbl": "PCR primer design"
+    },
+    {
+      "id": "http://edamontology.org/operation_0309",
+      "lbl": "Microarray probe design"
+    },
+    {
+      "id": "http://edamontology.org/operation_0310",
+      "lbl": "Sequence assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_0313",
+      "lbl": "Expression profile clustering"
+    },
+    {
+      "id": "http://edamontology.org/operation_0314",
+      "lbl": "Gene expression profiling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0315",
+      "lbl": "Expression profile comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0319",
+      "lbl": "Protein secondary structure assignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0320",
+      "lbl": "Protein structure assignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0321",
+      "lbl": "Protein structure validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0322",
+      "lbl": "Molecular model refinement"
+    },
+    {
+      "id": "http://edamontology.org/operation_0323",
+      "lbl": "Phylogenetic inference"
+    },
+    {
+      "id": "http://edamontology.org/operation_0324",
+      "lbl": "Phylogenetic analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0325",
+      "lbl": "Phylogenetic tree comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_0326",
+      "lbl": "Phylogenetic tree editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_0327",
+      "lbl": "Phylogenetic footprinting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0331",
+      "lbl": "Variant effect prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0334",
+      "lbl": "Enzyme kinetics calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0335",
+      "lbl": "Formatting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0336",
+      "lbl": "Format validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0338",
+      "lbl": "Sequence database search"
+    },
+    {
+      "id": "http://edamontology.org/operation_0339",
+      "lbl": "Structure database search"
+    },
+    {
+      "id": "http://edamontology.org/operation_0346",
+      "lbl": "Sequence similarity search"
+    },
+    {
+      "id": "http://edamontology.org/operation_0349",
+      "lbl": "Sequence database search (by property)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0360",
+      "lbl": "Structural similarity search"
+    },
+    {
+      "id": "http://edamontology.org/operation_0361",
+      "lbl": "Sequence annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0362",
+      "lbl": "Genome annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0363",
+      "lbl": "Reverse complement"
+    },
+    {
+      "id": "http://edamontology.org/operation_0364",
+      "lbl": "Random sequence generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0365",
+      "lbl": "Restriction digest"
+    },
+    {
+      "id": "http://edamontology.org/operation_0366",
+      "lbl": "Protein sequence cleavage"
+    },
+    {
+      "id": "http://edamontology.org/operation_0367",
+      "lbl": "Sequence mutation and randomisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0368",
+      "lbl": "Sequence masking"
+    },
+    {
+      "id": "http://edamontology.org/operation_0369",
+      "lbl": "Sequence cutting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0370",
+      "lbl": "Restriction site creation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0371",
+      "lbl": "DNA translation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0372",
+      "lbl": "DNA transcription"
+    },
+    {
+      "id": "http://edamontology.org/operation_0379",
+      "lbl": "Repeat sequence detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0380",
+      "lbl": "Repeat sequence organisation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0384",
+      "lbl": "Accessible surface calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0386",
+      "lbl": "Protein dipole moment calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0387",
+      "lbl": "Molecular surface calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0389",
+      "lbl": "Protein-nucleic acid interaction analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0390",
+      "lbl": "Protein peeling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0391",
+      "lbl": "Protein distance matrix calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0392",
+      "lbl": "Contact map calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0393",
+      "lbl": "Residue cluster calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0394",
+      "lbl": "Hydrogen bond calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0396",
+      "lbl": "Ramachandran plot calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0398",
+      "lbl": "Protein molecular weight calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0399",
+      "lbl": "Protein extinction coefficient calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0400",
+      "lbl": "Protein pKa calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0402",
+      "lbl": "Protein titration curve plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0403",
+      "lbl": "Protein isoelectric point calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0404",
+      "lbl": "Protein hydrogen exchange rate calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0405",
+      "lbl": "Protein hydrophobic region calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0406",
+      "lbl": "Protein aliphatic index calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0407",
+      "lbl": "Protein hydrophobic moment plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0408",
+      "lbl": "Protein globularity prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0409",
+      "lbl": "Protein solubility prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0410",
+      "lbl": "Protein crystallizability prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0415",
+      "lbl": "Nucleic acid feature detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0416",
+      "lbl": "Epitope mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0417",
+      "lbl": "PTM site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0418",
+      "lbl": "Protein signal peptide detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0420",
+      "lbl": "Nucleic acids-binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0422",
+      "lbl": "Protein cleavage site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0427",
+      "lbl": "Transposon prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0428",
+      "lbl": "PolyA signal detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0429",
+      "lbl": "Quadruplex formation site detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0430",
+      "lbl": "CpG island and isochore detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0431",
+      "lbl": "Restriction site recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_0432",
+      "lbl": "Nucleosome position prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0433",
+      "lbl": "Splice site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0435",
+      "lbl": "Operon prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0436",
+      "lbl": "Coding region prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0437",
+      "lbl": "SECIS element prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0438",
+      "lbl": "Transcriptional regulatory element prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0439",
+      "lbl": "Translation initiation site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0440",
+      "lbl": "Promoter prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0441",
+      "lbl": "cis-regulatory element prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0443",
+      "lbl": "trans-regulatory element prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0444",
+      "lbl": "S/MAR prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0445",
+      "lbl": "Transcription factor binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0446",
+      "lbl": "Exonic splicing enhancer prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0447",
+      "lbl": "Sequence alignment validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0448",
+      "lbl": "Sequence alignment analysis (conservation)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0449",
+      "lbl": "Sequence alignment analysis (site correlation)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0450",
+      "lbl": "Chimera detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0451",
+      "lbl": "Recombination detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0452",
+      "lbl": "Indel detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0455",
+      "lbl": "Nucleic acid thermodynamic property calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0456",
+      "lbl": "Nucleic acid melting profile plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0457",
+      "lbl": "Nucleic acid stitch profile plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0458",
+      "lbl": "Nucleic acid melting curve plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0459",
+      "lbl": "Nucleic acid probability profile plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0460",
+      "lbl": "Nucleic acid temperature profile plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0461",
+      "lbl": "Nucleic acid curvature calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0463",
+      "lbl": "miRNA target prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0464",
+      "lbl": "tRNA gene prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0465",
+      "lbl": "siRNA binding specificity prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0468",
+      "lbl": "Protein secondary structure prediction (helices)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0469",
+      "lbl": "Protein secondary structure prediction (turns)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0470",
+      "lbl": "Protein secondary structure prediction (coils)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0471",
+      "lbl": "Disulfide bond prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0474",
+      "lbl": "Protein structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0475",
+      "lbl": "Nucleic acid structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0476",
+      "lbl": "Ab initio structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0477",
+      "lbl": "Protein modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0478",
+      "lbl": "Molecular docking"
+    },
+    {
+      "id": "http://edamontology.org/operation_0479",
+      "lbl": "Backbone modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0480",
+      "lbl": "Side chain modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0481",
+      "lbl": "Loop modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0482",
+      "lbl": "Protein-ligand docking"
+    },
+    {
+      "id": "http://edamontology.org/operation_0483",
+      "lbl": "RNA inverse folding"
+    },
+    {
+      "id": "http://edamontology.org/operation_0484",
+      "lbl": "SNP detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_0485",
+      "lbl": "Radiation Hybrid Mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0487",
+      "lbl": "Haplotype mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0488",
+      "lbl": "Linkage disequilibrium calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0489",
+      "lbl": "Genetic code prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0490",
+      "lbl": "Dot plot plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_0491",
+      "lbl": "Pairwise sequence alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0492",
+      "lbl": "Multiple sequence alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0495",
+      "lbl": "Local alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0496",
+      "lbl": "Global alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0499",
+      "lbl": "Tree-based sequence alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0502",
+      "lbl": "RNA secondary structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0503",
+      "lbl": "Pairwise structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0504",
+      "lbl": "Multiple structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0509",
+      "lbl": "Local structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0510",
+      "lbl": "Global structure alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_0523",
+      "lbl": "Mapping assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_0524",
+      "lbl": "De-novo assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_0525",
+      "lbl": "Genome assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_0526",
+      "lbl": "EST assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_0527",
+      "lbl": "Sequence tag mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0531",
+      "lbl": "Heat map generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0533",
+      "lbl": "Expression profile pathway mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0538",
+      "lbl": "Phylogenetic inference (data centric)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0539",
+      "lbl": "Phylogenetic inference (method centric)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0540",
+      "lbl": "Phylogenetic inference (from molecular sequences)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0541",
+      "lbl": "Phylogenetic inference (from continuous quantitative characters)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0542",
+      "lbl": "Phylogenetic inference (from gene frequencies)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0543",
+      "lbl": "Phylogenetic inference (from polymorphism data)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0544",
+      "lbl": "Species tree construction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0545",
+      "lbl": "Phylogenetic inference (parsimony methods)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0546",
+      "lbl": "Phylogenetic inference (minimum distance methods)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0547",
+      "lbl": "Phylogenetic inference (maximum likelihood and Bayesian methods)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0548",
+      "lbl": "Phylogenetic inference (quartet methods)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0549",
+      "lbl": "Phylogenetic inference (AI methods)"
+    },
+    {
+      "id": "http://edamontology.org/operation_0550",
+      "lbl": "DNA substitution modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_0551",
+      "lbl": "Phylogenetic tree topology analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0552",
+      "lbl": "Phylogenetic tree bootstrapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_0553",
+      "lbl": "Gene tree construction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0554",
+      "lbl": "Allele frequency distribution analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_0555",
+      "lbl": "Consensus tree construction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0556",
+      "lbl": "Phylogenetic sub/super tree construction"
+    },
+    {
+      "id": "http://edamontology.org/operation_0557",
+      "lbl": "Phylogenetic tree distances calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0558",
+      "lbl": "Phylogenetic tree annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0560",
+      "lbl": "DNA vaccine design"
+    },
+    {
+      "id": "http://edamontology.org/operation_0564",
+      "lbl": "Sequence visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0566",
+      "lbl": "Sequence cluster visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0567",
+      "lbl": "Phylogenetic tree visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0570",
+      "lbl": "Structure visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0571",
+      "lbl": "Expression data visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_0573",
+      "lbl": "Map drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_0575",
+      "lbl": "Restriction map drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_0578",
+      "lbl": "Plasmid map drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_0579",
+      "lbl": "Operon drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_1777",
+      "lbl": "Protein function prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_1778",
+      "lbl": "Protein function comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_1781",
+      "lbl": "Gene regulatory network analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_1812",
+      "lbl": "Parsing"
+    },
+    {
+      "id": "http://edamontology.org/operation_1816",
+      "lbl": "Surface rendering"
+    },
+    {
+      "id": "http://edamontology.org/operation_1829",
+      "lbl": "Cysteine bridge detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_1830",
+      "lbl": "Free cysteine detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_1831",
+      "lbl": "Metal-bound cysteine detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_1834",
+      "lbl": "Protein-metal contact calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_1836",
+      "lbl": "Residue bump detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_1839",
+      "lbl": "Salt bridge calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_1843",
+      "lbl": "Residue packing validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_1844",
+      "lbl": "Protein geometry validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_1850",
+      "lbl": "Protein cysteine and disulfide bond assignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_2008",
+      "lbl": "siRNA duplex prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2089",
+      "lbl": "Sequence alignment refinement"
+    },
+    {
+      "id": "http://edamontology.org/operation_2121",
+      "lbl": "Sequence file editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_2233",
+      "lbl": "Representative sequence identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_2238",
+      "lbl": "Statistical calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2239",
+      "lbl": "3D-1D scoring matrix generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2241",
+      "lbl": "Transmembrane protein visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2284",
+      "lbl": "Nucleic acid density plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_2403",
+      "lbl": "Sequence analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2404",
+      "lbl": "Sequence motif analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2406",
+      "lbl": "Protein structure analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2415",
+      "lbl": "Protein folding analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2416",
+      "lbl": "Protein secondary structure analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2419",
+      "lbl": "Primer and probe design"
+    },
+    {
+      "id": "http://edamontology.org/operation_2421",
+      "lbl": "Database search"
+    },
+    {
+      "id": "http://edamontology.org/operation_2422",
+      "lbl": "Data retrieval"
+    },
+    {
+      "id": "http://edamontology.org/operation_2436",
+      "lbl": "Gene-set enrichment analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2437",
+      "lbl": "Gene regulatory network prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2439",
+      "lbl": "RNA secondary structure analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2441",
+      "lbl": "RNA structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2442",
+      "lbl": "DNA structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2451",
+      "lbl": "Sequence comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2454",
+      "lbl": "Gene prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2464",
+      "lbl": "Protein-protein binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2474",
+      "lbl": "Protein architecture comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2475",
+      "lbl": "Protein architecture recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_2476",
+      "lbl": "Molecular dynamics"
+    },
+    {
+      "id": "http://edamontology.org/operation_2478",
+      "lbl": "Nucleic acid sequence analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2479",
+      "lbl": "Protein sequence analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2480",
+      "lbl": "Structure analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2481",
+      "lbl": "Nucleic acid structure analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2483",
+      "lbl": "Structure comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2485",
+      "lbl": "Helical wheel drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_2486",
+      "lbl": "Topology diagram drawing"
+    },
+    {
+      "id": "http://edamontology.org/operation_2487",
+      "lbl": "Protein structure comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2488",
+      "lbl": "Protein secondary structure comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2489",
+      "lbl": "Subcellular localisation prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2492",
+      "lbl": "Protein interaction prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2495",
+      "lbl": "Expression analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2499",
+      "lbl": "Splicing analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2510",
+      "lbl": "DNA back-translation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2518",
+      "lbl": "Nucleic acid structure comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2520",
+      "lbl": "DNA mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_2574",
+      "lbl": "Protein hydropathy calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2575",
+      "lbl": "Binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_2844",
+      "lbl": "Structure clustering"
+    },
+    {
+      "id": "http://edamontology.org/operation_2871",
+      "lbl": "Sequence tagged site (STS) mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_2929",
+      "lbl": "Protein fragment weight comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2930",
+      "lbl": "Protein property comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2935",
+      "lbl": "Clustering profile plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_2937",
+      "lbl": "Proximity map plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_2938",
+      "lbl": "Dendrogram visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2939",
+      "lbl": "Principal component visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2940",
+      "lbl": "Scatter plot plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_2942",
+      "lbl": "Treemap visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2943",
+      "lbl": "Box-Whisker plot plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_2944",
+      "lbl": "Physical mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_2949",
+      "lbl": "Protein-protein interaction analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_2950",
+      "lbl": "Residue distance calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2962",
+      "lbl": "Codon usage bias calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2964",
+      "lbl": "Codon usage fraction calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_2995",
+      "lbl": "Sequence classification"
+    },
+    {
+      "id": "http://edamontology.org/operation_2996",
+      "lbl": "Structure classification"
+    },
+    {
+      "id": "http://edamontology.org/operation_2997",
+      "lbl": "Protein comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_2998",
+      "lbl": "Nucleic acid comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3080",
+      "lbl": "Structure editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3081",
+      "lbl": "Sequence alignment editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3092",
+      "lbl": "Protein feature detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3094",
+      "lbl": "Protein interaction network prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3095",
+      "lbl": "Nucleic acid design"
+    },
+    {
+      "id": "http://edamontology.org/operation_3096",
+      "lbl": "Editing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3180",
+      "lbl": "Sequence assembly validation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3182",
+      "lbl": "Genome alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_3183",
+      "lbl": "Localised reassembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_3184",
+      "lbl": "Sequence assembly visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3185",
+      "lbl": "Base-calling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3186",
+      "lbl": "Bisulfite mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3187",
+      "lbl": "Sequence contamination filtering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3192",
+      "lbl": "Sequence trimming"
+    },
+    {
+      "id": "http://edamontology.org/operation_3194",
+      "lbl": "Genome feature comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3195",
+      "lbl": "Sequencing error detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3196",
+      "lbl": "Genotyping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3197",
+      "lbl": "Genetic variation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3198",
+      "lbl": "Read mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3199",
+      "lbl": "Split read mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3200",
+      "lbl": "DNA barcoding"
+    },
+    {
+      "id": "http://edamontology.org/operation_3203",
+      "lbl": "Chromatogram visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3204",
+      "lbl": "Methylation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3206",
+      "lbl": "Whole genome methylation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3207",
+      "lbl": "Gene methylation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3208",
+      "lbl": "Genome visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3209",
+      "lbl": "Genome comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3211",
+      "lbl": "Genome indexing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3214",
+      "lbl": "Spectral analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3215",
+      "lbl": "Peak detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3216",
+      "lbl": "Scaffolding"
+    },
+    {
+      "id": "http://edamontology.org/operation_3217",
+      "lbl": "Scaffold gap completion"
+    },
+    {
+      "id": "http://edamontology.org/operation_3218",
+      "lbl": "Sequencing quality control"
+    },
+    {
+      "id": "http://edamontology.org/operation_3219",
+      "lbl": "Read pre-processing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3221",
+      "lbl": "Species frequency estimation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3222",
+      "lbl": "Peak calling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3223",
+      "lbl": "Differential gene expression profiling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3225",
+      "lbl": "Variant classification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3226",
+      "lbl": "Variant prioritisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3227",
+      "lbl": "Variant calling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3228",
+      "lbl": "Structural variation detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3229",
+      "lbl": "Exome assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_3230",
+      "lbl": "Read depth analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3232",
+      "lbl": "Gene expression QTL analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3233",
+      "lbl": "Copy number estimation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3237",
+      "lbl": "Primer removal"
+    },
+    {
+      "id": "http://edamontology.org/operation_3258",
+      "lbl": "Transcriptome assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_3267",
+      "lbl": "Sequence coordinate conversion"
+    },
+    {
+      "id": "http://edamontology.org/operation_3278",
+      "lbl": "Document similarity calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3279",
+      "lbl": "Document clustering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3280",
+      "lbl": "Named-entity and concept recognition"
+    },
+    {
+      "id": "http://edamontology.org/operation_3282",
+      "lbl": "ID mapping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3283",
+      "lbl": "Anonymisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3348",
+      "lbl": "Sequence checksum generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3349",
+      "lbl": "Bibliography generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3350",
+      "lbl": "Protein quaternary structure prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3351",
+      "lbl": "Molecular surface analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3352",
+      "lbl": "Ontology comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3357",
+      "lbl": "Format detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3359",
+      "lbl": "Splitting"
+    },
+    {
+      "id": "http://edamontology.org/operation_3431",
+      "lbl": "Deposition"
+    },
+    {
+      "id": "http://edamontology.org/operation_3435",
+      "lbl": "Standardisation and normalisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3436",
+      "lbl": "Aggregation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3437",
+      "lbl": "Article comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3443",
+      "lbl": "Image analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3445",
+      "lbl": "Diffraction data analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3446",
+      "lbl": "Cell migration analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3447",
+      "lbl": "Diffraction data reduction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3450",
+      "lbl": "Neurite measurement"
+    },
+    {
+      "id": "http://edamontology.org/operation_3453",
+      "lbl": "Diffraction data integration"
+    },
+    {
+      "id": "http://edamontology.org/operation_3454",
+      "lbl": "Phasing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3455",
+      "lbl": "Molecular replacement"
+    },
+    {
+      "id": "http://edamontology.org/operation_3456",
+      "lbl": "Rigid body refinement"
+    },
+    {
+      "id": "http://edamontology.org/operation_3457",
+      "lbl": "Single particle analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3458",
+      "lbl": "Single particle alignment and classification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3459",
+      "lbl": "Functional clustering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3460",
+      "lbl": "Taxonomic classification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3461",
+      "lbl": "Virulence prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3463",
+      "lbl": "Expression correlation analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3469",
+      "lbl": "RNA structure covariance model generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3478",
+      "lbl": "Phylogenetic reconstruction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3480",
+      "lbl": "Probabilistic data generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3481",
+      "lbl": "Probabilistic sequence generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3501",
+      "lbl": "Enrichment analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3502",
+      "lbl": "Chemical similarity enrichment"
+    },
+    {
+      "id": "http://edamontology.org/operation_3503",
+      "lbl": "Incident curve plotting"
+    },
+    {
+      "id": "http://edamontology.org/operation_3504",
+      "lbl": "Variant pattern analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3552",
+      "lbl": "Microscope image visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3553",
+      "lbl": "Image annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3557",
+      "lbl": "Imputation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3559",
+      "lbl": "Ontology visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3560",
+      "lbl": "Maximum occurence analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3561",
+      "lbl": "Database comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3563",
+      "lbl": "RNA-seq read count analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3564",
+      "lbl": "Chemical redundancy removal"
+    },
+    {
+      "id": "http://edamontology.org/operation_3565",
+      "lbl": "RNA-seq time series data analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3566",
+      "lbl": "Simulated gene expression data generation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3625",
+      "lbl": "Relation extraction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3627",
+      "lbl": "Mass spectra calibration"
+    },
+    {
+      "id": "http://edamontology.org/operation_3628",
+      "lbl": "Chromatographic alignment"
+    },
+    {
+      "id": "http://edamontology.org/operation_3629",
+      "lbl": "Deisotoping"
+    },
+    {
+      "id": "http://edamontology.org/operation_3630",
+      "lbl": "Protein quantification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3631",
+      "lbl": "Peptide identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3632",
+      "lbl": "Isotopic distributions calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3633",
+      "lbl": "Retention time prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3634",
+      "lbl": "Label-free quantification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3635",
+      "lbl": "Labeled quantification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3636",
+      "lbl": "MRM/SRM"
+    },
+    {
+      "id": "http://edamontology.org/operation_3637",
+      "lbl": "Spectral counting"
+    },
+    {
+      "id": "http://edamontology.org/operation_3638",
+      "lbl": "SILAC"
+    },
+    {
+      "id": "http://edamontology.org/operation_3639",
+      "lbl": "iTRAQ"
+    },
+    {
+      "id": "http://edamontology.org/operation_3640",
+      "lbl": "18O labeling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3641",
+      "lbl": "TMT-tag"
+    },
+    {
+      "id": "http://edamontology.org/operation_3642",
+      "lbl": "Dimethyl"
+    },
+    {
+      "id": "http://edamontology.org/operation_3643",
+      "lbl": "Tag-based peptide identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3644",
+      "lbl": "de Novo sequencing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3645",
+      "lbl": "PTM identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3646",
+      "lbl": "Peptide database search"
+    },
+    {
+      "id": "http://edamontology.org/operation_3647",
+      "lbl": "Blind peptide database search"
+    },
+    {
+      "id": "http://edamontology.org/operation_3649",
+      "lbl": "Target-Decoy"
+    },
+    {
+      "id": "http://edamontology.org/operation_3658",
+      "lbl": "Statistical inference"
+    },
+    {
+      "id": "http://edamontology.org/operation_3659",
+      "lbl": "Regression analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3660",
+      "lbl": "Metabolic network modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3661",
+      "lbl": "SNP annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3662",
+      "lbl": "Ab-initio gene prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3663",
+      "lbl": "Homology-based gene prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3664",
+      "lbl": "Statistical modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3666",
+      "lbl": "Molecular surface comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3672",
+      "lbl": "Gene functional annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3675",
+      "lbl": "Variant filtering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3677",
+      "lbl": "Differential binding analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3680",
+      "lbl": "RNA-Seq analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3694",
+      "lbl": "Mass spectrum visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3695",
+      "lbl": "Filtering"
+    },
+    {
+      "id": "http://edamontology.org/operation_3703",
+      "lbl": "Reference identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3704",
+      "lbl": "Ion counting"
+    },
+    {
+      "id": "http://edamontology.org/operation_3705",
+      "lbl": "Isotope-coded protein label"
+    },
+    {
+      "id": "http://edamontology.org/operation_3715",
+      "lbl": "Metabolic labeling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3730",
+      "lbl": "Cross-assembly"
+    },
+    {
+      "id": "http://edamontology.org/operation_3731",
+      "lbl": "Sample comparison"
+    },
+    {
+      "id": "http://edamontology.org/operation_3741",
+      "lbl": "Differential protein expression profiling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3744",
+      "lbl": "Multiple sample visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3745",
+      "lbl": "Ancestral reconstruction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3755",
+      "lbl": "PTM localisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3760",
+      "lbl": "Service management"
+    },
+    {
+      "id": "http://edamontology.org/operation_3761",
+      "lbl": "Service discovery"
+    },
+    {
+      "id": "http://edamontology.org/operation_3762",
+      "lbl": "Service composition"
+    },
+    {
+      "id": "http://edamontology.org/operation_3763",
+      "lbl": "Service invocation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3766",
+      "lbl": "Weighted correlation network analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3767",
+      "lbl": "Protein identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3778",
+      "lbl": "Text annotation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3791",
+      "lbl": "Collapsing methods"
+    },
+    {
+      "id": "http://edamontology.org/operation_3792",
+      "lbl": "miRNA expression analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3793",
+      "lbl": "Read summarisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3795",
+      "lbl": "In vitro selection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3797",
+      "lbl": "Rarefaction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3798",
+      "lbl": "Read binning"
+    },
+    {
+      "id": "http://edamontology.org/operation_3800",
+      "lbl": "RNA-Seq quantification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3801",
+      "lbl": "Spectral library search"
+    },
+    {
+      "id": "http://edamontology.org/operation_3802",
+      "lbl": "Sorting"
+    },
+    {
+      "id": "http://edamontology.org/operation_3803",
+      "lbl": "Natural product identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3809",
+      "lbl": "DMR identification"
+    },
+    {
+      "id": "http://edamontology.org/operation_3840",
+      "lbl": "Multilocus sequence typing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3860",
+      "lbl": "Spectrum calculation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3890",
+      "lbl": "Trajectory visualization"
+    },
+    {
+      "id": "http://edamontology.org/operation_3891",
+      "lbl": "Essential dynamics"
+    },
+    {
+      "id": "http://edamontology.org/operation_3893",
+      "lbl": "Forcefield parameterisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3896",
+      "lbl": "Active site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3897",
+      "lbl": "Ligand-binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3898",
+      "lbl": "Metal-binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3899",
+      "lbl": "Protein-protein docking"
+    },
+    {
+      "id": "http://edamontology.org/operation_3900",
+      "lbl": "DNA-binding protein prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3901",
+      "lbl": "RNA-binding protein prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3902",
+      "lbl": "RNA binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3903",
+      "lbl": "DNA binding site prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3904",
+      "lbl": "Protein disorder prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3907",
+      "lbl": "Information extraction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3908",
+      "lbl": "Information retrieval"
+    },
+    {
+      "id": "http://edamontology.org/operation_3919",
+      "lbl": "Methylation calling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3920",
+      "lbl": "DNA testing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3921",
+      "lbl": "Sequence read processing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3926",
+      "lbl": "Pathway visualisation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3927",
+      "lbl": "Network analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3928",
+      "lbl": "Pathway analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3929",
+      "lbl": "Metabolic pathway prediction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3933",
+      "lbl": "Demultiplexing"
+    },
+    {
+      "id": "http://edamontology.org/operation_3935",
+      "lbl": "Dimensionality reduction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3936",
+      "lbl": "Feature selection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3937",
+      "lbl": "Feature extraction"
+    },
+    {
+      "id": "http://edamontology.org/operation_3938",
+      "lbl": "Virtual screening"
+    },
+    {
+      "id": "http://edamontology.org/operation_3942",
+      "lbl": "Tree dating"
+    },
+    {
+      "id": "http://edamontology.org/operation_3946",
+      "lbl": "Ecological modelling"
+    },
+    {
+      "id": "http://edamontology.org/operation_3947",
+      "lbl": "Phylogenetic tree reconciliation"
+    },
+    {
+      "id": "http://edamontology.org/operation_3950",
+      "lbl": "Selection detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3960",
+      "lbl": "Principal component analysis"
+    },
+    {
+      "id": "http://edamontology.org/operation_3961",
+      "lbl": "Copy number variation detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3962",
+      "lbl": "Deletion detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3963",
+      "lbl": "Duplication detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3964",
+      "lbl": "Complex CNV detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_3965",
+      "lbl": "Amplification detection"
+    },
+    {
+      "id": "http://edamontology.org/operation_4008",
+      "lbl": "Protein design"
+    }
+  ]
+}
