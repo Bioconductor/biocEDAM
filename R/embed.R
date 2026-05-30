@@ -183,6 +183,13 @@ make_edam_embeddings <- function(
 retrieve_edam_candidates <- function(content, edam_emb,
                                      retrieve_k   = 75L,
                                      embed_model  = "text-embedding-3-small") {
+    if (edam_emb$model != embed_model)
+        stop(sprintf(
+            "embed_model '%s' does not match the artifact model '%s'.\n",
+            embed_model, edam_emb$model),
+            sprintf(
+            "Run make_edam_embeddings(model = '%s') to generate a matching artifact.",
+            embed_model))
     api_key <- llm_api_key("openai")
     q_emb   <- .embed_openai(content, api_key, embed_model)[1L, ]
     sims    <- .cosine_sim(q_emb, edam_emb$embeddings)
