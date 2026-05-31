@@ -6,6 +6,10 @@
 \usage{
 bvbrowse()
 }
+\value{
+called for its side effect (launches a Shiny app);
+returns \code{NULL} invisibly when the app is stopped
+}
 \description{
 interactive exploration of biocViews in relation to packages
 }

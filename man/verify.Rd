@@ -12,6 +12,10 @@ verify(datf)
 \item{datf}{data.frame with at least a \code{uri} column containing EDAM URIs
 (e.g. \code{"http://edamontology.org/topic_3308"})}
 }
+\value{
+a data.frame with the same structure as \code{datf}, restricted to
+rows whose \code{uri} matches a term in the bundled EDAM vocabulary tables
+}
 \description{
 given a data.frame with uri and tm produced by edamize (or mkdf),
 check against the frozen EDAM term tables in biocEDAM, filtering records to

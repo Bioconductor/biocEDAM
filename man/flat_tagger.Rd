@@ -24,6 +24,9 @@ the required environment variable for each.  Defaults to "anthropic".}
 
 \item{\dots}{parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}}
 }
+\value{
+a data.frame with columns \code{id} (EDAM CURIE) and \code{lbl} (term label)
+}
 \description{
 simple tagger based on text excerpt and available context from data-frames with edam vocabularies
 }

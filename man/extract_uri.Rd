@@ -7,7 +7,10 @@
 extract_uri(node)
 }
 \arguments{
-\item{node}{a JSON document}
+\item{node}{a JSON document (list)}
+}
+\value{
+a list of URI strings extracted from \code{node}
 }
 \description{
 Helper recursive function to extract 'uri' nodes from JSON document based on edamize

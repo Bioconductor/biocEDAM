@@ -11,9 +11,13 @@ edam_graph(txt, edam_graph, provider = "anthropic", ...)
 
 \item{edam_graph}{an ontologyIndex ontology-index instance representing EDAM}
 
-\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}. Defaults to "openai".}
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}. Defaults to "anthropic".}
 
 \item{\dots}{passed to ontoProc::onto_plot2}
+}
+\value{
+called for its side effect (a graph plot); returns the result of
+\code{ontoProc::onto_plot2} invisibly
 }
 \description{
 build a graph of EDAM terms deemed relevant to a text

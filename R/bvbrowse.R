@@ -2,6 +2,8 @@
 #' @import shiny
 #' @import graph
 #' @import BiocPkgTools
+#' @return called for its side effect (launches a Shiny app);
+#' returns \code{NULL} invisibly when the app is stopped
 #' @note Was made consistent with inst/app code on 3 Nov 2024.
 #' @examples
 #' if (interactive()) bvbrowse()
@@ -54,7 +56,7 @@ Rafael Goncalves of Harvard Medical School."),
   # build a mapping from views to package names
    #pl = BiocPkgTools::biocPkgList(repo=input$type)  # tibble, biocViews field is a list
    pl = vlist[[ input$type ]]
-   pl$tags = sapply(pl$biocViews, paste, collapse=":")
+   pl$tags <- vapply(pl$biocViews, paste, character(1L), collapse=":")
    vl = pl$biocViews
    vls = vapply(vl, length, numeric(1))
    ps = rep(pl$Package, vls)

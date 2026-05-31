@@ -1,7 +1,7 @@
 Package: biocEDAM
 Date: 2026-02-17
 Title: Support the investigation of biocViews in relation to EDAM ontology
-Version: 0.0.36
+Version: 0.0.37
 Authors@R: 
     c(person(
         "Vincent", "Carey", role = c("aut", "cre"),
@@ -20,7 +20,7 @@ Description: This package supports the investigation of biocViews
         python code from Anh Nguyet Vu of Sage Bionetworks.
 License: Artistic-2.0
 Encoding: UTF-8
-Depends: R (>= 4.1), biocViews
+Depends: R (>= 4.6.0), biocViews
 Suggests: knitr, testthat, BiocStyle, ontoProc, DT
 Imports: graph, shiny, BiocPkgTools, rvest, pdftools, rjsoncons,
 	jsonlite, ellmer, reticulate, dplyr, btw, ontoProc2, DBI,

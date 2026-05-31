@@ -58,17 +58,16 @@ tag_bioc = function(pkgname = "tximeta", url =
 #'     stringsAsFactors = FALSE)
 #' toline(df)
 #' @export
-toline = function(x) {
-  dr = which(duplicated(x$uri))
-  if (length(dr)>0) x = x[-dr,]
-  newu = gsub("http://edamontology.org/", "", x$uri)
-  edcodes = sapply(strsplit(newu, "_"), "[", 2)
-  edtype = sapply(strsplit(newu, "_"), "[", 1)
-  newtm = sprintf("%s (%s)", x$tm, edcodes)
-  bytop = split(newtm, edtype)
-  bytop = lapply(bytop, paste, collapse=", ")
-  bytop
-  targs = c("topic", "operation", "data", "format")
+toline <- function(x) {
+  dr <- which(duplicated(x$uri))
+  if (length(dr) > 0) x <- x[-dr, ]
+  newu    <- gsub("http://edamontology.org/", "", x$uri)
+  edcodes <- vapply(strsplit(newu, "_"), "[", character(1L), 2)
+  edtype  <- vapply(strsplit(newu, "_"), "[", character(1L), 1)
+  newtm   <- sprintf("%s (%s)", x$tm, edcodes)
+  bytop   <- split(newtm, edtype)
+  bytop   <- lapply(bytop, paste, collapse=", ")
+  targs   <- c("topic", "operation", "data", "format")
   data.frame(bytop[targs])
 }
 

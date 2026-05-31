@@ -6,7 +6,7 @@
 #' llm_env_var("anthropic")
 #' llm_env_var("ollama")   # "" — ollama needs no key
 #' @export
-llm_env_var = function(provider) {
+llm_env_var <- function(provider) {
   switch(provider,
     openai    = "OPENAI_API_KEY",
     anthropic = "ANTHROPIC_API_KEY",
@@ -30,10 +30,10 @@ llm_env_var = function(provider) {
 #' if (nchar(Sys.getenv("ANTHROPIC_API_KEY")) > 0)
 #'     llm_api_key("anthropic")
 #' @export
-llm_api_key = function(provider) {
-  var = llm_env_var(provider)
+llm_api_key <- function(provider) {
+  var <- llm_env_var(provider)
   if (nchar(var) == 0L) return("")
-  key = Sys.getenv(var)
+  key <- Sys.getenv(var)
   if (nchar(key) == 0L)
     stop(sprintf(
       "Environment variable %s is not set (required for provider '%s')",
@@ -55,7 +55,7 @@ llm_api_key = function(provider) {
 #'     ch$chat("Name one EDAM topic term.")
 #' }
 #' @export
-llm_chat = function(provider = "openai", model, ...) {
+llm_chat <- function(provider = "openai", model, ...) {
   llm_api_key(provider)
   switch(provider,
     openai    = ellmer::chat_openai(model = model, ...),

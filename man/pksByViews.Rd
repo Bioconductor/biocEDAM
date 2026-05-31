@@ -14,6 +14,10 @@ pksByViews(views, type = "BioCsoft", vlist = NULL)
 \item{vlist}{list() if NULL, use biocPkgList to obtain current biocPkgList, otherwise
 a named list with outputs of previous calls to biocPkgList}
 }
+\value{
+a data.frame with columns \code{pkg} and \code{view} for packages
+matching the requested views
+}
 \description{
 helper for package listing
 }

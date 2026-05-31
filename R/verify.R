@@ -3,6 +3,8 @@
 #' those whose uri matches a known id.
 #' @param datf data.frame with at least a \code{uri} column containing EDAM URIs
 #' (e.g. \code{"http://edamontology.org/topic_3308"})
+#' @return a data.frame with the same structure as \code{datf}, restricted to
+#' rows whose \code{uri} matches a term in the bundled EDAM vocabulary tables
 #' @examples
 #' df <- data.frame(
 #'     uri = c("http://edamontology.org/topic_3308",

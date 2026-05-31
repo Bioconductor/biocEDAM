@@ -7,6 +7,7 @@
 #' @param provider character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
 #' the required environment variable for each.  Defaults to "anthropic".
 #' @param \dots parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}
+#' @return a data.frame with columns \code{id} (EDAM CURIE) and \code{lbl} (term label)
 #' @note This function as of Nov 7 2025 will routinely hallucinate associations and terms.
 #' @examples
 #' if (interactive()) {
@@ -24,9 +25,9 @@
 #' flat_tagger(txt, nterms=12, model="gpt-4o")
 #' }
 #' @export
-flat_tagger = function(txt, nterms = 20, model="claude-sonnet-4-5", provider="anthropic", ...) {
+flat_tagger <- function(txt, nterms = 20, model="claude-sonnet-4-5", provider="anthropic", ...) {
   message("This function does not avoid hallucinatory rewording of EDAM tags or construction of false tags")
-  ch = llm_chat(provider=provider, model=model, ...)
+  ch <- llm_chat(provider=provider, model=model, ...)
   data("edam_topics", package="biocEDAM")
   data("edam_operations", package="biocEDAM")
   data("edam_data", package="biocEDAM")
