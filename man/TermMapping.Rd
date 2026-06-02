@@ -6,7 +6,7 @@
 \format{
 An ellmer \code{TypeObject} with fields:
 \describe{
-  \item{query}{The original natural language concept from the user query}
+  \item{input_text}{The biological or medical concept extracted from the input string}
   \item{term_label}{The matched ontology term label}
   \item{term_iri}{The IRI/URI of the matched term}
   \item{obo_id}{The OBO-format ID, e.g. \code{GO:0007507}}

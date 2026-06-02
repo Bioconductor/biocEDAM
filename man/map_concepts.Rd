@@ -15,7 +15,7 @@ by \code{\link{ols4_chat}} if not supplied.  Reuse across calls to avoid
 restarting the bridge process.}
 }
 \value{
-a data.frame with columns \code{query}, \code{term_label},
+a data.frame with columns \code{input_text}, \code{term_label},
 \code{term_iri}, \code{obo_id}, \code{ontology}, and \code{rationale},
 one row per concept-term pair.
 }

@@ -5,7 +5,7 @@
 #'
 #' @format An ellmer \code{TypeObject} with fields:
 #' \describe{
-#'   \item{query}{The original natural language concept from the user query}
+#'   \item{input_text}{The biological or medical concept extracted from the input string}
 #'   \item{term_label}{The matched ontology term label}
 #'   \item{term_iri}{The IRI/URI of the matched term}
 #'   \item{obo_id}{The OBO-format ID, e.g. \code{GO:0007507}}
@@ -16,8 +16,8 @@
 #' @export
 TermMapping <- ellmer::type_object(
     "TermMapping",
-    query      = ellmer::type_string(
-                     "The original natural language concept from the user query"),
+    input_text = ellmer::type_string(
+                     "The biological or medical concept extracted from the input string"),
     term_label = ellmer::type_string("The matched ontology term label"),
     term_iri   = ellmer::type_string("The IRI/URI of the matched term"),
     obo_id     = ellmer::type_string(
