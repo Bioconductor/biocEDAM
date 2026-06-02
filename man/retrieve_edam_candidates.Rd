@@ -8,7 +8,8 @@ retrieve_edam_candidates(
   content,
   edam_emb,
   retrieve_k = 75L,
-  embed_model = "text-embedding-3-small"
+  sim_threshold = 0.3,
+  embed_model = edam_emb$model
 )
 }
 \arguments{

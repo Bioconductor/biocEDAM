@@ -18,6 +18,53 @@
     do.call(rbind, rows)
 }
 
+# ---- HuggingFace Inference API embedding ------------------------------------
+
+# Embed texts via the HuggingFace Serverless Inference API.
+# Passes options=list(wait_for_model=TRUE) so cold-start 503s are handled
+# server-side rather than requiring client retries.
+# sentence-transformers models return pooled vectors; plain BERT models return
+# token-level hidden states which are mean-pooled here.
+.embed_huggingface <- function(texts, model, api_key) {
+    url     <- paste0("https://api-inference.huggingface.co/models/", model)
+    batches <- split(texts, ceiling(seq_along(texts) / 50L))
+    rows <- lapply(batches, function(batch) {
+        resp <- httr2::request(url) |>
+            httr2::req_headers(Authorization = paste("Bearer", api_key)) |>
+            httr2::req_body_json(list(inputs  = as.list(batch),
+                                      options = list(wait_for_model = TRUE))) |>
+            httr2::req_perform() |>
+            httr2::resp_body_json()
+        do.call(rbind, lapply(resp, function(x) {
+            if (is.list(x[[1L]]))          # token-level → mean-pool
+                colMeans(do.call(rbind, lapply(x, unlist)))
+            else
+                unlist(x)                  # already pooled
+        }))
+    })
+    do.call(rbind, rows)
+}
+
+# ---- local sentence-transformers embedding ----------------------------------
+
+# Embed texts using a local HuggingFace sentence-transformers model.
+# The model is downloaded on first use and cached by HuggingFace.
+.embed_local <- function(texts, model) {
+    reticulate::py_require("sentence-transformers")
+    st      <- reticulate::import("sentence_transformers")
+    encoder <- st$SentenceTransformer(model)
+    py_out  <- encoder$encode(as.list(texts),
+                               batch_size        = 32L,
+                               show_progress_bar = FALSE,
+                               convert_to_numpy  = TRUE)
+    reticulate::py_to_r(py_out)
+}
+
+# TRUE if model is an OpenAI API embedding model, FALSE for local HF models.
+.is_openai_model <- function(model) {
+    startsWith(model, "text-embedding-")
+}
+
 # ---- cosine similarity ------------------------------------------------------
 
 .cosine_sim <- function(query, mat) {
@@ -125,20 +172,22 @@ get_edam_embeddings <- function() {
 
 # ---- artifact generation (maintainer / fallback) ----------------------------
 
-#' Generate and save EDAM term embeddings using the OpenAI API
+#' Generate and save EDAM term embeddings
 #'
 #' Connects to the current EDAM SemanticSQL release, fetches term labels and
-#' definitions, embeds them with OpenAI \code{text-embedding-3-small}, and
-#' saves the result to \code{outfile}.  The saved object can be submitted to
-#' AnnotationHub or loaded directly and passed to
-#' \code{\link{retrieve_edam_candidates}}.
-#'
-#' Requires \code{OPENAI_API_KEY} to be set.
+#' definitions, embeds them using the specified provider, and saves the result
+#' to \code{outfile}.  The saved object can be submitted to AnnotationHub or
+#' loaded directly via \code{\link{get_edam_embeddings}}.
 #'
 #' @param outfile character(1) path for the output \code{.rds} file.
 #' Defaults to \code{edam_embeddings.rds} in \code{tempdir()}.
-#' @param model character(1) OpenAI embedding model.
-#' Defaults to \code{"text-embedding-3-small"}.
+#' @param model character(1) embedding model identifier.
+#' For \code{provider="openai"} use e.g. \code{"text-embedding-3-small"};
+#' for \code{provider="huggingface"} use a HuggingFace model ID such as
+#' \code{"FremyCompany/BioLORD-2023-C"}.
+#' @param provider character(1) embedding provider: \code{"openai"} (default)
+#' or \code{"huggingface"}.  The corresponding environment variable must be
+#' set (see \code{\link{llm_env_var}}).
 #' @return invisibly, the embedding list (same structure as the AnnotationHub
 #' resource returned by \code{\link{get_edam_embeddings}}).
 #' @examples
@@ -150,14 +199,19 @@ get_edam_embeddings <- function() {
 #' }
 #' @export
 make_edam_embeddings <- function(
-        outfile = file.path(tempdir(), "edam_embeddings.rds"),
-        model   = "text-embedding-3-small") {
-    api_key <- llm_api_key("openai")
+        outfile  = file.path(tempdir(), "edam_embeddings.rds"),
+        model    = "text-embedding-3-small",
+        provider = "openai") {
+    api_key <- llm_api_key(provider)
     ee      <- ontoProc2::semsql_connect(ontology = "edam")
     terms   <- .get_edam_terms_with_definitions(ee@con)
-    message(sprintf("Embedding %d EDAM terms via OpenAI (%s)...",
-                    nrow(terms), model))
-    embs <- .embed_openai(terms$embed_text, api_key, model)
+    message(sprintf("Embedding %d EDAM terms via %s (%s)...",
+                    nrow(terms), provider, model))
+    embs <- switch(provider,
+        openai      = .embed_openai(terms$embed_text, api_key, model),
+        huggingface = .embed_huggingface(terms$embed_text, model, api_key),
+        stop(sprintf("Unsupported embed provider: '%s'", provider))
+    )
     result <- list(
         ids        = terms$id,
         labels     = terms$lbl,
@@ -165,6 +219,7 @@ make_edam_embeddings <- function(
         texts      = terms$embed_text,
         embeddings = embs,
         model      = model,
+        provider   = provider,
         created    = Sys.time()
     )
     saveRDS(result, outfile)
@@ -207,8 +262,9 @@ make_edam_embeddings <- function(
 #' }
 #' @export
 retrieve_edam_candidates <- function(content, edam_emb,
-                                     retrieve_k   = 75L,
-                                     embed_model  = "text-embedding-3-small") {
+                                     retrieve_k    = 75L,
+                                     sim_threshold = 0.3,
+                                     embed_model   = edam_emb$model) {
     if (edam_emb$model != embed_model)
         stop(sprintf(
             "embed_model '%s' does not match the artifact model '%s'.\n",
@@ -216,15 +272,31 @@ retrieve_edam_candidates <- function(content, edam_emb,
             sprintf(
             "Run make_edam_embeddings(model = '%s') to generate a matching artifact.",
             embed_model))
-    api_key <- llm_api_key("openai")
-    q_emb   <- .embed_openai(content, api_key, embed_model)[1L, ]
-    sims    <- .cosine_sim(q_emb, edam_emb$embeddings)
+    # Determine provider: use stored field if present, else infer from model name
+    provider <- edam_emb$provider %||%
+        if (.is_openai_model(embed_model)) "openai" else "local"
+    q_emb <- switch(provider,
+        openai = {
+            api_key <- llm_api_key("openai")
+            .embed_openai(content, api_key, embed_model)[1L, ]
+        },
+        huggingface = {
+            api_key <- llm_api_key("huggingface")
+            .embed_huggingface(content, embed_model, api_key)[1L, ]
+        },
+        local = .embed_local(content, embed_model)[1L, ],
+        stop(sprintf("Unknown embed provider '%s' in artifact.", provider))
+    )
+    sims <- .cosine_sim(q_emb, edam_emb$embeddings)
 
     types <- c("topic", "operation", "data", "format")
     lapply(setNames(types, types), function(type) {
-        idx      <- which(edam_emb$types == type)
-        top_idx  <- idx[order(sims[idx], decreasing = TRUE)[
-                            seq_len(min(retrieve_k, length(idx)))]]
+        idx     <- which(edam_emb$types == type & sims >= sim_threshold)
+        if (length(idx) == 0L)
+            return(data.frame(id = character(), lbl = character(),
+                              stringsAsFactors = FALSE))
+        top_idx <- idx[order(sims[idx], decreasing = TRUE)[
+                           seq_len(min(retrieve_k, length(idx)))]]
         data.frame(id  = edam_emb$ids[top_idx],
                    lbl = edam_emb$labels[top_idx],
                    stringsAsFactors = FALSE)

@@ -70,6 +70,10 @@ mkdf = function(x) {
 #' embedding artifact (see \code{\link{get_edam_embeddings}}).
 #' Set to \code{NULL} to pass the full vocabulary directly to the LLM.
 #' Defaults to 75L.
+#' @param sim_threshold numeric(1) minimum cosine similarity for a candidate
+#' term to be passed to the LLM.  Terms below this threshold are dropped before
+#' the LLM selection step, reducing irrelevant tags.  Only used when
+#' \code{retrieve_k} is not NULL.  Defaults to 0.3.
 #' @param embed_model character(1) OpenAI embedding model used for retrieval;
 #' must match the model used to build the artifact.
 #' Defaults to \code{"text-embedding-3-small"}.
@@ -103,8 +107,9 @@ edamize = function(
         model       = "claude-sonnet-4-5",
         nterms      = 20L,
         prescrub    = TRUE,
-        retrieve_k  = 75L,
-        embed_model = "text-embedding-3-small",
+        retrieve_k    = 75L,
+        sim_threshold = 0.3,
+        embed_model   = "text-embedding-3-small",
         ...) {
     if (!is.character(content_for_edam) || length(content_for_edam) != 1L)
         stop("content_for_edam must be a single character string; ",
@@ -115,7 +120,8 @@ edamize = function(
     if (!is.null(retrieve_k)) {
         edam_emb = get_edam_embeddings()
         edam_db  = retrieve_edam_candidates(content_for_edam, edam_emb,
-                                             retrieve_k, embed_model)
+                                             retrieve_k, sim_threshold,
+                                             embed_model)
     } else {
         ee      = ontoProc2::semsql_connect(ontology = "edam")
         edam_db = .get_edam_terms_from_db(ee@con)
@@ -133,11 +139,14 @@ edamize = function(
     )
 
     prompt = paste0(
-        "You are an expert bioinformatics curator. ",
-        "Select approximately ", nterms, " EDAM ontology terms most relevant to the content below. ",
-        "Aim for a balanced mix of topics, operations, data types, and formats. ",
-        "Prefer specific, informative terms over generic parent categories ",
-        "(e.g. avoid 'Bioinformatics' or 'Data analysis' unless uniquely fitting). ",
+        "You are an expert bioinformatics curator assigning EDAM ontology terms ",
+        "to a software tool or resource. ",
+        "From the vocabulary tables provided, select ONLY terms that are ",
+        "DIRECTLY and CLEARLY relevant to the content below. ",
+        "Relevance is paramount: return fewer than ", nterms, " terms if necessary ",
+        "rather than padding with marginally related or speculative matches. ",
+        "Do not assign terms from unrelated biological or computational domains. ",
+        "Prefer specific terms over broad parent categories. ",
         "Return the id field EXACTLY as it appears in the vocabulary tables -- ",
         "do not invent, paraphrase, or alter any id or label.\n\n",
         "CONTENT:\n", content_for_edam

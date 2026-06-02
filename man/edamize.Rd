@@ -11,6 +11,7 @@ edamize(
   nterms = 20L,
   prescrub = TRUE,
   retrieve_k = 75L,
+  sim_threshold = 0.3,
   embed_model = "text-embedding-3-small",
   ...
 )
@@ -36,6 +37,11 @@ LLM selection.  Requires \code{OPENAI_API_KEY} and the pre-computed
 embedding artifact (see \code{\link{get_edam_embeddings}}).
 Set to \code{NULL} to pass the full vocabulary directly to the LLM.
 Defaults to 75L.}
+
+\item{sim_threshold}{numeric(1) minimum cosine similarity for a candidate
+term to be passed to the LLM.  Terms below this threshold are dropped before
+the LLM selection step, reducing irrelevant tags.  Only used when
+\code{retrieve_k} is not NULL.  Defaults to 0.3.}
 
 \item{embed_model}{character(1) OpenAI embedding model used for retrieval;
 must match the model used to build the artifact.

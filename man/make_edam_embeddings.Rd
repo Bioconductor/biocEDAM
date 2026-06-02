@@ -2,19 +2,26 @@
 % Please edit documentation in R/embed.R
 \name{make_edam_embeddings}
 \alias{make_edam_embeddings}
-\title{Generate and save EDAM term embeddings using the OpenAI API}
+\title{Generate and save EDAM term embeddings}
 \usage{
 make_edam_embeddings(
   outfile = file.path(tempdir(), "edam_embeddings.rds"),
-  model = "text-embedding-3-small"
+  model = "text-embedding-3-small",
+  provider = "openai"
 )
 }
 \arguments{
 \item{outfile}{character(1) path for the output \code{.rds} file.
 Defaults to \code{edam_embeddings.rds} in \code{tempdir()}.}
 
-\item{model}{character(1) OpenAI embedding model.
-Defaults to \code{"text-embedding-3-small"}.}
+\item{model}{character(1) embedding model identifier.
+For \code{provider="openai"} use e.g. \code{"text-embedding-3-small"};
+for \code{provider="huggingface"} use a HuggingFace model ID such as
+\code{"FremyCompany/BioLORD-2023-C"}.}
+
+\item{provider}{character(1) embedding provider: \code{"openai"} (default)
+or \code{"huggingface"}.  The corresponding environment variable must be
+set (see \code{\link{llm_env_var}}).}
 }
 \value{
 invisibly, the embedding list (same structure as the AnnotationHub
@@ -22,13 +29,9 @@ resource returned by \code{\link{get_edam_embeddings}}).
 }
 \description{
 Connects to the current EDAM SemanticSQL release, fetches term labels and
-definitions, embeds them with OpenAI \code{text-embedding-3-small}, and
-saves the result to \code{outfile}.  The saved object can be submitted to
-AnnotationHub or loaded directly and passed to
-\code{\link{retrieve_edam_candidates}}.
-}
-\details{
-Requires \code{OPENAI_API_KEY} to be set.
+definitions, embeds them using the specified provider, and saves the result
+to \code{outfile}.  The saved object can be submitted to AnnotationHub or
+loaded directly via \code{\link{get_edam_embeddings}}.
 }
 \examples{
 if (interactive() && nchar(Sys.getenv("OPENAI_API_KEY")) > 0) {

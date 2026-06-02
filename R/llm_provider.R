@@ -8,12 +8,13 @@
 #' @export
 llm_env_var <- function(provider) {
   switch(provider,
-    openai    = "OPENAI_API_KEY",
-    anthropic = "ANTHROPIC_API_KEY",
-    claude    = "ANTHROPIC_API_KEY",
-    gemini    = "GOOGLE_API_KEY",
-    google    = "GOOGLE_API_KEY",
-    ollama    = "",
+    openai      = "OPENAI_API_KEY",
+    anthropic   = "ANTHROPIC_API_KEY",
+    claude      = "ANTHROPIC_API_KEY",
+    gemini      = "GOOGLE_API_KEY",
+    google      = "GOOGLE_API_KEY",
+    huggingface = "HUGGINGFACE_API_KEY",
+    ollama      = "",
     stop(sprintf(
       "Unknown LLM provider: '%s'. Supported: openai, anthropic, claude, gemini, google, ollama",
       provider
