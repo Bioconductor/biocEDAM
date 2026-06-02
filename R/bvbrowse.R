@@ -2,6 +2,7 @@
 #' @import shiny
 #' @import graph
 #' @import BiocPkgTools
+#' @import biocViews
 #' @return called for its side effect (launches a Shiny app);
 #' returns \code{NULL} invisibly when the app is stopped
 #' @note Was made consistent with inst/app code on 3 Nov 2024.

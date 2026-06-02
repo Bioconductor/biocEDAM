@@ -1,7 +1,7 @@
 Package: biocEDAM
 Date: 2026-02-17
 Title: Support the investigation of biocViews in relation to EDAM ontology
-Version: 0.0.38
+Version: 0.0.39
 Authors@R: 
     c(person(
         "Vincent", "Carey", role = c("aut", "cre"),

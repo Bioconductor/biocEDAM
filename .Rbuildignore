@@ -1,0 +1,10 @@
+^\.github$
+^docs$
+^_pkgdown\.yml$
+^BrowseGeneSig\.png$
+^flat_tagger\.R$
+^nopy\.R$
+^nopy2\.R$
+^nopy3\.R$
+^.*\.Rcheck$
+^.*\.tar\.gz$

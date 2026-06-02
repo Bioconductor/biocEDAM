@@ -21,8 +21,11 @@ description).}
 
 \item{retrieve_k}{integer(1) number of candidates to keep per type.}
 
-\item{embed_model}{character(1) OpenAI embedding model; must match the model
-used to build \code{edam_emb}.  Defaults to \code{"text-embedding-3-small"}.}
+\item{sim_threshold}{numeric(1) minimum cosine similarity; candidates below
+this value are dropped before the LLM selection step.  Defaults to 0.3.}
+
+\item{embed_model}{character(1) embedding model; must match the model used
+to build \code{edam_emb}.  Defaults to \code{edam_emb$model}.}
 }
 \value{
 named list of data.frames (topic, operation, data, format), each
