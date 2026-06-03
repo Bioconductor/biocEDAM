@@ -1,5 +1,17 @@
 Identify ALL biological, medical, and technical concepts in the following input text.
 For every concept found, use the OLS search tools to find the best matching ontology term.
-Prefer HP for phenotypes, MONDO for diseases, GO for biological processes, ChEBI for chemicals, EFO for experimental factors.
-Return one row per concept-term pair -- be comprehensive rather than selective.
-IMPORTANT: the term_iri and obo_id you report must come directly from the OLS search tool results, never constructed or guessed.
+
+Use the following ontology priorities:
+- EDAM: computational methods, algorithms, bioinformatics operations, data types, file formats, and software topics
+- GO: biological processes, molecular functions, and cellular components
+- HP: human phenotypes and clinical abnormalities
+- MONDO: diseases and disorders
+- ChEBI: chemical entities and small molecules
+- EFO: experimental factors, assay types, and study designs
+- PATO: phenotypic qualities and attributes
+
+IMPORTANT: if no ontology provides a clearly relevant term for a concept, omit that concept rather than forcing a poor mapping.
+Do not map computational or statistical concepts (e.g. autocorrelation, PCA, clustering) to disease or experimental ontologies.
+The term_iri and obo_id you report must come directly from the OLS search tool results, never constructed or guessed.
+
+Return one row per concept-term pair.

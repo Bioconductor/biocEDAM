@@ -224,6 +224,10 @@ ols4_enrich <- function(result, label_match = FALSE) {
 #' Defaults to \code{"claude-sonnet-4-5"}.
 #' @param temperature numeric(1) sampling temperature; defaults to \code{0}
 #' for deterministic output.  Ignored when \code{chat} is supplied directly.
+#' @param prompt character(1) instruction text sent to the LLM before the
+#' input text.  Defaults to the contents of
+#' \code{inst/prompts/map_concepts.txt}; use
+#' \code{\link{read_prompt}("map_concepts.txt")} to inspect or customise.
 #' @param label_match logical(1) if \code{TRUE}, adds \code{llm_label} and
 #' \code{label_match} columns via \code{\link{ols4_enrich}}, flagging rows
 #' where the LLM label and OLS4 canonical label share no content words

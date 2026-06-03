@@ -23,6 +23,11 @@ flat_tagger(
 \item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
 the required environment variable for each.  Defaults to "anthropic".}
 
+\item{prompt}{character(1) instruction text sent to the LLM.  Defaults to
+the contents of \code{inst/prompts/flat_tagger.txt}; must contain two
+\code{\%s}/\code{\%d} placeholders for \code{nterms} and \code{txt}.
+Use \code{\link{read_prompt}("flat_tagger.txt")} to inspect the default.}
+
 \item{\dots}{parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}}
 }
 \value{

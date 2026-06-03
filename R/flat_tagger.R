@@ -6,6 +6,10 @@
 #' @param model character(1) model identifier for the selected provider; defaults to "claude-sonnet-4-5" (Anthropic)
 #' @param provider character(1) LLM provider; see \code{\link{llm_env_var}} for supported values and
 #' the required environment variable for each.  Defaults to "anthropic".
+#' @param prompt character(1) instruction text sent to the LLM.  Defaults to
+#' the contents of \code{inst/prompts/flat_tagger.txt}; must contain two
+#' \code{\%s}/\code{\%d} placeholders for \code{nterms} and \code{txt}.
+#' Use \code{\link{read_prompt}("flat_tagger.txt")} to inspect the default.
 #' @param \dots parameters passed to the underlying \code{chat_*} function via \code{\link{llm_chat}}
 #' @return a data.frame with columns \code{id} (EDAM CURIE) and \code{lbl} (term label)
 #' @note This function as of Nov 7 2025 will routinely hallucinate associations and terms.
