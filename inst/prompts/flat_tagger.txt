@@ -1,0 +1,6 @@
+Provide around %d EDAM ontology terms relevant to the user query.
+Return the results in an R data frame with one column giving the EDAM id, the other giving the label.
+You are using the ellmer structured chat to facilitate return of a data frame.
+Try to provide balanced selections among concepts of format, data, operation, topic.
+Only use the literal text fields in the labels (lbl field) of the EDAM vocabulary maps.
+The query is: %s

@@ -10,6 +10,7 @@ edamize(
   model = "claude-sonnet-4-5",
   nterms = 20L,
   prescrub = TRUE,
+  prompt = read_prompt("edamize.txt"),
   retrieve_k = 75L,
   sim_threshold = 0.3,
   embed_model = "text-embedding-3-small",
@@ -29,6 +30,12 @@ Defaults to "claude-sonnet-4-5".}
 
 \item{prescrub}{logical(1) if TRUE apply \code{\link{cleantxt}} before processing.
 Defaults to TRUE.}
+
+\item{prompt}{character(1) instruction text sent to the LLM before the
+EDAM vocabulary tables and content.  The string must contain one \code{\%d}
+placeholder that will be replaced by \code{nterms}.  Defaults to the
+contents of \code{inst/prompts/edamize.txt}; supply your own string to
+customise curation behaviour without editing package files.}
 
 \item{retrieve_k}{integer(1) or NULL.  When not NULL, use embedding-based
 retrieval (via \code{\link{retrieve_edam_candidates}}) to pre-filter the

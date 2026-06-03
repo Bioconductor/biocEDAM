@@ -25,7 +25,8 @@
 #' flat_tagger(txt, nterms=12, model="gpt-4o")
 #' }
 #' @export
-flat_tagger <- function(txt, nterms = 20, model="claude-sonnet-4-5", provider="anthropic", ...) {
+flat_tagger <- function(txt, nterms = 20, model="claude-sonnet-4-5", provider="anthropic",
+                        prompt = read_prompt("flat_tagger.txt"), ...) {
   message("This function does not avoid hallucinatory rewording of EDAM tags or construction of false tags")
   ch <- llm_chat(provider=provider, model=model, ...)
   data("edam_topics", package="biocEDAM")
@@ -38,8 +39,8 @@ flat_tagger <- function(txt, nterms = 20, model="claude-sonnet-4-5", provider="a
     lbl = type_string()
     )
    )
-  ch$chat_structured(btw(edam_topics[[1]], edam_operations[[1]], edam_data[[1]], edam_formats[[1]]), sprintf("Provide around %d edam terms relevant to user query.  Return the results in an R data frame with one column giving the edam id, the other giving the label.  You are using the ellmer structured chat to facilitate return of a data frame.  The query is: Provide up to %d edam terms relevant to %s.  Try to provide balanced selections among concepts of format, data, operation, topic. Only use the literal text fields in the labels (lbl field) of the edam vocabulary maps.", 
-      nterms, nterms, txt), type=dfstr) 
+  ch$chat_structured(btw(edam_topics[[1]], edam_operations[[1]], edam_data[[1]], edam_formats[[1]]),
+      sprintf(prompt, nterms, txt), type=dfstr)
 }
   
 

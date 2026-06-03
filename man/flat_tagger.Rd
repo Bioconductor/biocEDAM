@@ -9,6 +9,7 @@ flat_tagger(
   nterms = 20,
   model = "claude-sonnet-4-5",
   provider = "anthropic",
+  prompt = read_prompt("flat_tagger.txt"),
   ...
 )
 }

@@ -63,6 +63,11 @@ mkdf = function(x) {
 #' @param nterms integer(1) approximate number of EDAM terms to select. Defaults to 20.
 #' @param prescrub logical(1) if TRUE apply \code{\link{cleantxt}} before processing.
 #' Defaults to TRUE.
+#' @param prompt character(1) instruction text sent to the LLM before the
+#' EDAM vocabulary tables and content.  The string must contain one \code{\%d}
+#' placeholder that will be replaced by \code{nterms}.  Defaults to the
+#' contents of \code{inst/prompts/edamize.txt}; supply your own string to
+#' customise curation behaviour without editing package files.
 #' @param retrieve_k integer(1) or NULL.  When not NULL, use embedding-based
 #' retrieval (via \code{\link{retrieve_edam_candidates}}) to pre-filter the
 #' EDAM vocabulary to the top \code{retrieve_k} candidates per type before
@@ -103,10 +108,11 @@ mkdf = function(x) {
 #' @export
 edamize = function(
         content_for_edam,
-        provider    = "anthropic",
-        model       = "claude-sonnet-4-5",
-        nterms      = 20L,
-        prescrub    = TRUE,
+        provider      = "anthropic",
+        model         = "claude-sonnet-4-5",
+        nterms        = 20L,
+        prescrub      = TRUE,
+        prompt        = read_prompt("edamize.txt"),
         retrieve_k    = 75L,
         sim_threshold = 0.3,
         embed_model   = "text-embedding-3-small",
@@ -138,22 +144,10 @@ edamize = function(
         )
     )
 
-    prompt = paste0(
-        "You are an expert bioinformatics curator assigning EDAM ontology terms ",
-        "to a software tool or resource. ",
-        "From the vocabulary tables provided, select ONLY terms that are ",
-        "DIRECTLY and CLEARLY relevant to the content below. ",
-        "Relevance is paramount: return fewer than ", nterms, " terms if necessary ",
-        "rather than padding with marginally related or speculative matches. ",
-        "Do not assign terms from unrelated biological or computational domains. ",
-        "Prefer specific terms over broad parent categories. ",
-        "Return the id field EXACTLY as it appears in the vocabulary tables -- ",
-        "do not invent, paraphrase, or alter any id or label.\n\n",
-        "CONTENT:\n", content_for_edam
-    )
+    full_prompt = paste0(sprintf(prompt, nterms), "\n\nCONTENT:\n", content_for_edam)
 
     result = ch$chat_structured(
-        btw::btw(edam_db$topic, edam_db$operation, edam_db$data, edam_db$format, prompt),
+        btw::btw(edam_db$topic, edam_db$operation, edam_db$data, edam_db$format, full_prompt),
         type = sel_type
     )
 

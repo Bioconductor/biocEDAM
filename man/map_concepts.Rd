@@ -4,20 +4,45 @@
 \alias{map_concepts}
 \title{Map biological or medical concepts to ontology terms via OLS4}
 \usage{
-map_concepts(query, chat = ols4_chat())
+map_concepts(
+  query,
+  provider = "anthropic",
+  model = "claude-sonnet-4-5",
+  temperature = 0,
+  prompt = read_prompt("map_concepts.txt"),
+  label_match = FALSE,
+  chat = ols4_chat(provider = provider, model = model, temperature = temperature)
+)
 }
 \arguments{
-\item{query}{character(1) free-text query containing one or more biological
+\item{query}{character(1) free-text input containing one or more biological
 or medical concepts.}
 
-\item{chat}{an ellmer \code{Chat} object with OLS4 tools registered; created
-by \code{\link{ols4_chat}} if not supplied.  Reuse across calls to avoid
-restarting the bridge process.}
+\item{provider}{character(1) LLM provider; see \code{\link{llm_env_var}}.
+Defaults to \code{"anthropic"}.}
+
+\item{model}{character(1) model identifier for the chosen provider.
+Defaults to \code{"claude-sonnet-4-5"}.}
+
+\item{temperature}{numeric(1) sampling temperature; defaults to \code{0}
+for deterministic output.  Ignored when \code{chat} is supplied directly.}
+
+\item{label_match}{logical(1) if \code{TRUE}, adds \code{llm_label} and
+\code{label_match} columns via \code{\link{ols4_enrich}}, flagging rows
+where the LLM label and OLS4 canonical label share no content words
+(a sign of a hallucinated IRI).  Defaults to \code{FALSE}.}
+
+\item{chat}{an ellmer \code{Chat} object with OLS4 tools already registered.
+When supplied, \code{provider}, \code{model}, and \code{temperature} are
+ignored.  Build once with \code{\link{ols4_chat}} and reuse across calls to
+avoid restarting the bridge process each time.}
 }
 \value{
 a data.frame with columns \code{input_text}, \code{term_label},
-\code{term_iri}, \code{obo_id}, \code{ontology}, and \code{rationale},
-one row per concept-term pair.
+\code{term_iri}, \code{obo_id}, \code{ontology}, \code{rationale},
+\code{validated}, and \code{definition}, one row per concept-term pair
+(plus \code{llm_label} and \code{label_match} when \code{label_match=TRUE}).
+Filter on \code{validated == TRUE} to retain only OLS4-confirmed terms.
 }
 \description{
 Sends \code{query} to an ellmer chat that has EBI OLS4 search tools
@@ -25,10 +50,24 @@ registered, asking the LLM to identify concepts and retrieve the best
 matching ontology terms.  Returns a typed data frame conforming to
 \code{\link{TermMappingTable}}.
 }
+\details{
+Each row is validated against the EBI OLS4 REST API via
+\code{\link{ols4_enrich}}: rows whose \code{term_iri} cannot be found in
+OLS4 are dropped with a warning, and an authoritative \code{definition}
+column is added alongside the LLM-generated \code{rationale}.
+}
 \examples{
 if (interactive()) {
+    # default provider (anthropic)
+    map_concepts("spatial autocorrelation in gene expression")
+
+    # switch provider
+    map_concepts("chromatin accessibility",
+                 provider = "openai", model = "gpt-4o")
+
+    # reuse a pre-built chat across multiple calls
     ch <- ols4_chat()
-    map_concepts("spatial autocorrelation in gene expression", chat = ch)
-    map_concepts("chromatin accessibility", chat = ch)
+    map_concepts("atrial fibrillation", chat = ch)
+    map_concepts("whole genome sequencing", chat = ch)
 }
 }

@@ -1,0 +1,5 @@
+Identify ALL biological, medical, and technical concepts in the following input text.
+For every concept found, use the OLS search tools to find the best matching ontology term.
+Prefer HP for phenotypes, MONDO for diseases, GO for biological processes, ChEBI for chemicals, EFO for experimental factors.
+Return one row per concept-term pair -- be comprehensive rather than selective.
+IMPORTANT: the term_iri and obo_id you report must come directly from the OLS search tool results, never constructed or guessed.

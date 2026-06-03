@@ -7,6 +7,7 @@
 ols4_chat(
   provider = "anthropic",
   model = "claude-sonnet-4-5",
+  temperature = 0,
   url = "https://www.ebi.ac.uk/ols4/api/mcp",
   ...
 )
@@ -17,6 +18,9 @@ Defaults to \code{"anthropic"}.}
 
 \item{model}{character(1) model identifier. Defaults to
 \code{"claude-sonnet-4-5"}.}
+
+\item{temperature}{numeric(1) sampling temperature passed to the LLM.
+Defaults to \code{0} for deterministic, reproducible output.}
 
 \item{url}{character(1) OLS4 MCP endpoint URL passed to
 \code{\link{ols4_mcp_tools}}.}
