@@ -272,6 +272,51 @@ map_concepts <- function(query,
     ols4_enrich(result, label_match = label_match)
 }
 
+#' Export a map_concepts result as a JSON document
+#'
+#' Converts the data.frame returned by \code{\link{map_concepts}} into a JSON
+#' document.  Terms are grouped by ontology; each entry records the ontology
+#' IRI, term label, OBO identifier, and the input concept that was mapped.
+#'
+#' @rawNamespace import(jsonlite, except=validate)
+#' @param x data.frame as returned by \code{\link{map_concepts}}.
+#' @param validated_only logical(1) if \code{TRUE} (default), only rows where
+#'   \code{validated == TRUE} are included.
+#' @param path character(1) or \code{NULL}.  When not \code{NULL}, the JSON is
+#'   written to this file path and \code{NULL} is returned invisibly.  When
+#'   \code{NULL} (default) the JSON string is returned.
+#' @return A JSON character string, or \code{NULL} invisibly when \code{path}
+#'   is supplied.
+#' @examples
+#' df <- data.frame(
+#'   input_text = c("atrial fibrillation", "genome sequencing"),
+#'   term_label = c("Atrial Fibrillation", "Whole Genome Sequencing"),
+#'   term_iri   = c("http://purl.obolibrary.org/obo/HP_0005110",
+#'                  "http://purl.obolibrary.org/obo/OBI_0002117"),
+#'   obo_id     = c("HP:0005110", "OBI:0002117"),
+#'   ontology   = c("HP", "OBI"),
+#'   rationale  = c("matches concept", "matches concept"),
+#'   validated  = c(TRUE, TRUE),
+#'   definition = c(NA_character_, NA_character_),
+#'   stringsAsFactors = FALSE
+#' )
+#' cat(mapping_to_json(df))
+#' @export
+mapping_to_json <- function(x, validated_only = TRUE, path = NULL) {
+    if (validated_only && "validated" %in% names(x))
+        x <- x[x$validated, ]
+    keep    <- intersect(c("input_text", "term_label", "term_iri", "obo_id"),
+                         names(x))
+    grouped <- split(x[, keep, drop = FALSE], x$ontology)
+    grouped <- lapply(grouped, function(df) { rownames(df) <- NULL; df })
+    json    <- jsonlite::toJSON(grouped, pretty = TRUE, auto_unbox = TRUE)
+    if (!is.null(path)) {
+        writeLines(json, path)
+        return(invisible(NULL))
+    }
+    json
+}
+
 #' Summarise OLS4 MCP tools as a data frame
 #'
 #' @param tools list of ellmer tool objects as returned by
