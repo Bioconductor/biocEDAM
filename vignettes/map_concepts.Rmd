@@ -1,0 +1,211 @@
+---
+title: "Mapping free text to ontology terms with map_concepts"
+author: "Vincent J. Carey, stvjc at channing.harvard.edu"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Mapping free text to ontology terms with map_concepts}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    highlight: pygments
+    number_sections: yes
+    theme: united
+    toc: yes
+---
+
+```{r setup, echo=FALSE, message=FALSE}
+library(biocEDAM)
+```
+
+# Introduction
+
+`map_concepts()` and `map_concepts_edam()` translate free text — such as a
+dataset description, abstract, or workflow summary — into structured ontology
+term mappings using a two-stage LLM pipeline backed by the
+[EBI OLS4](https://www.ebi.ac.uk/ols4) ontology search service.
+
+**Stage 1** extracts a list of biological, medical, or computational concepts
+from the input text using a plain LLM call (no external tools).
+
+**Stage 2** looks up each concept individually in OLS4 via a fresh LLM
+conversation, returning a term label.  R code then resolves that label to a
+canonical IRI via the OLS4 REST API, keeping the LLM out of IRI assignment
+entirely.  Each concept receives its own fresh conversation so that context
+never accumulates across concepts — a key safeguard against the hallucinated
+IRIs that arise when a single long conversation handles many tool calls.
+
+# Requirements
+
+Two external dependencies are needed for live use.  When either is absent the
+code in this vignette falls back automatically to stored mock results so the
+vignette still builds and displays representative output.
+
+**1. Anthropic API key** — set before calling any `map_concepts` function:
+
+```{r auth, eval=FALSE}
+Sys.setenv(ANTHROPIC_API_KEY = "your-key-here")
+```
+
+**2. OLS4 MCP bridge** — `npx` and `mcp-remote` must be on the system PATH.
+Install once with:
+
+```{bash mcp_install, eval=FALSE}
+npm install -g mcp-remote
+```
+
+# map_concepts: multi-ontology mapping
+
+## A bioinformatics workflow description
+
+`map_concepts()` searches across all ontologies available in OLS4, selecting
+the most appropriate one for each concept.  The `max_concepts` parameter caps
+the number of OLS4 lookups, which is useful for long texts.
+
+```{r wf_text}
+wf_text <- paste(
+    "The workflow for Illumina-sequenced ARTIC data builds on the RNASeq",
+    "workflow for paired-end data using the same steps for mapping and variant",
+    "calling, but adds extra logic for trimming ARTIC primer sequences off",
+    "reads with the ivar package."
+)
+```
+
+When an API key and MCP bridge are available, run live:
+
+```{r mc_workflow}
+if (interactive())
+    wf <- map_concepts(wf_text, max_concepts = 8)
+```
+
+The vignette uses a pre-computed result:
+
+```{r mc_workflow_mock, message=FALSE}
+wf <- readRDS(system.file("extdata", "mock_wf_map_concepts.rds",
+                           package = "biocEDAM"))
+as.data.frame(wf)[, c("input_text", "term_label", "obo_id", "ontology")]
+```
+
+Note that `deduplicate = TRUE` (the default) collapses rows that resolve to the
+same IRI, recording all source concepts in the `input_text` field separated by
+`"; "`.
+
+## A cardiovascular genomics abstract
+
+For a longer, more heterogeneous text `map_concepts()` spans multiple
+ontologies — MONDO for diseases, EFO for study designs, EDAM for
+computational methods:
+
+```{r cvd_text}
+cvd_text <- paste(
+    "The Cardiovascular Disease working group considered early-onset coronary",
+    "artery disease, stroke, atrial fibrillation, congestive heart failure and",
+    "type 2 diabetes. Genome-wide association studies provide a powerful tool",
+    "to identify common variants. Comprehensive molecular phenotyping is",
+    "performed using genomic, transcriptomic, proteomics, and metabolomic",
+    "approaches."
+)
+```
+
+```{r mc_cvd}
+if (interactive())
+    cvd <- map_concepts(cvd_text, max_concepts = 12)
+```
+
+```{r mc_cvd_mock, message=FALSE}
+cvd <- readRDS(system.file("extdata", "mock_cvd_map_concepts.rds",
+                            package = "biocEDAM"))
+as.data.frame(cvd)[, c("input_text", "term_label", "obo_id", "ontology")]
+```
+
+# map_concepts_edam: EDAM-only mapping
+
+`map_concepts_edam()` restricts both the LLM search and the OLS4 REST label
+resolution to the EDAM ontology.  EDAM has four sub-trees:
+
+| Sub-tree | Scope |
+|---|---|
+| `topic` | Research areas and scientific domains |
+| `operation` | Computational steps and analytical methods |
+| `data` | Data types and information entities |
+| `format` | File formats and data exchange standards |
+
+```{r mce}
+if (interactive())
+    wf_edam <- map_concepts_edam(wf_text, max_concepts = 8)
+```
+
+```{r mce_mock, message=FALSE}
+wf_edam <- readRDS(system.file("extdata", "mock_wf_map_concepts_edam.rds",
+                                package = "biocEDAM"))
+as.data.frame(wf_edam)[, c("input_text", "term_label", "obo_id")]
+```
+
+## Scope limitations
+
+EDAM does not cover clinical phenotypes, diseases, spatial statistics, or
+general study designs.  For the cardiovascular text above, `map_concepts_edam()`
+would return very few rows — only the omics method concepts (genomics,
+transcriptomics, proteomics) have good EDAM coverage.  Use `map_concepts()` for
+mixed or clinically-oriented texts.
+
+# Parameters
+
+| Parameter | Default | Purpose |
+|---|---|---|
+| `max_concepts` | `Inf` | Cap Stage 2 lookups; use 8–15 for long texts |
+| `deduplicate` | `TRUE` | Collapse rows with identical IRIs |
+| `definition` | `FALSE` | Fetch OLS4 definitions (one extra REST call per term) |
+| `label_match` | `FALSE` | Add `llm_label`/`label_match` diagnostic columns |
+| `ontology_filter` | `NULL` | Force REST search to a specific ontology |
+| `tools` | `ols4_mcp_tools()` | Pre-loaded MCP tools; reuse to avoid bridge restarts |
+
+Pre-loading the MCP tools is useful when calling `map_concepts` repeatedly:
+
+```{r preload}
+if (interactive()) {
+    tls <- ols4_mcp_tools()
+    r1  <- map_concepts(text1, tools = tls)
+    r2  <- map_concepts(text2, tools = tls)
+}
+```
+
+# Curation
+
+All outputs require human review before use.  Common failure modes include:
+
+- A plausible term label that resolves to an unrelated IRI via OLS4 search
+- A concept mapped to an ontology whose scope does not match (e.g. a disease
+  concept mapped to a GO biological process)
+- A spurious EDAM term returned for a concept outside EDAM's scope
+
+Setting `definition = TRUE` adds authoritative OLS4 definitions, which makes
+it easier to judge whether a mapping is appropriate:
+
+```{r def}
+if (interactive()) {
+    wf_def <- map_concepts_edam(wf_text, max_concepts = 8, definition = TRUE)
+    print(wf_def[, c("term_label", "definition")])
+}
+```
+
+Inspect `term_label` against `input_text` for each row and discard implausible
+mappings before treating results as authoritative.
+
+# Inspecting prompts
+
+All prompts used internally can be inspected and customised via `read_prompt()`:
+
+```{r prompts}
+cat(read_prompt("extract_concepts.txt"))
+```
+
+```{r prompts2}
+cat(read_prompt("lookup_edam_concept.txt"))
+```
+
+# Session information
+
+```{r si}
+sessionInfo()
+```
