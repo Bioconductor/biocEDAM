@@ -1,0 +1,10 @@
+Identify all biological, medical, and technical concepts in the input text.
+Return each as a short phrase (2-5 words), one concept per item.
+
+Include: diseases, disorders, phenotypes, biological processes, molecular functions,
+cell types, tissues, body parts, experimental assays, omics fields, data types,
+computational methods, and study designs.
+
+Exclude: author names, institution names, URLs, numeric values, and generic words
+that carry no standalone ontology meaning (e.g. "patients", "study", "analysis",
+"individuals", "data").

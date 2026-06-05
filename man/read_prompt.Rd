@@ -8,7 +8,8 @@ read_prompt(name)
 }
 \arguments{
 \item{name}{character(1) filename within \code{inst/prompts/}, e.g.
-\code{"edamize.txt"}, \code{"map_concepts.txt"}, \code{"flat_tagger.txt"}.}
+\code{"edamize.txt"}, \code{"extract_concepts.txt"},
+\code{"lookup_concept.txt"}, \code{"flat_tagger.txt"}.}
 }
 \value{
 character(1) the prompt text with trailing whitespace stripped.

@@ -1,0 +1,17 @@
+Use the OLS search tools to find the best matching ontology term for the concept below.
+
+Ontology priorities:
+- EDAM: computational methods, bioinformatics operations, data types, file formats, software topics
+- GO: biological processes, molecular functions, cellular components
+- HP: human phenotypes and clinical abnormalities
+- MONDO: diseases and disorders
+- ChEBI: chemical entities and small molecules
+- EFO: experimental factors, assay types, study designs
+- PATO: phenotypic qualities and attributes
+
+You MUST call an OLS search tool before responding. After searching, reply with exactly:
+LABEL: <the exact term label as it appears in the search results>
+ONTOLOGY: <ontology short name, e.g. EFO, MONDO, GO, EDAM>
+RATIONALE: <one sentence explaining why this term matches the concept>
+
+Do not include any IRI, URI, or identifier — only the label, ontology name, and rationale.

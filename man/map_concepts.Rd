@@ -9,9 +9,16 @@ map_concepts(
   provider = "anthropic",
   model = "claude-sonnet-4-5",
   temperature = 0,
-  prompt = read_prompt("map_concepts.txt"),
+  extract_prompt = read_prompt("extract_concepts.txt"),
+  lookup_prompt = read_prompt("lookup_concept.txt"),
+  max_concepts = Inf,
+  deduplicate = TRUE,
+  definition = FALSE,
   label_match = FALSE,
-  chat = ols4_chat(provider = provider, model = model, temperature = temperature)
+  ontology_filter = NULL,
+  tools = ols4_mcp_tools(),
+  extractor = llm_chat(provider = provider, model = model, api_args = list(temperature =
+    temperature))
 )
 }
 \arguments{
@@ -25,54 +32,78 @@ Defaults to \code{"anthropic"}.}
 Defaults to \code{"claude-sonnet-4-5"}.}
 
 \item{temperature}{numeric(1) sampling temperature; defaults to \code{0}
-for deterministic output.  Ignored when \code{chat} is supplied directly.}
+for deterministic output.}
 
-\item{prompt}{character(1) instruction text sent to the LLM before the
-input text.  Defaults to the contents of
-\code{inst/prompts/map_concepts.txt}; use
-\code{\link{read_prompt}("map_concepts.txt")} to inspect or customise.}
+\item{extract_prompt}{character(1) prompt for Stage 1 (concept extraction).
+Defaults to \code{inst/prompts/extract_concepts.txt}.}
+
+\item{lookup_prompt}{character(1) prompt for Stage 2 (per-concept OLS4 lookup).
+Defaults to \code{inst/prompts/lookup_concept.txt}.}
+
+\item{max_concepts}{integer(1) maximum number of concepts to look up in
+Stage 2.  The first \code{max_concepts} items from Stage 1 are used;
+the rest are silently dropped.  \code{Inf} (default) processes all concepts.}
+
+\item{deduplicate}{logical(1) if \code{TRUE} (default), rows with duplicate
+\code{term_iri} values are collapsed into one row; the \code{input_text}
+field of the surviving row lists all source concepts separated by \code{"; "}.}
+
+\item{definition}{logical(1) if \code{FALSE} (default), the \code{definition}
+column is set to \code{NA} and no extra OLS4 REST calls are made.  Set to
+\code{TRUE} to fetch authoritative definitions via \code{\link{ols4_enrich}},
+at the cost of one additional REST call per term.}
 
 \item{label_match}{logical(1) if \code{TRUE}, adds \code{llm_label} and
-\code{label_match} columns via \code{\link{ols4_enrich}}, flagging rows
-where the LLM label and OLS4 canonical label share no content words
-(a sign of a hallucinated IRI).  Defaults to \code{FALSE}.}
+\code{label_match} columns; implies \code{definition = TRUE} since it
+requires \code{\link{ols4_enrich}}.  Defaults to \code{FALSE}.}
 
-\item{chat}{an ellmer \code{Chat} object with OLS4 tools already registered.
-When supplied, \code{provider}, \code{model}, and \code{temperature} are
-ignored.  Build once with \code{\link{ols4_chat}} and reuse across calls to
-avoid restarting the bridge process each time.}
+\item{ontology_filter}{character(1) or \code{NULL}.  When supplied, overrides
+the ontology returned by the LLM and forces the OLS4 REST label search
+to search within that ontology only (e.g. \code{"edam"}).  \code{NULL}
+(default) uses whatever ontology the LLM selects.}
+
+\item{tools}{list of ellmer \code{ToolDef} objects as returned by
+\code{\link{ols4_mcp_tools}}.  Loaded once per \code{map_concepts} call;
+each per-concept lookup creates a fresh chat that registers these tools,
+preventing context accumulation across concepts.  Supply a pre-loaded tools
+object to avoid restarting the MCP bridge on repeated calls.}
+
+\item{extractor}{an ellmer \code{Chat} object \emph{without} tools, used for
+Stage 1 concept extraction.  Defaults to a plain \code{\link{llm_chat}}
+with the same provider, model, and temperature.}
 }
 \value{
 a data.frame with columns \code{input_text}, \code{term_label},
 \code{term_iri}, \code{obo_id}, \code{ontology}, \code{rationale},
 \code{validated}, and \code{definition}, one row per concept-term pair
 (plus \code{llm_label} and \code{label_match} when \code{label_match=TRUE}).
-Filter on \code{validated == TRUE} to retain only OLS4-confirmed terms.
+\strong{Outputs require human curation.}  The LLM may return plausible-looking
+but incorrect term mappings, particularly for concepts with ambiguous ontology
+coverage.  Review \code{term_label} against \code{input_text} for each row
+before treating results as authoritative.
 }
 \description{
-Sends \code{query} to an ellmer chat that has EBI OLS4 search tools
-registered, asking the LLM to identify concepts and retrieve the best
-matching ontology terms.  Returns a typed data frame conforming to
-\code{\link{TermMappingTable}}.
+Uses a two-stage approach to avoid LLM hallucination under tool-call overload:
+\enumerate{
+  \item \strong{Concept extraction} — a plain LLM call (no tools) identifies
+    all concepts in \code{query} and returns them as a character vector.
+  \item \strong{Per-concept lookup} — each concept gets its own fresh
+    single-turn chat so conversation history never accumulates across
+    concepts.  The LLM calls an OLS4 tool and returns only a term label;
+    R code resolves the label to a canonical IRI via OLS4 REST.
 }
-\details{
-Each row is validated against the EBI OLS4 REST API via
-\code{\link{ols4_enrich}}: rows whose \code{term_iri} cannot be found in
-OLS4 are dropped with a warning, and an authoritative \code{definition}
-column is added alongside the LLM-generated \code{rationale}.
+Results are validated against the EBI OLS4 REST API via
+\code{\link{ols4_enrich}}, which adds \code{validated} and \code{definition}
+columns.
 }
 \examples{
 if (interactive()) {
-    # default provider (anthropic)
-    map_concepts("spatial autocorrelation in gene expression")
+    map_concepts("atrial fibrillation and whole genome sequencing",
+                 max_concepts = 10)
 
-    # switch provider
-    map_concepts("chromatin accessibility",
-                 provider = "openai", model = "gpt-4o")
-
-    # reuse a pre-built chat across multiple calls
-    ch <- ols4_chat()
-    map_concepts("atrial fibrillation", chat = ch)
-    map_concepts("whole genome sequencing", chat = ch)
+    # pre-load tools to avoid restarting the MCP bridge on repeated calls
+    tls <- ols4_mcp_tools()
+    map_concepts("atrial fibrillation", tools = tls)
+    map_concepts("whole genome sequencing", tools = tls)
 }
 }

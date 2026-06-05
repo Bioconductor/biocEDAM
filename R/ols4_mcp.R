@@ -75,6 +75,66 @@ ols4_chat <- function(provider    = "anthropic",
     chat
 }
 
+# Parse LABEL / ONTOLOGY / RATIONALE from an LLM plain-text response.
+# Returns NULL if no LABEL line is found.
+.parse_label_response <- function(text) {
+    lines <- trimws(strsplit(text, "\n")[[1L]])
+    get_field <- function(key) {
+        pat <- paste0("^", key, "\\s*:\\s*")
+        m   <- grep(pat, lines, ignore.case = TRUE, value = TRUE)
+        if (length(m) == 0L) return(NA_character_)
+        trimws(sub(pat, "", m[[1L]], ignore.case = TRUE))
+    }
+    label     <- get_field("LABEL")
+    if (is.na(label) || !nchar(label)) return(NULL)
+    if (trimws(tolower(label)) == "none") return(NULL)
+    list(label     = label,
+         ontology  = get_field("ONTOLOGY"),
+         rationale = get_field("RATIONALE") %||% "")
+}
+
+# Search OLS4 by label string via REST; falls back from exact to fuzzy match.
+# Returns list(term_label, term_iri, obo_id, ontology) or NULL if not found.
+.ols4_search_label <- function(label, ontology = NULL) {
+    build_req <- function(exact) {
+        req <- httr2::request("https://www.ebi.ac.uk/ols4/api/search") |>
+            httr2::req_url_query(
+                q           = label,
+                queryFields = "label",
+                fieldList   = "iri,label,obo_id,ontology_name",
+                exact       = if (exact) "true" else "false",
+                rows        = 3L
+            )
+        if (!is.null(ontology) && !is.na(ontology))
+            req <- httr2::req_url_query(req, ontology = tolower(ontology))
+        req
+    }
+    do_search <- function(exact) {
+        tryCatch(
+            build_req(exact) |>
+                httr2::req_throttle(rate = 5) |>
+                httr2::req_retry(max_tries = 3L,
+                                 is_transient = \(r) httr2::resp_status(r) == 429L) |>
+                httr2::req_error(is_error = function(r) FALSE) |>
+                httr2::req_perform() |>
+                httr2::resp_body_json(),
+            error = function(e) NULL
+        )
+    }
+    resp <- do_search(exact = TRUE)
+    docs <- resp[["response"]][["docs"]]
+    if (is.null(docs) || length(docs) == 0L) {
+        resp <- do_search(exact = FALSE)
+        docs <- resp[["response"]][["docs"]]
+    }
+    if (is.null(docs) || length(docs) == 0L) return(NULL)
+    doc <- docs[[1L]]
+    list(term_label = doc[["label"]]         %||% NA_character_,
+         term_iri   = doc[["iri"]]           %||% NA_character_,
+         obo_id     = doc[["obo_id"]]        %||% NA_character_,
+         ontology   = toupper(doc[["ontology_name"]] %||% NA_character_))
+}
+
 # Check whether an LLM-generated label and an OLS4 canonical label refer to
 # the same concept by looking for shared content words.  Returns NA when either
 # label is missing.
@@ -206,15 +266,18 @@ ols4_enrich <- function(result, label_match = FALSE) {
 
 #' Map biological or medical concepts to ontology terms via OLS4
 #'
-#' Sends \code{query} to an ellmer chat that has EBI OLS4 search tools
-#' registered, asking the LLM to identify concepts and retrieve the best
-#' matching ontology terms.  Returns a typed data frame conforming to
-#' \code{\link{TermMappingTable}}.
-#'
-#' Each row is validated against the EBI OLS4 REST API via
-#' \code{\link{ols4_enrich}}: rows whose \code{term_iri} cannot be found in
-#' OLS4 are dropped with a warning, and an authoritative \code{definition}
-#' column is added alongside the LLM-generated \code{rationale}.
+#' Uses a two-stage approach to avoid LLM hallucination under tool-call overload:
+#' \enumerate{
+#'   \item \strong{Concept extraction} — a plain LLM call (no tools) identifies
+#'     all concepts in \code{query} and returns them as a character vector.
+#'   \item \strong{Per-concept lookup} — each concept gets its own fresh
+#'     single-turn chat so conversation history never accumulates across
+#'     concepts.  The LLM calls an OLS4 tool and returns only a term label;
+#'     R code resolves the label to a canonical IRI via OLS4 REST.
+#' }
+#' Results are validated against the EBI OLS4 REST API via
+#' \code{\link{ols4_enrich}}, which adds \code{validated} and \code{definition}
+#' columns.
 #'
 #' @param query character(1) free-text input containing one or more biological
 #' or medical concepts.
@@ -223,53 +286,214 @@ ols4_enrich <- function(result, label_match = FALSE) {
 #' @param model character(1) model identifier for the chosen provider.
 #' Defaults to \code{"claude-sonnet-4-5"}.
 #' @param temperature numeric(1) sampling temperature; defaults to \code{0}
-#' for deterministic output.  Ignored when \code{chat} is supplied directly.
-#' @param prompt character(1) instruction text sent to the LLM before the
-#' input text.  Defaults to the contents of
-#' \code{inst/prompts/map_concepts.txt}; use
-#' \code{\link{read_prompt}("map_concepts.txt")} to inspect or customise.
+#' for deterministic output.
+#' @param extract_prompt character(1) prompt for Stage 1 (concept extraction).
+#' Defaults to \code{inst/prompts/extract_concepts.txt}.
+#' @param lookup_prompt character(1) prompt for Stage 2 (per-concept OLS4 lookup).
+#' Defaults to \code{inst/prompts/lookup_concept.txt}.
+#' @param max_concepts integer(1) maximum number of concepts to look up in
+#' Stage 2.  The first \code{max_concepts} items from Stage 1 are used;
+#' the rest are silently dropped.  \code{Inf} (default) processes all concepts.
+#' @param deduplicate logical(1) if \code{TRUE} (default), rows with duplicate
+#' \code{term_iri} values are collapsed into one row; the \code{input_text}
+#' field of the surviving row lists all source concepts separated by \code{"; "}.
+#' @param definition logical(1) if \code{FALSE} (default), the \code{definition}
+#' column is set to \code{NA} and no extra OLS4 REST calls are made.  Set to
+#' \code{TRUE} to fetch authoritative definitions via \code{\link{ols4_enrich}},
+#' at the cost of one additional REST call per term.
 #' @param label_match logical(1) if \code{TRUE}, adds \code{llm_label} and
-#' \code{label_match} columns via \code{\link{ols4_enrich}}, flagging rows
-#' where the LLM label and OLS4 canonical label share no content words
-#' (a sign of a hallucinated IRI).  Defaults to \code{FALSE}.
-#' @param chat an ellmer \code{Chat} object with OLS4 tools already registered.
-#' When supplied, \code{provider}, \code{model}, and \code{temperature} are
-#' ignored.  Build once with \code{\link{ols4_chat}} and reuse across calls to
-#' avoid restarting the bridge process each time.
+#' \code{label_match} columns; implies \code{definition = TRUE} since it
+#' requires \code{\link{ols4_enrich}}.  Defaults to \code{FALSE}.
+#' @param ontology_filter character(1) or \code{NULL}.  When supplied, overrides
+#' the ontology returned by the LLM and forces the OLS4 REST label search
+#' to search within that ontology only (e.g. \code{"edam"}).  \code{NULL}
+#' (default) uses whatever ontology the LLM selects.
+#' @param tools list of ellmer \code{ToolDef} objects as returned by
+#' \code{\link{ols4_mcp_tools}}.  Loaded once per \code{map_concepts} call;
+#' each per-concept lookup creates a fresh chat that registers these tools,
+#' preventing context accumulation across concepts.  Supply a pre-loaded tools
+#' object to avoid restarting the MCP bridge on repeated calls.
+#' @param extractor an ellmer \code{Chat} object \emph{without} tools, used for
+#' Stage 1 concept extraction.  Defaults to a plain \code{\link{llm_chat}}
+#' with the same provider, model, and temperature.
 #' @return a data.frame with columns \code{input_text}, \code{term_label},
 #' \code{term_iri}, \code{obo_id}, \code{ontology}, \code{rationale},
 #' \code{validated}, and \code{definition}, one row per concept-term pair
 #' (plus \code{llm_label} and \code{label_match} when \code{label_match=TRUE}).
-#' Filter on \code{validated == TRUE} to retain only OLS4-confirmed terms.
+#' \strong{Outputs require human curation.}  The LLM may return plausible-looking
+#' but incorrect term mappings, particularly for concepts with ambiguous ontology
+#' coverage.  Review \code{term_label} against \code{input_text} for each row
+#' before treating results as authoritative.
 #' @examples
 #' if (interactive()) {
-#'     # default provider (anthropic)
-#'     map_concepts("spatial autocorrelation in gene expression")
+#'     map_concepts("atrial fibrillation and whole genome sequencing",
+#'                  max_concepts = 10)
 #'
-#'     # switch provider
-#'     map_concepts("chromatin accessibility",
-#'                  provider = "openai", model = "gpt-4o")
-#'
-#'     # reuse a pre-built chat across multiple calls
-#'     ch <- ols4_chat()
-#'     map_concepts("atrial fibrillation", chat = ch)
-#'     map_concepts("whole genome sequencing", chat = ch)
+#'     # pre-load tools to avoid restarting the MCP bridge on repeated calls
+#'     tls <- ols4_mcp_tools()
+#'     map_concepts("atrial fibrillation", tools = tls)
+#'     map_concepts("whole genome sequencing", tools = tls)
 #' }
 #' @export
 map_concepts <- function(query,
-                         provider    = "anthropic",
-                         model       = "claude-sonnet-4-5",
-                         temperature = 0,
-                         prompt      = read_prompt("map_concepts.txt"),
-                         label_match = FALSE,
-                         chat        = ols4_chat(provider    = provider,
-                                                  model       = model,
-                                                  temperature = temperature)) {
-    result <- chat$chat_structured(
-        paste0(prompt, "\n\nInput text: ", query),
-        type = TermMappingTable
+                         provider       = "anthropic",
+                         model          = "claude-sonnet-4-5",
+                         temperature    = 0,
+                         extract_prompt = read_prompt("extract_concepts.txt"),
+                         lookup_prompt  = read_prompt("lookup_concept.txt"),
+                         max_concepts   = Inf,
+                         deduplicate    = TRUE,
+                         definition     = FALSE,
+                         label_match    = FALSE,
+                         ontology_filter = NULL,
+                         tools          = ols4_mcp_tools(),
+                         extractor      = llm_chat(provider = provider,
+                                                    model    = model,
+                                                    api_args = list(
+                                                        temperature = temperature))) {
+    # Stage 1: extract concept strings with no tool calls
+    concepts <- extractor$chat_structured(
+        paste0(extract_prompt, "\n\nInput text: ", query),
+        type = ellmer::type_array(
+            items = ellmer::type_string(
+                "A biological, medical, or technical concept from the text"))
     )
-    ols4_enrich(result, label_match = label_match)
+
+    if (length(concepts) == 0L) {
+        message("No concepts extracted from input text.")
+        return(.empty_mapping_table())
+    }
+    if (is.finite(max_concepts) && length(concepts) > max_concepts) {
+        message(sprintf("Extracted %d concept(s); limiting to first %d.",
+                        length(concepts), max_concepts))
+        concepts <- concepts[seq_len(max_concepts)]
+    } else {
+        message(sprintf("Extracted %d concept(s); querying OLS4 for each...",
+                        length(concepts)))
+    }
+
+    # Stage 2: fresh single-turn chat per concept eliminates context accumulation.
+    # LLM returns LABEL/ONTOLOGY/RATIONALE text — no IRI.
+    # R code resolves label → IRI via OLS4 REST.
+    make_lookup_chat <- function() {
+        ch <- llm_chat(provider = provider, model = model,
+                       api_args = list(temperature = temperature))
+        ch$register_tools(tools)
+        ch
+    }
+
+    rows <- lapply(seq_along(concepts), function(i) {
+        concept <- concepts[[i]]
+        message(sprintf("  [%d/%d] %s", i, length(concepts), concept))
+
+        resp_text <- tryCatch(
+            make_lookup_chat()$chat(
+                paste0(lookup_prompt, "\n\nConcept: ", concept)),
+            error = function(e) {
+                message(sprintf("    chat failed: %s", conditionMessage(e)))
+                NULL
+            }
+        )
+        if (is.null(resp_text)) return(NULL)
+
+        parsed <- .parse_label_response(resp_text)
+        if (is.null(parsed)) {
+            message(sprintf("    could not parse label response for '%s'", concept))
+            return(NULL)
+        }
+
+        onto <- if (!is.null(ontology_filter)) ontology_filter else parsed$ontology
+        iri_info <- .ols4_search_label(parsed$label, ontology = onto)
+        if (is.null(iri_info)) {
+            message(sprintf("    no OLS4 match for label '%s'", parsed$label))
+            return(NULL)
+        }
+
+        data.frame(input_text = concept,
+                   term_label = iri_info$term_label,
+                   term_iri   = iri_info$term_iri,
+                   obo_id     = iri_info$obo_id,
+                   ontology   = iri_info$ontology,
+                   rationale  = parsed$rationale,
+                   stringsAsFactors = FALSE)
+    })
+    rows <- Filter(Negate(is.null), rows)
+
+    if (length(rows) == 0L) {
+        warning("All per-concept lookups failed.")
+        return(.empty_mapping_table())
+    }
+
+    result <- do.call(rbind, rows)
+    rownames(result) <- NULL
+
+    if (definition || label_match) {
+        result <- ols4_enrich(result, label_match = label_match)
+    } else {
+        result$validated  <- TRUE
+        result$definition <- NA_character_
+    }
+
+    if (deduplicate && nrow(result) > 0L) {
+        first   <- !duplicated(result$term_iri)
+        merged  <- vapply(result$term_iri, function(iri) {
+            paste(result$input_text[result$term_iri == iri], collapse = "; ")
+        }, character(1L))
+        result$input_text <- merged
+        result <- result[first, , drop = FALSE]
+        rownames(result) <- NULL
+        n_dropped <- sum(!first)
+        if (n_dropped > 0L)
+            message(sprintf("Removed %d duplicate term(s) (same IRI).", n_dropped))
+    }
+    result
+}
+
+#' Map concepts to EDAM ontology terms via OLS4
+#'
+#' A focused wrapper around \code{\link{map_concepts}} that restricts all
+#' ontology lookups to the EDAM ontology.  The LLM is instructed to search
+#' within EDAM only and to identify which EDAM sub-tree applies (topic,
+#' operation, data, or format); the OLS4 REST label search is also constrained
+#' to EDAM regardless of the LLM's response.
+#'
+#' \strong{Scope and curation.}  EDAM covers bioinformatics operations, data
+#' types, file formats, and computational biology topics.  Concepts outside
+#' this scope — including spatial statistics, clinical phenotypes, chemical
+#' entities, and general study designs — have little or no EDAM coverage.
+#' When the input text contains such concepts the LLM may return a spurious
+#' EDAM term rather than admitting no match exists.  \emph{All outputs should
+#' be reviewed by a domain expert before use}: check that each
+#' \code{term_label} is semantically appropriate for its \code{input_text},
+#' and discard rows where the mapping is implausible.  The
+#' \code{\link{map_concepts}} function (unrestricted ontology) may give better
+#' coverage for mixed or clinically-oriented texts.
+#'
+#' @inheritParams map_concepts
+#' @param \dots additional arguments passed to \code{\link{map_concepts}},
+#' e.g. \code{max_concepts}, \code{deduplicate}, \code{definition}.
+#' @return a data.frame as returned by \code{\link{map_concepts}}, with all
+#' rows from the EDAM ontology.
+#' @examples
+#' if (interactive()) {
+#'     map_concepts_edam("RNA-Seq workflow with variant calling and primer trimming",
+#'                       max_concepts = 8)
+#' }
+#' @export
+map_concepts_edam <- function(query, ...) {
+    map_concepts(query,
+                 lookup_prompt   = read_prompt("lookup_edam_concept.txt"),
+                 ontology_filter = "edam",
+                 ...)
+}
+
+# Return a zero-row data.frame with the expected post-enrich column set
+.empty_mapping_table <- function() {
+    data.frame(input_text = character(), term_label = character(),
+               term_iri   = character(), obo_id     = character(),
+               ontology   = character(), rationale  = character(),
+               validated  = logical(),  definition = character(),
+               stringsAsFactors = FALSE)
 }
 
 #' Export a map_concepts result as a JSON document

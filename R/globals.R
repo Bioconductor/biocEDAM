@@ -11,7 +11,8 @@ NULL
 #' \code{\link{flat_tagger}}.
 #'
 #' @param name character(1) filename within \code{inst/prompts/}, e.g.
-#' \code{"edamize.txt"}, \code{"map_concepts.txt"}, \code{"flat_tagger.txt"}.
+#' \code{"edamize.txt"}, \code{"extract_concepts.txt"},
+#' \code{"lookup_concept.txt"}, \code{"flat_tagger.txt"}.
 #' @return character(1) the prompt text with trailing whitespace stripped.
 #' @examples
 #' cat(read_prompt("map_concepts.txt"))

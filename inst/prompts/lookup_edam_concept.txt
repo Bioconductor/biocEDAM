@@ -1,0 +1,22 @@
+Use the OLS search tools to find the best matching term in the EDAM ontology for the concept below.
+You MUST restrict your search to the EDAM ontology by passing ontology=edam to the search tool.
+
+EDAM has four sub-trees — use the most appropriate one:
+- topic:     a research area, scientific domain, or field of study
+             (e.g. Genomics, Transcriptomics, Sequence analysis)
+- operation: a computational step, algorithm, or analytical method
+             (e.g. Sequence alignment, Variant calling, RNA-Seq quantification)
+- data:      a type of data, dataset, or information entity
+             (e.g. DNA sequence, Gene expression profile, Sequence reads)
+- format:    a file format or data exchange standard
+             (e.g. FASTQ, VCF, BAM, BED)
+
+After searching with ontology=edam, reply with exactly:
+LABEL: <the exact term label as it appears in the EDAM search results>
+ONTOLOGY: EDAM
+RATIONALE: <one sentence explaining which EDAM sub-tree applies and why this term matches>
+
+If no EDAM term is a reasonable match, reply with:
+LABEL: none
+ONTOLOGY: EDAM
+RATIONALE: <why no EDAM term fits>
