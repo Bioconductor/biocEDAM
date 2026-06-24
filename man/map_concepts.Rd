@@ -14,7 +14,7 @@ map_concepts(
   max_concepts = Inf,
   deduplicate = TRUE,
   definition = FALSE,
-  label_match = FALSE,
+  label_match = TRUE,
   ontology_filter = NULL,
   tools = ols4_mcp_tools(),
   extractor = llm_chat(provider = provider, model = model, api_args = list(temperature =
@@ -53,9 +53,13 @@ column is set to \code{NA} and no extra OLS4 REST calls are made.  Set to
 \code{TRUE} to fetch authoritative definitions via \code{\link{ols4_enrich}},
 at the cost of one additional REST call per term.}
 
-\item{label_match}{logical(1) if \code{TRUE}, adds \code{llm_label} and
-\code{label_match} columns; implies \code{definition = TRUE} since it
-requires \code{\link{ols4_enrich}}.  Defaults to \code{FALSE}.}
+\item{label_match}{logical(1) if \code{TRUE} (default), adds
+\code{llm_label} and \code{label_match} columns, where
+\code{label_match = FALSE} flags rows where the LLM-chosen label and the
+OLS4 canonical label share no content words — a reliable signal of a
+spurious mapping.  Filter with \code{result[result$label_match, ]} to
+retain only plausible rows.  Implies \code{definition = TRUE} since it
+requires \code{\link{ols4_enrich}}.}
 
 \item{ontology_filter}{character(1) or \code{NULL}.  When supplied, overrides
 the ontology returned by the LLM and forces the OLS4 REST label search
@@ -75,12 +79,12 @@ with the same provider, model, and temperature.}
 \value{
 a data.frame with columns \code{input_text}, \code{term_label},
 \code{term_iri}, \code{obo_id}, \code{ontology}, \code{rationale},
-\code{validated}, and \code{definition}, one row per concept-term pair
-(plus \code{llm_label} and \code{label_match} when \code{label_match=TRUE}).
-\strong{Outputs require human curation.}  The LLM may return plausible-looking
-but incorrect term mappings, particularly for concepts with ambiguous ontology
-coverage.  Review \code{term_label} against \code{input_text} for each row
-before treating results as authoritative.
+\code{validated}, \code{definition}, \code{llm_label}, and
+\code{label_match}, one row per concept-term pair.
+\strong{Outputs require human curation.}  Filter on
+\code{result[result$label_match, ]} to discard the most obvious spurious
+mappings, then review remaining rows before treating results as
+authoritative.
 }
 \description{
 Uses a two-stage approach to avoid LLM hallucination under tool-call overload:

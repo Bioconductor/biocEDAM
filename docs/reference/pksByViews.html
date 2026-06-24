@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocEDAM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/biotools.html">Examining biotools tagging of Bioconductor packages</a></li>
     <li><a class="dropdown-item" href="../articles/curate.html">Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="nav-link" href="https://github.com/vjcitn/biocEDAM/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -64,11 +65,15 @@
 a named list with outputs of previous calls to biocPkgList</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>a data.frame with columns <code>pkg</code> and <code>view</code> for packages
+matching the requested views</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"vlist"</span>, package<span class="op">=</span><span class="st">"biocEDAM"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>strings not representable in native encoding will be translated to UTF-8</span>
 <span class="r-in"><span><span class="fu">pksByViews</span><span class="op">(</span>views <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ChIPchip"</span>, <span class="st">"ShinyApps"</span><span class="op">)</span>, type<span class="op">=</span><span class="st">"BioCsoft"</span>, vlist<span class="op">=</span><span class="va">vlist</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                          pkg      view</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1441           BiocHubsShiny ShinyApps</span>
@@ -112,7 +117,7 @@ a named list with outputs of previous calls to biocPkgList</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

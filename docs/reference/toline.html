@@ -9,7 +9,7 @@ reflecting main elements of EDAM"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">biocEDAM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -24,6 +24,7 @@ reflecting main elements of EDAM"></head><body>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/biotools.html">Examining biotools tagging of Bioconductor packages</a></li>
     <li><a class="dropdown-item" href="../articles/curate.html">Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="nav-link" href="https://github.com/vjcitn/biocEDAM/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -63,6 +64,23 @@ reflecting main elements of EDAM</p>
     <p>a data.frame</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    uri <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"http://edamontology.org/topic_3308"</span>,</span></span>
+<span class="r-in"><span>            <span class="st">"http://edamontology.org/operation_2238"</span>,</span></span>
+<span class="r-in"><span>            <span class="st">"http://edamontology.org/data_3112"</span>,</span></span>
+<span class="r-in"><span>            <span class="st">"http://edamontology.org/format_3475"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    tm  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Transcriptomics"</span>, <span class="st">"Statistical calculation"</span>,</span></span>
+<span class="r-in"><span>            <span class="st">"Gene expression matrix"</span>, <span class="st">"TSV"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    stringsAsFactors <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">toline</span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    topic                      operation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Transcriptomics (3308) Statistical calculation (2238)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            data     format</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 Gene expression matrix (3112) TSV (3475)</span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 
@@ -72,7 +90,7 @@ reflecting main elements of EDAM</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

@@ -1,0 +1,90 @@
+<div id="main" class="col-md-9" role="main">
+
+# Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas
+
+<div class="section level2">
+
+## Introduction
+
+This vignette is derived almost entirely from collaborative code
+supplied by Anh Nguyet Vu of Sage Bionetworks. The purpose is to
+illustrate usage of OpenAPI transformation to provide systematic
+organization and tagging of content available for Bioconductor packages.
+
+Code in this vignette requires that `OPENAI_API_KEY` be defined.
+
+</div>
+
+<div class="section level2">
+
+## Example 1: tximeta
+
+We start with the transformation of vignette content, which may be in
+HTML or PDF, based on the structured data extraction code examples given
+in a vignette for the ellmer package on CRAN. We prompt GPT-4o to
+produce a concise and objective summary of at most 450 words, which is
+placed in the `focus` component of the returned data.
+
+<div id="cb1" class="sourceCode">
+
+``` r
+if (nchar(Sys.getenv("OPENAI_API_KEY"))>0) {
+library(biocEDAM)
+content = vig2data("https://bioconductor.org/packages/release/bioc/vignettes/tximeta/inst/doc/tximeta.html")
+str(content)
+nchar(content$focus)
+}
+```
+
+</div>
+
+We then use schema-driven inference to produce associated EDAM tags; see
+the code in `inst/curbioc` in the package source.
+
+<div id="cb2" class="sourceCode">
+
+``` r
+if (nchar(Sys.getenv("OPENAI_API_KEY"))>0) {
+substr(content$focus,1,250)
+pks = c("requests", "openai", "jsonschema", "tiktoken", "pandas")
+for (i in pks) reticulate::py_require(i)
+for (i in pks) reticulate::import(i)
+ans = edamize(content$focus)
+DT::datatable(mkdf(ans))
+}
+```
+
+</div>
+
+</div>
+
+<div class="section level2">
+
+## Example 2: MSnbase
+
+<div id="cb3" class="sourceCode">
+
+``` r
+if (nchar(Sys.getenv("OPENAI_API_KEY"))>0) {
+mm = vig2data("https://bioconductor.org/packages/release/bioc/vignettes/MSnbase/inst/doc/v05-MSnbase-development.html")
+uu = edamize(mm$focus)
+if (is.null(uu)) uu = edamize(mm$focus)  # second try
+DT::datatable(mkdf(uu))
+}
+```
+
+</div>
+
+</div>
+
+<div class="section level2">
+
+## Caveats
+
+Sometimes there is no result. This pertains to indeterminacy in the GPT
+environment we are using. Often a second try will get a result. If you
+have persistent trouble, please file an issue.
+
+</div>
+
+</div>

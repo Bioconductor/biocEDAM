@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocEDAM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/biotools.html">Examining biotools tagging of Bioconductor packages</a></li>
     <li><a class="dropdown-item" href="../articles/curate.html">Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="nav-link" href="https://github.com/vjcitn/biocEDAM/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -41,91 +42,264 @@
 
 
 
-
-    </div><div class="section level2">
+      <dl></dl></div><div class="section level2">
 
 
 
 
       <dl><dt>
 
+          <code><a href="TermMapping.html">TermMapping</a></code>
+
+        </dt>
+        <dd>Ellmer type schema for a single ontology term mapping</dd>
+
+        <dt>
+
+          <code><a href="TermMappingTable.html">TermMappingTable</a></code>
+
+        </dt>
+        <dd>Ellmer type schema for a table of ontology term mappings</dd>
+
+        <dt>
+
           <code><a href="allmap.html">allmap</a></code>
 
         </dt>
         <dd>map from biocViews to EDAM</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bioc_line.html">bioc_line()</a></code>
 
         </dt>
         <dd>use BiocPkgTools to acquire metadata on a specified Bioconductor package</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="biotools_bioc.html">biotools_bioc</a></code>
 
         </dt>
         <dd>result of scanning biotools metadata on 3 Nov 2024 to find bioconductor packages and EDAM topics</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="bvbrowse.html">bvbrowse()</a></code>
 
         </dt>
         <dd>interactive exploration of biocViews in relation to packages</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="cleantxt.html">cleantxt()</a></code>
 
         </dt>
-        <dd>utility to "clean" odd characters in text input that seem to increase risk of json-transformation failures</dd>
-      </dl><dl><dt>
+        <dd>utility to "clean" odd characters in text input that seem to increase risk of LLM failures</dd>
+
+        <dt>
 
           <code><a href="curate_bioc.html">curate_bioc()</a></code>
 
         </dt>
-        <dd>use Anh Vu's OpenAI prompting to develop structured metadata about Bioconductor packages, targeting EDAM ontology and bio.tools schema</dd>
-      </dl><dl><dt>
+        <dd>use Anh Vu's prompting to develop structured metadata about Bioconductor packages, targeting EDAM ontology and bio.tools schema</dd>
+
+        <dt>
+
+          <code><a href="edam_data.html">edam_data</a></code>
+
+        </dt>
+        <dd>snapshot of edam data circa early 2024</dd>
+
+        <dt>
+
+          <code><a href="edam_formats.html">edam_formats</a></code>
+
+        </dt>
+        <dd>snapshot of edam formats circa early 2024</dd>
+
+        <dt>
+
+          <code><a href="edam_graph.html">edam_graph()</a></code>
+
+        </dt>
+        <dd>build a graph of EDAM terms deemed relevant to a text</dd>
+
+        <dt>
+
+          <code><a href="edam_operations.html">edam_operations</a></code>
+
+        </dt>
+        <dd>snapshot of edam operations circa early 2024</dd>
+
+        <dt>
+
+          <code><a href="edam_topics.html">edam_topics</a></code>
+
+        </dt>
+        <dd>snapshot of edam topics circa early 2024</dd>
+
+        <dt>
 
           <code><a href="edamize.html">edamize()</a></code>
 
         </dt>
-        <dd>use Anh Vu's OpenAI prompting to develop structured metadata about Bioconductor packages, targeting EDAM ontology and bio.tools schema</dd>
-      </dl><dl><dt>
+        <dd>Assign EDAM ontology terms to text using a live SemanticSQL database and an LLM</dd>
+
+        <dt>
+
+          <code><a href="extract_uri.html">extract_uri()</a></code>
+
+        </dt>
+        <dd>Helper recursive function to extract 'uri' nodes from JSON document based on edamize</dd>
+
+        <dt>
+
+          <code><a href="flat_tagger.html">flat_tagger()</a></code>
+
+        </dt>
+        <dd>simple tagger based on text excerpt and available context from data-frames with edam vocabularies</dd>
+
+        <dt>
+
+          <code><a href="get_edam_embeddings.html">get_edam_embeddings()</a></code>
+
+        </dt>
+        <dd>Retrieve pre-computed EDAM term embeddings from AnnotationHub</dd>
+
+        <dt>
+
+          <code><a href="llm_api_key.html">llm_api_key()</a></code>
+
+        </dt>
+        <dd>Retrieve the API key for an LLM provider from the environment</dd>
+
+        <dt>
+
+          <code><a href="llm_chat.html">llm_chat()</a></code>
+
+        </dt>
+        <dd>Create an ellmer chat object for a given LLM provider</dd>
+
+        <dt>
+
+          <code><a href="llm_env_var.html">llm_env_var()</a></code>
+
+        </dt>
+        <dd>Map an LLM provider name to its environment variable</dd>
+
+        <dt>
+
+          <code><a href="make_edam_embeddings.html">make_edam_embeddings()</a></code>
+
+        </dt>
+        <dd>Generate and save EDAM term embeddings</dd>
+
+        <dt>
+
+          <code><a href="map_concepts.html">map_concepts()</a></code>
+
+        </dt>
+        <dd>Map biological or medical concepts to ontology terms via OLS4</dd>
+
+        <dt>
+
+          <code><a href="mapping_to_json.html">mapping_to_json()</a></code>
+
+        </dt>
+        <dd>Export a map_concepts result as a JSON document</dd>
+
+        <dt>
 
           <code><a href="mkdf.html">mkdf()</a></code>
 
         </dt>
-        <dd>simple utility to process output of edamize into data.frame</dd>
-      </dl><dl><dt>
+        <dd>simple utility to process output of edamize into a data.frame</dd>
+
+        <dt>
+
+          <code><a href="ols4_chat.html">ols4_chat()</a></code>
+
+        </dt>
+        <dd>Create an ellmer chat pre-wired with EBI OLS4 MCP tools</dd>
+
+        <dt>
+
+          <code><a href="ols4_enrich.html">ols4_enrich()</a></code>
+
+        </dt>
+        <dd>Validate and enrich a TermMappingTable via the OLS4 REST API</dd>
+
+        <dt>
+
+          <code><a href="ols4_mcp_tools.html">ols4_mcp_tools()</a></code>
+
+        </dt>
+        <dd>List tools available from the EBI OLS4 MCP service</dd>
+
+        <dt>
+
+          <code><a href="ols4_tool_table.html">ols4_tool_table()</a></code>
+
+        </dt>
+        <dd>Summarise OLS4 MCP tools as a data frame</dd>
+
+        <dt>
 
           <code><a href="pksByViews.html">pksByViews()</a></code>
 
         </dt>
         <dd>helper for package listing</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="read_prompt.html">read_prompt()</a></code>
+
+        </dt>
+        <dd>Read a prompt template from the biocEDAM prompt library</dd>
+
+        <dt>
+
+          <code><a href="retrieve_edam_candidates.html">retrieve_edam_candidates()</a></code>
+
+        </dt>
+        <dd>Retrieve the top-k semantically closest EDAM terms per type</dd>
+
+        <dt>
 
           <code><a href="saved_views_2023.18.11.html">saved_views_2023.18.11</a></code>
 
         </dt>
         <dd>dated set of biocViews</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="tag_bioc.html">tag_bioc()</a></code>
 
         </dt>
         <dd>full workflow to tag a bioconductor package and selected representative content with EDAM terms</dd>
-      </dl><dl><dt>
+
+        <dt>
 
           <code><a href="toline.html">toline()</a></code>
 
         </dt>
         <dd>process the output of edamize followed by mkdf to create a data frame with components topic, operation, data, format, reflecting main elements of EDAM</dd>
-      </dl><dl><dt>
+
+        <dt>
+
+          <code><a href="verify.html">verify()</a></code>
+
+        </dt>
+        <dd>given a data.frame with uri and tm produced by edamize (or mkdf), check against the frozen EDAM term tables in biocEDAM, filtering records to those whose uri matches a known id.</dd>
+
+        <dt>
 
           <code><a href="vig2data.html">vig2data()</a></code>
 
         </dt>
-        <dd>use the extract_data facility defined in ellmer's doc to obtain summary information about an html document, tailored to vignettes in bioconductor</dd>
-      </dl><dl><dt>
+        <dd>Use the extract_data facility defined in ellmer's doc to obtain summary information about textual content. Originally tailored to vignettes in bioconductor; it is newly generalized to handle any pdf, html or text in URL.</dd>
+
+        <dt>
 
           <code><a href="vlist.html">vlist</a></code>
 
@@ -140,7 +314,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

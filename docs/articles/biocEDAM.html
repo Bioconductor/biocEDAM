@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">biocEDAM</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,6 +38,7 @@
     <li><a class="dropdown-item" href="../articles/curate.html">Curation of Bioconductor package metadata, targeting EDAM ontology and ELIXIR bio.tools metadata schemas</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -53,7 +54,7 @@
 
 
 
-<link href="biocEDAM_files/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet">
+<link href="biocEDAM_files/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
 <script src="biocEDAM_files/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="biocEDAM_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
 <script src="biocEDAM_files/datatables-binding-0.34.0/datatables.js"></script><link href="biocEDAM_files/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
 <link href="biocEDAM_files/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
@@ -64,7 +65,7 @@
       <h1>biocEDAM: ontology for a genomic data science ecosystem</h1>
                         <h4 data-toc-skip class="author">Vincent J. Carey, stvjc at channing.harvard.edu</h4>
             
-            <h4 data-toc-skip class="date">October 18, 2025</h4>
+            <h4 data-toc-skip class="date">June 03, 2026</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/vjcitn/biocEDAM/blob/HEAD/vignettes/biocEDAM.Rmd"><code>vignettes/biocEDAM.Rmd</code></a></small>
       <div class="d-none name"><code>biocEDAM.Rmd</code></div>
@@ -89,19 +90,19 @@
 <span><span class="va">s1</span> <span class="op">=</span> <span class="va">s1</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Package</span>, <span class="va">tags</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">s1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span>,<span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 2</span></span>m</span>
-<span><span class="co">##    Package            tags                                                      </span></span>
-<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                     </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> interactiveDisplay Software:WorkflowStep:Pathways:AssayDomain:Technology:Sta…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> EnMCB              Software:WorkflowStep:AssayDomain:Technology:Microarray:S…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> HIPPO              Software:Technology:AssayDomain:BiologicalQuestion:Statis…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> COMPASS            Software:ResearchField:Technology:ImmunoOncology:FlowCyto…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> txdbmaker          Software:Infrastructure:WorkflowStep:BiologicalQuestion:R…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> RCAS               Software:BiologicalQuestion:WorkflowStep:Pathways:Researc…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> magpie             Software:ResearchField:BiologicalQuestion:Technology:Sequ…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> CausalR            Software:ResearchField:WorkflowStep:Visualization:Statist…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> blima              Software:Technology:WorkflowStep:BiologicalQuestion:Assay…</span><a6></a6></span>
-<span><span class="co">## <span style="color: #BCBCBC;">10</span> TargetScore        Software:Technology:Sequencing:miRNA</span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 2</span></span></span>
+<span><span class="co">##    Package        tags                                                          </span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                         </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> HiLDA          Software:BiologicalQuestion:Technology:StatisticalMethod:Soma…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> doseR          Software:Infrastructure:Technology:AssayDomain:ResearchField:…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> graph          Software:StatisticalMethod:GraphAndNetwork                    </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> cn.farms       Software:Technology:AssayDomain:Microarray:CopyNumberVariation</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> sSeq           Software:ResearchField:Immunology:Technology:Sequencing:Immun…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> plotgardener   Software:WorkflowStep:BiologicalQuestion:ResearchField:Techno…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> yamss          Software:Technology:ResearchField:BiologicalQuestion:MassSpec…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> iSEEpathways   Software:BiologicalQuestion:AssayDomain:Infrastructure:Workfl…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> CAFE           Software:AssayDomain:Technology:Microarray:BiologicalQuestion…</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> tidyexposomics Software:ResearchField:AssayDomain:BiologicalQuestion:Workflo…</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="edam">EDAM<a class="anchor" aria-label="anchor" href="#edam"></a>
@@ -109,8 +110,12 @@
 <p>At edamontology.org, EDAM is described as “a comprehensive ontology of well-established, familiar concepts that are prevalent within bioscientific data analysis and data management (including computational biology, bioinformatics, and bioimage informatics). EDAM includes topics, operations, types of data and data identifiers, and data formats, relevant in data analysis and data management in life sciences.”</p>
 <p>With a devel version of ontoProc, we ingest and sample from the EDAM ontology:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vjcitn/ontoProc" class="external-link">ontoProc</a></span><span class="op">)</span></span>
-<span><span class="va">epath</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ontoProc/man/owl2cache.html" class="external-link">owl2cache</a></span><span class="op">(</span>url<span class="op">=</span><span class="st">"https://edamontology.org/EDAM_1.25.owl"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vjcitn/ontoProc" class="external-link">ontoProc</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: multiple methods tables found for 'scale'</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: replacing previous import 'BiocGenerics::scale' by</span></span>
+<span><span class="co">## 'DelayedArray::scale' when loading 'SummarizedExperiment'</span></span></code></pre>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">epath</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ontoProc/man/owl2cache.html" class="external-link">owl2cache</a></span><span class="op">(</span>url<span class="op">=</span><span class="st">"https://edamontology.org/EDAM_1.25.owl"</span><span class="op">)</span></span>
 <span><span class="va">edam</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ontoProc/man/setup_entities2.html" class="external-link">setup_entities2</a></span><span class="op">(</span><span class="va">epath</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="va">sam</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="va">edam</span><span class="op">$</span><span class="va">name</span>, <span class="fl">15</span><span class="op">)</span></span>
@@ -125,7 +130,7 @@
 <h2 id="a-preliminary-comparison-of-the-vocabularies">A preliminary comparison of the vocabularies<a class="anchor" aria-label="anchor" href="#a-preliminary-comparison-of-the-vocabularies"></a>
 </h2>
 <p>The Pypi package <a href="https://pypi.org/project/text2term/" class="external-link">text2term</a> was used to measure similarity between terms available in EDAM and terms of biocViews. The <a href="https://github.com/vjcitn/biocEDAM">biocEDAM package</a> includes a table of results, that we filter here for scores exceeding 0.8.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/vjcitn/biocEDAM">biocEDAM</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">allmap</span><span class="op">)</span></span>
 <span><span class="va">ndf</span> <span class="op">=</span> <span class="va">allmap</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">`Mapping Score`</span><span class="op">&gt;</span><span class="fl">.8</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">`Source Term`</span>, </span>
@@ -147,7 +152,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

@@ -1,0 +1,234 @@
+<div id="main" class="col-md-9" role="main">
+
+# biocEDAM
+
+<div class="section level1">
+
+This package investigates tools that can help understand the
+relationship of [biocViews](https://bioconductor.org/packages/biocViews)
+in relation to the [EDAM ontology](https://edamontology.org).
+
+<div class="section level2">
+
+## Installation
+
+-   Use `BiocManager::install('vjcitn/biocEDAM')` to install this
+    package.
+
+-   The DESCRIPTION file of the package defines python requirements.
+
+-   When functions requiring python are called, a virtual environment
+    will be created by reticulate to resolve references to modules in
+    use.
+
+Note that some functions require that a valid OpenAI API key is readable
+through the environment variable `OPENAI_API_KEY`. When this is absent,
+functions will simply fail.
+
+Charges to the associated OpenAI account will accrue when these
+functions are called. All the experimental work underlying the
+development of the code in March 2025 produced charges of $1.34. You can
+examine your charges at `platform.openai.com/usage`.
+
+</div>
+
+<div class="section level2">
+
+## Purpose
+
+[biocViews](https://bioconductor.org/packages/biocViews) is an ad hoc
+vocabulary in the form of a graphNEL instance with over 400 terms.
+[EDAM](https://edamontology.org) is an OWL model of a vocabulary devoted
+to concepts of data analysis and data management in the biosciences.
+This package unites these two resources with the objective of permitting
+exploration that will lead to formal ontological tagging of all
+Bioconductor software and data packages and workflows.
+
+</div>
+
+<div class="section level2">
+
+## Tools
+
+<div class="section level3">
+
+### vig2data
+
+This function uses rvest, pdftools, and gpt-4o via ellmer to transform
+content (typically referenced via URL for Bioconductor vignettes, see
+examples) to structured data about authors, topics (determined *ad
+libitum* by GPT), and a component `focused` which is a concise summary
+of content up to 450 words. This component will be used in `edamize`.
+
+</div>
+
+<div class="section level3">
+
+### edamize
+
+This function calls python code of Anh Nguyet Vu that prompts GPT to
+select and organize terms from EDAM on the basis of relevance to the
+supplied text (`focused` from `vig2data` in the intended application).
+Terms from the topic, operation, data, and format components of EDAM may
+be returned.
+
+</div>
+
+<div class="section level3">
+
+### bvbrowse
+
+This function starts a shiny app that presents term-filtered sets of
+packages and their views annotation.
+
+![](https://github.com/vjcitn/biocEDAM/blob/main/BrowseGeneSig.png?raw=true)
+
+</div>
+
+<div class="section level3">
+
+### allmap
+
+The `allmap` data.frame is the output of
+[text2term](https://pypi.org/text2term) applied to biocViews terms for
+evaluation of similarity to terms in the EDAM ontology.
+
+    > head(allmap)
+                                  Source Term ID    Source Term
+    0 http://ccb.hms.harvard.edu/t2t/RFzhTje9ucG      BiocViews
+    1 http://ccb.hms.harvard.edu/t2t/RFzhTje9ucG      BiocViews
+    2 http://ccb.hms.harvard.edu/t2t/R3hqXkeJtkt       Software
+    3 http://ccb.hms.harvard.edu/t2t/R4dWXrwrX3W AnnotationData
+    4 http://ccb.hms.harvard.edu/t2t/R4dWXrwrX3W AnnotationData
+    5 http://ccb.hms.harvard.edu/t2t/R4dWXrwrX3W AnnotationData
+         Mapped Term Label   Mapped Term CURIE
+    0     GenomeReviews ID      EDAM.DATA:2751
+    1                 BioC    EDAM.FORMAT:3782
+    2 Software engineering     EDAM.TOPIC:3372
+    3           Annotation      EDAM.DATA:2018
+    4           Annotation EDAM.OPERATION:0226
+    5          Gene report      EDAM.DATA:0916
+                             Mapped Term IRI Mapping Score Tags
+    0      http://edamontology.org/data_2751         0.459 None
+    1    http://edamontology.org/format_3782         0.380 None
+    2     http://edamontology.org/topic_3372         0.721 None
+    3      http://edamontology.org/data_2018         0.805 None
+    4 http://edamontology.org/operation_0226         0.805 None
+    5      http://edamontology.org/data_0916         0.703 None
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="main" class="col-md-9" role="main">
+
+# Package index
+
+<div class="section level2">
+
+## All functions
+
+</div>
+
+<div class="section level2">
+
+-   `TermMapping` : Ellmer type schema for a single ontology term
+    mapping
+-   `TermMappingTable` : Ellmer type schema for a table of ontology term
+    mappings
+-   `allmap` : map from biocViews to EDAM
+-   `bioc_line()` : use BiocPkgTools to acquire metadata on a specified
+    Bioconductor package
+-   `biotools_bioc` : result of scanning biotools metadata on 3 Nov 2024
+    to find bioconductor packages and EDAM topics
+-   `bvbrowse()` : interactive exploration of biocViews in relation to
+    packages
+-   `cleantxt()` : utility to "clean" odd characters in text input that
+    seem to increase risk of LLM failures
+-   `curate_bioc()` : use Anh Vu's prompting to develop structured
+    metadata about Bioconductor packages, targeting EDAM ontology and
+    bio.tools schema
+-   `edam_data` : snapshot of edam data circa early 2024
+-   `edam_formats` : snapshot of edam formats circa early 2024
+-   `edam_graph()` : build a graph of EDAM terms deemed relevant to a
+    text
+-   `edam_operations` : snapshot of edam operations circa early 2024
+-   `edam_topics` : snapshot of edam topics circa early 2024
+-   `edamize()` : Assign EDAM ontology terms to text using a live
+    SemanticSQL database and an LLM
+-   `extract_uri()` : Helper recursive function to extract 'uri' nodes
+    from JSON document based on edamize
+-   `flat_tagger()` : simple tagger based on text excerpt and available
+    context from data-frames with edam vocabularies
+-   `get_edam_embeddings()` : Retrieve pre-computed EDAM term embeddings
+    from AnnotationHub
+-   `llm_api_key()` : Retrieve the API key for an LLM provider from the
+    environment
+-   `llm_chat()` : Create an ellmer chat object for a given LLM provider
+-   `llm_env_var()` : Map an LLM provider name to its environment
+    variable
+-   `make_edam_embeddings()` : Generate and save EDAM term embeddings
+-   `map_concepts()` : Map biological or medical concepts to ontology
+    terms via OLS4
+-   `mapping_to_json()` : Export a map\_concepts result as a JSON
+    document
+-   `mkdf()` : simple utility to process output of edamize into a
+    data.frame
+-   `ols4_chat()` : Create an ellmer chat pre-wired with EBI OLS4 MCP
+    tools
+-   `ols4_enrich()` : Validate and enrich a TermMappingTable via the
+    OLS4 REST API
+-   `ols4_mcp_tools()` : List tools available from the EBI OLS4 MCP
+    service
+-   `ols4_tool_table()` : Summarise OLS4 MCP tools as a data frame
+-   `pksByViews()` : helper for package listing
+-   `read_prompt()` : Read a prompt template from the biocEDAM prompt
+    library
+-   `retrieve_edam_candidates()` : Retrieve the top-k semantically
+    closest EDAM terms per type
+-   `saved_views_2023.18.11` : dated set of biocViews
+-   `tag_bioc()` : full workflow to tag a bioconductor package and
+    selected representative content with EDAM terms
+-   `toline()` : process the output of edamize followed by mkdf to
+    create a data frame with components topic, operation, data, format,
+    reflecting main elements of EDAM
+-   `verify()` : given a data.frame with uri and tm produced by edamize
+    (or mkdf), check against the frozen EDAM term tables in biocEDAM,
+    filtering records to those whose uri matches a known id.
+-   `vig2data()` : Use the extract\_data facility defined in ellmer's
+    doc to obtain summary information about textual content. Originally
+    tailored to vignettes in bioconductor; it is newly generalized to
+    handle any pdf, html or text in URL.
+-   `vlist` : snapshot of all biocViews
+
+</div>
+
+</div>
+
+<div id="main" class="col-md-9" role="main">
+
+# Articles
+
+<div class="section">
+
+### All vignettes
+
+<div class="section-desc">
+
+</div>
+
+-   [biocEDAM: ontology for a genomic data science
+    ecosystem](https://github.com/vjcitn/biocEDAM/articles/biocEDAM.md):
+-   [Examining biotools tagging of Bioconductor
+    packages](https://github.com/vjcitn/biocEDAM/articles/biotools.md):
+-   [Curation of Bioconductor package metadata, targeting EDAM ontology
+    and ELIXIR bio.tools metadata
+    schemas](https://github.com/vjcitn/biocEDAM/articles/curate.md):
+
+</div>
+
+</div>
