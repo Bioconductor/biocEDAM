@@ -5,6 +5,17 @@ Include: diseases, disorders, phenotypes, biological processes, molecular functi
 cell types, tissues, body parts, experimental assays, omics fields, data types,
 computational methods, and study designs.
 
-Exclude: author names, institution names, URLs, numeric values, and generic words
-that carry no standalone ontology meaning (e.g. "patients", "study", "analysis",
-"individuals", "data").
+Exclude:
+- Author names, institution names, URLs, and numeric values
+- Generic words with no standalone ontology meaning (e.g. "patients", "study",
+  "analysis", "individuals", "data", "approach", "method")
+- Vague relational or descriptive phrases that combine a generic noun with a
+  qualifier but do not name a specific ontology concept — for example:
+  "rare risk variants", "protective variants", "common variants",
+  "genetic factors", "risk factors", "disease phenotypes", "biological markers"
+  These describe properties or relationships, not named entities; omit them.
+- Adjective-noun phrases where the adjective is a study-design qualifier rather
+  than part of a recognised concept name (e.g. "early-onset" modifying a disease
+  is acceptable; "rare" modifying "variants" is not)
+
+When in doubt, prefer to omit rather than include a borderline phrase.
